@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Symptom Research &amp; Doctor Visit Prep</title>
+<style>
+  @page { size: letter; margin: 0.6in; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #222;
+    line-height: 1.5;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    font-size: 14px;
+  }
+  h1 {
+    font-size: 26px;
+    border-bottom: 3px solid #2c3e50;
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+    color: #1a2530;
+  }
+  .subtitle {
+    color: #555;
+    font-style: italic;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 19px;
+    color: #1a2530;
+    border-left: 5px solid #2c3e50;
+    padding-left: 10px;
+    margin-top: 34px;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 15.5px;
+    color: #2c3e50;
+    margin-bottom: 4px;
+  }
+  .emergency-box {
+    background: #fdecea;
+    border: 2px solid #c0392b;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 18px 0;
+  }
+  .emergency-box h2 {
+    border: none;
+    padding-left: 0;
+    margin-top: 0;
+    color: #c0392b;
+  }
+  .condition {
+    border: 1px solid #d5dbe0;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    background: #fafbfc;
+    page-break-inside: avoid;
+  }
+  .condition h3 {
+    margin-top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .rank {
+    display: inline-block;
+    background: #2c3e50;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    line-height: 22px;
+    margin-right: 8px;
+  }
+  .why-fits {
+    margin-top: 8px;
+    font-size: 13.5px;
+  }
+  .links {
+    margin-top: 8px;
+    font-size: 12.5px;
+  }
+  .links a {
+    color: #1a5276;
+    word-break: break-all;
+  }
+  table.log {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-top: 8px;
+  }
+  table.log th, table.log td {
+    border: 1px solid #999;
+    padding: 4px 3px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table.log th {
+    background: #2c3e50;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    font-size: 10.5px;
+  }
+  table.log td {
+    height: 30px;
+  }
+  .week-heading {
+    background: #eef1f4;
+    font-weight: bold;
+    padding: 6px 10px;
+    margin-top: 22px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+  }
+  .script-box {
+    background: #eef6ec;
+    border: 1px solid #7cb98a;
+    border-radius: 6px;
+    padding: 10px 16px;
+    margin: 10px 0;
+    font-style: italic;
+  }
+  .question-list li { margin-bottom: 6px; }
+  .disclaimer {
+    font-size: 11.5px;
+    color: #555;
+    background: #f3f3f3;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px 16px;
+    margin-top: 30px;
+  }
+  .page-break { page-break-before: always; }
+  @media print {
+    body { padding: 0; }
+    a { color: #000 !important; text-decoration: none; }
+  }
+  .toc {
+    background: #f3f6f8;
+    border: 1px solid #d5dbe0;
+    border-radius: 6px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .toc ul { margin: 6px 0; }
+</style>
+</head>
+<body>
+
+<h1>Symptom Research &amp; Doctor Visit Prep</h1>
+<p class="subtitle">Prepared for a 72-year-old male with migrating, escalating pain (nose/eyes/ears/brain → stomach/kidney/lungs) building over ~2 days per episode, with diarrhea</p>
+
+<div class="toc">
+  <strong>Contents</strong>
+  <ul>
+    <li>When to go to the ER right now</li>
+    <li>Top 5 possibilities to discuss with the doctor</li>
+    <li>4-week symptom log (fill out before the appointment)</li>
+    <li>How to talk to the doctor — framing, scripts, and questions</li>
+  </ul>
+</div>
+
+<div class="emergency-box">
+  <h2>⚠ Go to the ER — don't wait for an appointment — if any of these happen during an episode:</h2>
+  <ul>
+    <li>Sudden vision changes: blurring, double vision, a dark curtain, or temporary blindness</li>
+    <li>Jaw or tongue pain/cramping specifically brought on by chewing, or scalp tenderness (combing hair hurts)</li>
+    <li>Chest pain, severe shortness of breath, or coughing up blood</li>
+    <li>Black, tarry stools, or visible blood in stool or vomit</li>
+    <li>Sudden weakness, numbness, or trouble speaking</li>
+    <li>High fever with confusion, or a pain episode that feels clearly different/worse than prior ones</li>
+  </ul>
+</div>
+
+<h2>Top 5 Things This Could Be</h2>
+<p style="font-size:13px; color:#444;">These are <em>categories to raise with the doctor</em>, not diagnoses. The goal is to give him and the doctor a starting point for testing. They're ordered roughly by how well they fit the pattern described (age, head/eye involvement, multi-organ spread, escalating 2-day cycle) and how important they are to rule out first.</p>
+
+<div class="condition">
+  <h3><span><span class="rank">1</span>Giant Cell Arteritis (GCA) &amp; Polymyalgia Rheumatica (PMR)</span></h3>
+  <p><strong>What it is:</strong> Inflammation of the lining of medium/large arteries, most often the ones in the temples and head. It's one of the most common causes of new head/eye pain in people over 50, and it travels closely with PMR, a related condition causing aching and stiffness in the shoulders/hips.</p>
+  <p class="why-fits"><strong>Why it fits:</strong> His age (72) and the head, eye, and ear involvement are the classic presentation. This is the single most urgent thing to rule out first, because untreated GCA can cause sudden, permanent vision loss — but it's treatable and usually improves within days of starting steroids once caught.</p>
+  <p><strong>What would help confirm/rule out:</strong> ESR and CRP blood tests (inflammatory markers) — simple and fast. If elevated, a temporal artery biopsy or ultrasound may follow.</p>
+  <div class="links">
+    <strong>Learn more:</strong><br>
+    Mayo Clinic — Giant Cell Arteritis: <a href="https://www.mayoclinic.org/diseases-conditions/giant-cell-arteritis/symptoms-causes/syc-20372758" target="_blank">mayoclinic.org/diseases-conditions/giant-cell-arteritis</a>
+  </div>
+</div>
+
+<div class="condition">
+  <h3><span><span class="rank">2</span>Systemic Vasculitis (e.g. GPA / EGPA — ANCA-associated)</span></h3>
+  <p><strong>What it is:</strong> A family of conditions where the immune system inflames blood vessels themselves. Because vessels feed every organ, vasculitis can cause symptoms that seem to "jump" between the sinuses/nose, lungs, kidneys, and gut — which lines up with the pattern described.</p>
+  <p class="why-fits"><strong>Why it fits:</strong> The multi-organ spread (nose/sinus → lungs → kidney → gut) is the hallmark of vasculitis. Some subtypes (like EGPA) start with allergy- or asthma-like symptoms, which may explain why "allergies" came up with the first doctor.</p>
+  <p><strong>What would help confirm/rule out:</strong> ANCA blood test, ESR/CRP, urinalysis (checks for kidney involvement — protein or blood in urine), possibly a rheumatology referral.</p>
+  <div class="links">
+    <strong>Learn more:</strong><br>
+    Cleveland Clinic — Vasculitis: Symptoms, Types &amp; Treatment: <a href="https://my.clevelandclinic.org/health/diseases/12101-vasculitis" target="_blank">my.clevelandclinic.org/health/diseases/12101-vasculitis</a>
+  </div>
+</div>
+
+<div class="condition">
+  <h3><span><span class="rank">3</span>Mast Cell Activation Syndrome (MCAS) / Severe Allergic-Type Hypersensitivity</span></h3>
+  <p><strong>What it is:</strong> A condition where mast cells (immune cells involved in allergic reactions) release inflammatory chemicals (histamine and others) inappropriately, causing episodic symptoms across multiple organ systems at once.</p>
+  <p class="why-fits"><strong>Why it fits:</strong> This may explain why "allergies" was floated as an explanation — MCAS symptoms genuinely resemble allergic reactions, but episodically and across more systems (sinus/head symptoms plus GI symptoms like diarrhea and abdominal pain together in one episode is a recognized pattern).</p>
+  <p><strong>What would help confirm/rule out:</strong> Blood tryptase level drawn during and after an episode, symptom diary correlating episodes with possible triggers (foods, stress, temperature changes, medications), consultation with an allergist/immunologist.</p>
+  <div class="links">
+    <strong>Learn more:</strong><br>
+    Cleveland Clinic — Mast Cell Activation Syndrome: <a href="https://my.clevelandclinic.org/health/diseases/mast-cell-activation-syndrome" target="_blank">my.clevelandclinic.org/health/diseases/mast-cell-activation-syndrome</a><br>
+    The Mast Cell Disease Society — Overview: <a href="https://tmsforacure.org/overview/mast-cell-activation-syndromes/" target="_blank">tmsforacure.org/overview/mast-cell-activation-syndromes</a>
+  </div>
+</div>
+
+<div class="condition">
+  <h3><span><span class="rank">4</span>Autoinflammatory / Periodic Fever Syndromes</span></h3>
+  <p><strong>What it is:</strong> A group of conditions (Familial Mediterranean Fever and related syndromes) that cause short, recurring "attacks" of pain and inflammation — classically 1–3 days — often involving the abdomen, chest, or joints, then resolving completely between attacks.</p>
+  <p class="why-fits"><strong>Why it fits:</strong> The 2-day build-and-resolve cycle described is extremely characteristic of this category. These conditions are less common at age 72 without a prior history (they usually start younger), but they're worth mentioning if there's any family history of similar episodes or Mediterranean/Middle Eastern ancestry — and some adult-onset autoinflammatory conditions do exist.</p>
+  <p><strong>What would help confirm/rule out:</strong> Family history questions, CBC/ESR/CRP during an attack vs. between attacks, possible genetic testing if attacks keep recurring on this exact timeline.</p>
+  <div class="links">
+    <strong>Learn more:</strong><br>
+    NORD — Familial Mediterranean Fever: <a href="https://rarediseases.org/rare-diseases/familial-mediterranean-fever/" target="_blank">rarediseases.org/rare-diseases/familial-mediterranean-fever</a>
+  </div>
+</div>
+
+<div class="condition">
+  <h3><span><span class="rank">5</span>Peripheral/Autonomic Neuropathy or Medication-Related Cause</span></h3>
+  <p><strong>What it is:</strong> Nerve damage or dysfunction — either from the nerves that carry pain signals (which can cause pain that seems to travel or come in waves) or the autonomic nerves that control digestion (which could explain the diarrhea tied to the same episodes). Some common medications (including certain statins, and interactions between multiple prescriptions) can also trigger migrating pain or GI upset.</p>
+  <p class="why-fits"><strong>Why it fits:</strong> It's a broader, less "clean" fit than the others — it doesn't as naturally explain kidney or lung involvement — but it's common at 72, worth ruling out precisely because it's easy to fix if a medication is the cause, and it belongs on the list of things a doctor should screen for.</p>
+  <p><strong>What would help confirm/rule out:</strong> A full medication and supplement review (including anything started or changed recently), blood glucose/A1c (diabetes is the most common cause of neuropathy), B12 level, and possibly a neurology referral.</p>
+  <div class="links">
+    <strong>Learn more:</strong><br>
+    Mayo Clinic — Peripheral Neuropathy: <a href="https://www.mayoclinic.org/diseases-conditions/peripheral-neuropathy/symptoms-causes/syc-20352061" target="_blank">mayoclinic.org/diseases-conditions/peripheral-neuropathy</a>
+  </div>
+</div>
+
+<p style="font-size:12.5px; color:#555; margin-top:14px;"><strong>A note on the "allergies" / "hypochondriac" framing:</strong> Allergies alone don't typically explain kidney pain, diarrhea, or a repeating 2-day escalation cycle involving that many organs. That doesn't mean the first doctor was wrong to consider allergies — a couple of the conditions above genuinely can look allergy-like at first — but it means the investigation shouldn't stop there. A written log (below) is the best tool for showing this is a consistent, physical pattern rather than something vague.</p>
+
+<div class="page-break"></div>
+
+<h2>4-Week Symptom Log</h2>
+<p style="font-size:13px;">Fill this out for each episode as it happens (not from memory afterward, if possible). Bring the completed log to the appointment — a written pattern is far more persuasive to a doctor than a verbal description. Photocopy extra pages if more than one episode happens in a week.</p>
+
+<div class="week-heading">WEEK 1</div>
+<table class="log">
+<tr>
+  <th style="width:9%">Date &amp; time started</th>
+  <th style="width:12%">Where it started</th>
+  <th style="width:16%">Where it moved (in order, with rough times)</th>
+  <th style="width:7%">Peak pain (0–10)</th>
+  <th style="width:7%">Time to peak</th>
+  <th style="width:13%">Other symptoms (fever, diarrhea, vision, rash, chills, weight/appetite change)</th>
+  <th style="width:13%">What was happening before (food, stress, sleep, new meds)</th>
+  <th style="width:11%">What helped / didn't</th>
+  <th style="width:12%">When it fully resolved</th>
+</tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<div class="week-heading">WEEK 2</div>
+<table class="log">
+<tr>
+  <th style="width:9%">Date &amp; time started</th>
+  <th style="width:12%">Where it started</th>
+  <th style="width:16%">Where it moved (in order, with rough times)</th>
+  <th style="width:7%">Peak pain (0–10)</th>
+  <th style="width:7%">Time to peak</th>
+  <th style="width:13%">Other symptoms (fever, diarrhea, vision, rash, chills, weight/appetite change)</th>
+  <th style="width:13%">What was happening before (food, stress, sleep, new meds)</th>
+  <th style="width:11%">What helped / didn't</th>
+  <th style="width:12%">When it fully resolved</th>
+</tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<div class="week-heading">WEEK 3</div>
+<table class="log">
+<tr>
+  <th style="width:9%">Date &amp; time started</th>
+  <th style="width:12%">Where it started</th>
+  <th style="width:16%">Where it moved (in order, with rough times)</th>
+  <th style="width:7%">Peak pain (0–10)</th>
+  <th style="width:7%">Time to peak</th>
+  <th style="width:13%">Other symptoms (fever, diarrhea, vision, rash, chills, weight/appetite change)</th>
+  <th style="width:13%">What was happening before (food, stress, sleep, new meds)</th>
+  <th style="width:11%">What helped / didn't</th>
+  <th style="width:12%">When it fully resolved</th>
+</tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<div class="week-heading">WEEK 4</div>
+<table class="log">
+<tr>
+  <th style="width:9%">Date &amp; time started</th>
+  <th style="width:12%">Where it started</th>
+  <th style="width:16%">Where it moved (in order, with rough times)</th>
+  <th style="width:7%">Peak pain (0–10)</th>
+  <th style="width:7%">Time to peak</th>
+  <th style="width:13%">Other symptoms (fever, diarrhea, vision, rash, chills, weight/appetite change)</th>
+  <th style="width:13%">What was happening before (food, stress, sleep, new meds)</th>
+  <th style="width:11%">What helped / didn't</th>
+  <th style="width:12%">When it fully resolved</th>
+</tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3 style="margin-top:20px;">Also bring to the appointment:</h3>
+<ul style="font-size:13px;">
+  <li>A complete list of all current medications and supplements, including anything started or changed in the last 3 months</li>
+  <li>Any family history of similar episodes, autoimmune disease, or Mediterranean/Middle Eastern/Armenian/Jewish/Turkish ancestry (relevant to periodic fever syndromes)</li>
+  <li>Blood pressure, temperature, or pulse readings taken during an episode, if possible</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2>How to Talk to the Doctor</h2>
+
+<h3>Opening the conversation (first 30 seconds matter)</h3>
+<div class="script-box">
+"I've been having recurring episodes of pain that start in one place and move to others — it's gone from my head and eyes to my stomach, kidneys, and lungs. Each episode builds from mild to severe over about two days, and it comes with diarrhea. I've been tracking this — here's a written log of the last few weeks."
+</div>
+
+<h3>If the "allergies" or dismissive framing comes back up</h3>
+<div class="script-box">
+"I understand allergies were considered, but I'm not clear on what specifically points to allergies here — allergies don't usually explain kidney pain or a two-day escalating cycle. Can we talk through what else this pattern could be, and what tests would help tell the difference?"
+</div>
+
+<h3>Being direct without being confrontational</h3>
+<div class="script-box">
+"This isn't something I'm imagining — I have it documented. I'd like to rule out a few specific things: giant cell arteritis, vasculitis, and mast cell activation. Can we start with some baseline bloodwork?"
+</div>
+
+<h3>Specific questions to ask</h3>
+<ul class="question-list" style="font-size:13.5px;">
+  <li>"Given my age and the head/eye pain, can we check ESR and CRP to screen for giant cell arteritis or polymyalgia rheumatica?"</li>
+  <li>"Since this involves multiple organs — sinuses, lungs, kidneys, gut — could this be vasculitis? What blood and urine tests would screen for that (e.g. ANCA, urinalysis)?"</li>
+  <li>"Could this be mast cell activation? Is it worth checking a tryptase level during an episode?"</li>
+  <li>"Could any of my current medications, or interactions between them, be causing this?"</li>
+  <li>"If we still think it's allergies, what specifically points to that — and what result would make us reconsider?"</li>
+  <li>"Would a referral to a rheumatologist, allergist/immunologist, or neurologist make sense if initial bloodwork is normal?"</li>
+  <li>"What symptoms should send me straight to the ER rather than waiting for a follow-up?"</li>
+</ul>
+
+<h3>If the doctor says it's "probably nothing" without testing</h3>
+<div class="script-box">
+"What would we expect to see if it were something? I'd feel better having baseline bloodwork — a CBC, metabolic panel, ESR, CRP, and urinalysis — even if it comes back normal, so we know."
+</div>
+
+<h3>On the "hypochondriac" concern</h3>
+<p style="font-size:13px;">A documented log with consistent timing, measurable pain levels, and specific associated symptoms is the opposite of imagined or exaggerated symptoms. Bringing the log accomplishes two things at once: it gives the doctor something concrete to work from, and it reframes the conversation away from "is this real" toward "what is this." Even a clean set of test results isn't wasted effort — it narrows things down and rules out the more urgent possibilities.</p>
+
+<h3>If the first doctor is dismissive</h3>
+<div class="script-box">
+"I'd like to request a referral to a rheumatologist to help rule out vasculitis or an autoinflammatory condition, given how many organ systems are involved."
+</div>
+<p style="font-size:13px;">A second opinion is a completely reasonable next step if the pattern keeps recurring and isn't taken seriously.</p>
+
+<div class="disclaimer">
+This document is intended to help organize information and prepare for a medical appointment — it is not medical advice and does not replace evaluation by a qualified healthcare provider. Only a doctor examining your father and reviewing his history and test results can make an actual diagnosis. If any of the emergency warning signs listed on page 1 occur, seek emergency care immediately rather than waiting for a scheduled visit.
+</div>
+
+</body>
+</html>
