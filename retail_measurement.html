@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Store Scout Scorecard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFF8EC;
+    --ink:#1F2E3D;
+    --coral:#FF6B5B;
+    --teal:#1F9E93;
+    --sun:#FFC24B;
+    --grape:#7A5CC0;
+    --line:#1F2E3D;
+  }
+
+  *{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  html,body{
+    margin:0; padding:0;
+    background:#DCE6E4;
+    font-family:'Nunito', sans-serif;
+    color:var(--ink);
+  }
+
+  .page{
+    max-width:850px;
+    margin:22px auto;
+    background:var(--paper);
+    border:3px solid var(--ink);
+    border-radius:14px;
+    padding:26px 32px 22px;
+    position:relative;
+    box-shadow:0 10px 0 rgba(31,46,61,0.12);
+  }
+
+  /* ---------- header ---------- */
+  .masthead{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    border-bottom:3px dashed var(--ink);
+    padding-bottom:14px;
+    margin-bottom:16px;
+  }
+  .badge{
+    flex:0 0 auto;
+    width:78px; height:78px;
+  }
+  .titles{ flex:1 1 auto; }
+  .kicker{
+    font-family:'Nunito',sans-serif;
+    font-weight:800;
+    font-size:12px;
+    letter-spacing:1.5px;
+    color:var(--coral);
+    margin:0 0 2px;
+  }
+  h1{
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+    font-size:34px;
+    margin:0;
+    line-height:1;
+    color:var(--ink);
+  }
+  h1 span{ color:var(--teal); }
+  .tagline{
+    margin:6px 0 0;
+    font-size:13.5px;
+    font-weight:600;
+    color:#4b5b6b;
+  }
+  .stamp{
+    flex:0 0 auto;
+    width:96px; height:96px;
+    border:3px solid var(--coral);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    transform:rotate(8deg);
+    color:var(--coral);
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:11px;
+    line-height:1.15;
+    padding:6px;
+  }
+
+  /* ---------- mission info strip ---------- */
+  .infogrid{
+    display:grid;
+    grid-template-columns:2fr 1.1fr 1.1fr 1.3fr;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+  }
+  .field label{
+    font-size:10.5px;
+    font-weight:800;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    color:var(--teal);
+  }
+  .fill-line{
+    border-bottom:2px solid var(--ink);
+    height:20px;
+  }
+
+  /* ---------- section headers ---------- */
+  .section-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:4px 0 10px;
+  }
+  .section-head h2{
+    font-family:'Fredoka',sans-serif;
+    font-size:17px;
+    font-weight:600;
+    margin:0;
+    white-space:nowrap;
+  }
+  .section-head .rule{
+    height:3px;
+    flex:1 1 auto;
+    border-radius:2px;
+  }
+  .core .section-head h2{ color:var(--coral); }
+  .core .section-head .rule{ background:var(--coral); opacity:.35; }
+  .bonus .section-head h2{ color:var(--grape); }
+  .bonus .section-head .rule{ background:var(--grape); opacity:.35; }
+
+  /* ---------- rating rows ---------- */
+  .cat-list{ display:flex; flex-direction:column; gap:7px; margin-bottom:6px; }
+  .cat-row{
+    display:grid;
+    grid-template-columns:1.9fr auto 1.4fr;
+    align-items:center;
+    gap:10px;
+    background:#ffffffaa;
+    border:1.5px solid var(--ink);
+    border-radius:9px;
+    padding:6px 10px;
+  }
+  .cat-row .name{
+    font-weight:800;
+    font-size:12.5px;
+  }
+  .cat-row .name small{
+    display:block;
+    font-weight:600;
+    font-size:10px;
+    color:#5b6b7a;
+    text-transform:none;
+    letter-spacing:0;
+  }
+  .stars{
+    font-size:17px;
+    letter-spacing:3px;
+    color:var(--sun);
+    text-shadow:0 0 0 var(--ink);
+    -webkit-text-stroke:1px var(--ink);
+    white-space:nowrap;
+  }
+  .notefill{
+    border-bottom:1.5px dotted #7a8a99;
+    height:14px;
+  }
+
+  /* special row for "time to get help" with a blank instead of stars */
+  .cat-row.timed .stars{ display:none; }
+  .timed .timebox{
+    font-size:11px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    justify-content:flex-end;
+    white-space:nowrap;
+  }
+  .timebox .box{
+    width:34px; height:20px;
+    border:1.5px solid var(--ink);
+    border-radius:4px;
+    background:#fff;
+  }
+
+  /* ---------- bonus grid ---------- */
+  .bonus-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    margin-bottom:6px;
+  }
+  .bonus-card{
+    background:#ffffffaa;
+    border:1.5px dashed var(--grape);
+    border-radius:9px;
+    padding:7px 10px;
+  }
+  .bonus-card .name{
+    font-weight:800;
+    font-size:11.5px;
+    display:block;
+    margin-bottom:3px;
+  }
+  .bonus-card .name small{
+    display:block;
+    font-weight:600;
+    font-size:9.5px;
+    color:#5b6b7a;
+  }
+  .bonus-card .stars{ font-size:15px; letter-spacing:2px; }
+  .yesno{
+    display:flex;
+    gap:10px;
+    font-size:11px;
+    font-weight:800;
+  }
+  .yesno span{
+    border:1.5px solid var(--ink);
+    border-radius:5px;
+    padding:1px 8px;
+  }
+  .countbox{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:11px;
+    font-weight:700;
+  }
+  .countbox .box{
+    width:26px; height:18px;
+    border:1.5px solid var(--ink);
+    border-radius:4px;
+    background:#fff;
+  }
+
+  /* ---------- verdict ---------- */
+  .verdict{
+    margin-top:14px;
+    border-top:3px dashed var(--ink);
+    padding-top:14px;
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:18px;
+  }
+  .verdict h2{
+    font-family:'Fredoka',sans-serif;
+    font-size:17px;
+    color:var(--teal);
+    margin:0 0 8px;
+  }
+  .final-stars{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .final-stars .stars{ font-size:26px; letter-spacing:4px; }
+  .total-box{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    font-weight:800;
+    font-size:12px;
+  }
+  .total-box .box{
+    width:60px; height:26px;
+    border:2px solid var(--ink);
+    border-radius:5px;
+    background:#fff;
+  }
+  .return-row{
+    margin-top:10px;
+    font-weight:800;
+    font-size:12px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  .lines .fill-line{ margin-bottom:10px; }
+  .lines label{
+    font-size:10.5px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    color:var(--coral);
+    display:block;
+    margin-bottom:2px;
+  }
+  .sign-row{
+    margin-top:12px;
+    display:flex;
+    gap:24px;
+    font-size:10.5px;
+    font-weight:700;
+  }
+  .sign-row .fill-line{ width:150px; display:inline-block; }
+
+  .print-btn{
+    position:fixed;
+    top:16px; right:16px;
+    background:var(--coral);
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:30px;
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    box-shadow:0 4px 0 rgba(0,0,0,0.2);
+  }
+  .print-btn:hover{ filter:brightness(1.05); }
+
+  @media print{
+    body{ background:#fff; }
+    .page{ margin:0; box-shadow:none; border-width:2px; }
+    .print-btn{ display:none; }
+    @page{ size:letter; margin:0.35in; }
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨️ Print this form</button>
+
+<div class="page">
+
+  <div class="masthead">
+    <svg class="badge" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="#FFC24B" stroke="#1F2E3D" stroke-width="3"/>
+      <path d="M50 20 L58 40 L80 42 L63 56 L69 78 L50 65 L31 78 L37 56 L20 42 L42 40 Z" fill="#FF6B5B" stroke="#1F2E3D" stroke-width="2.5"/>
+      <circle cx="50" cy="50" r="10" fill="#1F9E93" stroke="#1F2E3D" stroke-width="2.5"/>
+    </svg>
+    <div class="titles">
+      <p class="kicker">FIELD REPORT · RETAIL DIVISION</p>
+      <h1>Store <span>Scout</span> Scorecard</h1>
+      <p class="tagline">One scout, one cart, one honest opinion. Rate what you see, sniff what you smell.</p>
+    </div>
+    <div class="stamp">SCOUT<br>APPROVED</div>
+  </div>
+
+  <div class="infogrid">
+    <div class="field"><label>Store Name</label><div class="fill-line"></div></div>
+    <div class="field"><label>Date</label><div class="fill-line"></div></div>
+    <div class="field"><label>Time In</label><div class="fill-line"></div></div>
+    <div class="field"><label>Scout's Name</label><div class="fill-line"></div></div>
+  </div>
+
+  <div class="core">
+    <div class="section-head"><h2>🛒 The Real Categories</h2><div class="rule"></div></div>
+    <div class="cat-list">
+
+      <div class="cat-row">
+        <div class="name">Customer Service<small>Were they actually useful, or just present?</small></div>
+        <div class="stars">☆☆☆☆☆</div>
+        <div class="notefill"></div>
+      </div>
+
+      <div class="cat-row">
+        <div class="name">Friendliness<small>Genuine warmth vs. a rehearsed smile</small></div>
+        <div class="stars">☆☆☆☆☆</div>
+        <div class="notefill"></div>
+      </div>
+
+      <div class="cat-row">
+        <div class="name">Cleanliness<small>Floors, shelves, and that one weird corner</small></div>
+        <div class="stars">☆☆☆☆☆</div>
+        <div class="notefill"></div>
+      </div>
+
+      <div class="cat-row">
+        <div class="name">Findability<small>Could you locate your item without a search party?</small></div>
+        <div class="stars">☆☆☆☆☆</div>
+        <div class="notefill"></div>
+      </div>
+
+      <div class="cat-row timed">
+        <div class="name">Time To Get Help<small>Wander the aisles — how long until someone asks?</small></div>
+        <div class="timebox"><span class="box"></span> min <span class="box"></span> sec</div>
+        <div class="notefill"></div>
+      </div>
+
+      <div class="cat-row">
+        <div class="name">Checkout Speed<small>Line length vs. lane count vs. your patience</small></div>
+        <div class="stars">☆☆☆☆☆</div>
+        <div class="notefill"></div>
+      </div>
+
+      <div class="cat-row">
+        <div class="name">Stock &amp; Shelves<small>Was the thing you wanted actually there?</small></div>
+        <div class="stars">☆☆☆☆☆</div>
+        <div class="notefill"></div>
+      </div>
+
+      <div class="cat-row">
+        <div class="name">Value For Money<small>Prices clear, fair, and not a scavenger hunt</small></div>
+        <div class="stars">☆☆☆☆☆</div>
+        <div class="notefill"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bonus">
+    <div class="section-head"><h2>🎉 Bonus Nonsense Categories</h2><div class="rule"></div></div>
+    <div class="bonus-grid">
+
+      <div class="bonus-card">
+        <span class="name">Cart Wobble Factor<small>Did fate give you the one with the busted wheel?</small></span>
+        <div class="stars">☆☆☆☆☆</div>
+      </div>
+
+      <div class="bonus-card">
+        <span class="name">Mystery Smell Index<small>1 = fresh linen, 5 = please investigate</small></span>
+        <div class="stars">☆☆☆☆☆</div>
+      </div>
+
+      <div class="bonus-card">
+        <span class="name">Employee Vibe Check<small>Overall energy read of the staff today</small></span>
+        <div class="stars">☆☆☆☆☆</div>
+      </div>
+
+      <div class="bonus-card">
+        <span class="name">Background Music Bop-Ability<small>Did you almost dance near the cereal?</small></span>
+        <div class="stars">☆☆☆☆☆</div>
+      </div>
+
+      <div class="bonus-card">
+        <span class="name">Self-Checkout Rage Meter<small>"Unexpected item in bagging area" count</small></span>
+        <div class="countbox">Count: <span class="box"></span></div>
+      </div>
+
+      <div class="bonus-card">
+        <span class="name">Misplaced Item Sightings<small>Found: a lamp in the cereal aisle, etc.</small></span>
+        <div class="countbox">Count: <span class="box"></span></div>
+      </div>
+
+      <div class="bonus-card">
+        <span class="name">"Let Me Know If You Need Anything" &amp; Vanish<small>Did an employee say it, then disappear forever?</small></span>
+        <div class="yesno"><span>YES</span><span>NO</span><span>WITNESSED&nbsp;IT</span></div>
+      </div>
+
+      <div class="bonus-card">
+        <span class="name">Overall Chaos Level<small>1 = zen garden, 5 = Black Friday energy</small></span>
+        <div class="stars">☆☆☆☆☆</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div>
+      <h2>🏆 Final Verdict</h2>
+      <div class="final-stars">
+        <span>Overall Rating:</span>
+        <span class="stars">☆☆☆☆☆</span>
+      </div>
+      <div class="total-box">Total Score: <span class="box"></span> / 65</div>
+      <div class="return-row">Would return? <span>YES</span> &nbsp; <span>NO</span> &nbsp; <span>ONLY&nbsp;FOR&nbsp;SNACKS</span></div>
+    </div>
+    <div class="lines">
+      <label>Best moment of the trip</label>
+      <div class="fill-line"></div>
+      <label>Weirdest moment of the trip</label>
+      <div class="fill-line"></div>
+    </div>
+  </div>
+
+  <div class="sign-row">
+    <span>Scout's Signature: <span class="fill-line"></span></span>
+    <span>Witnessed By: <span class="fill-line"></span></span>
+  </div>
+
+</div>
+
+</body>
+</html>
