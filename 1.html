@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medical Investigation Guide & Symptom Log</title>
+<style>
+  :root {
+    --primary: #1a365d;
+    --secondary: #2b6cb0;
+    --danger: #9b2c2c;
+    --danger-bg: #fff5f5;
+    --neutral-dark: #2d3748;
+    --neutral-light: #f7fafc;
+    --border: #cbd5e0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--neutral-dark);
+    line-height: 1.5;
+    margin: 0;
+    padding: 20px;
+    background-color: #fff;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h1, h2, h3, h4 {
+    color: var(--primary);
+    margin-top: 1.2em;
+    margin-bottom: 0.5em;
+  }
+
+  h1 {
+    font-size: 24pt;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 8px;
+    margin-top: 0;
+  }
+
+  h2 {
+    font-size: 16pt;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 13pt;
+    margin-bottom: 4px;
+  }
+
+  p, li {
+    font-size: 10.5pt;
+  }
+
+  .alert-box {
+    border: 2px solid var(--danger);
+    background-color: var(--danger-bg);
+    padding: 14px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+  }
+
+  .alert-box h3 {
+    color: var(--danger);
+    margin-top: 0;
+  }
+
+  .condition-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 14px;
+    background-color: var(--neutral-light);
+    page-break-inside: avoid;
+  }
+
+  .condition-card h3 {
+    margin-top: 0;
+    color: var(--secondary);
+  }
+
+  .source-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 9.5pt;
+    font-weight: bold;
+    color: var(--secondary);
+    text-decoration: underline;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 9.5pt;
+  }
+
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: #edf2f7;
+    color: var(--primary);
+  }
+
+  .script-box {
+    background-color: #ebf8ff;
+    border-left: 4px solid var(--secondary);
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-style: italic;
+  }
+
+  .log-table th {
+    background-color: #e2e8f0;
+    font-size: 8.5pt;
+  }
+
+  .log-table td {
+    height: 60px;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  @media print {
+    body {
+      padding: 0;
+      font-size: 10pt;
+    }
+    .container {
+      max-width: 100%;
+    }
+    .no-print {
+      display: none;
+    }
+    a {
+      text-decoration: underline;
+      color: inherit;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Clinical Investigation Guide &amp; Symptom Log</h1>
+  <p><strong>Patient Profile:</strong> Male, 72 &bull; <strong>Primary Complaint:</strong> Episodic, escalating migratory pain (cranial/sensory to torso/abdominal with diarrhea) over 48-hour cycles.</p>
+
+  <!-- EMERGENCY RED FLAGS -->
+  <div class="alert-box">
+    <h3>Emergency Red Flags &mdash; Go to the ER Immediately</h3>
+    <p>Do not wait for an outpatient clinic visit if any of the following occur during an attack:</p>
+    <ul>
+      <li><strong>Sudden visual disturbances:</strong> Partial vision loss, blurriness, double vision, or a "dark curtain" over the visual field (potential sign of temporal artery occlusion).</li>
+      <li><strong>Jaw claudication:</strong> Severe cramping or pain in the jaw or tongue while chewing.</li>
+      <li><strong>Neurological deficits:</strong> Sudden numbness, limb weakness, slurred speech, or drooping face.</li>
+      <li><strong>Severe systemic signs:</strong> Coughing up blood, black/tarry stools, or persistent high fever with confusion.</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 1: TOP 5 DIFFERENTIAL DIAGNOSES -->
+  <h2>1. Top 5 Clinical Possibilities to Discuss With a Doctor</h2>
+  <p>These conditions match episodic, multi-organ, or migrating symptoms in an older adult. They are frameworks for discussion, not self-diagnoses.</p>
+
+  <div class="condition-card">
+    <h3>1. Giant Cell Arteritis (GCA) / Polymyalgia Rheumatica (PMR)</h3>
+    <p><strong>What it is:</strong> Severe inflammation of the temporal and cranial arteries, seen almost exclusively in adults over 50. It frequently presents alongside PMR, which causes migrating, severe musculoskeletal aching.</p>
+    <p><strong>Why it fits:</strong> Affects the temples, eyes, and ears. Untreated, it poses a severe risk of permanent blindness. Simple blood tests for inflammation (ESR and CRP) serve as standard initial screening.</p>
+    <a class="source-link" href="https://www.mayoclinic.org/diseases-conditions/giant-cell-arteritis/symptoms-causes/syc-20372758" target="_blank">Mayo Clinic's Guide on Giant Cell Arteritis</a>
+  </div>
+
+  <div class="condition-card">
+    <h3>2. ANCA-Associated Vasculitis (EGPA or GPA)</h3>
+    <p><strong>What it is:</strong> Systemic inflammation of small-to-medium blood vessels. <em>Eosinophilic Granulomatosis with Polyangiitis</em> (EGPA, formerly Churg-Strauss) and <em>Granulomatosis with Polyangiitis</em> (GPA) can simultaneously affect the sinuses, lungs, digestive tract, and kidneys.</p>
+    <p><strong>Why it fits:</strong> Explains why a physician may have suspected "allergies"—EGPA classically begins with chronic sinusitis, nasal symptoms, or asthma before progressing to systemic nerve, lung, and abdominal pain. A urinalysis and an ANCA blood test screen for this.</p>
+    <a class="source-link" href="https://www.mayoclinic.org/diseases-conditions/churg-strauss-syndrome/symptoms-causes/syc-20371695" target="_blank">Mayo Clinic's Overview of EGPA (Churg-Strauss Syndrome)</a> &bull; 
+    <a class="source-link" href="https://www.mayoclinic.org/diseases-conditions/granulomatosis-with-polyangiitis/symptoms-causes/syc-20351088" target="_blank">Mayo Clinic's Overview of Granulomatosis with Polyangiitis (GPA)</a>
+  </div>
+
+  <div class="condition-card">
+    <h3>3. Autoinflammatory / Periodic Syndromes</h3>
+    <p><strong>What it is:</strong> Disorders of the innate immune system characterized by spontaneous, recurring attacks of inflammation without an infection or elevated autoantibodies. Examples include late-onset Familial Mediterranean Fever (FMF) or related periodic syndromes.</p>
+    <p><strong>Why it fits:</strong> These syndromes classically feature <strong>predictable 24- to 72-hour attacks</strong> with severe serositis (inflammation of abdominal linings causing intense pain and diarrhea, or lung pleura causing sharp chest pain) that resolve spontaneously between episodes.</p>
+    <a class="source-link" href="https://www.mayoclinic.org/diseases-conditions/familial-mediterranean-fever/symptoms-causes/syc-20372470" target="_blank">Mayo Clinic's Guide to Familial Mediterranean Fever</a>
+  </div>
+
+  <div class="condition-card">
+    <h3>4. Small Fiber &amp; Autonomic Neuropathy</h3>
+    <p><strong>What it is:</strong> Malfunction of small sensory nerve fibers that transmit pain signals and regulate involuntary autonomic processes (such as gastrointestinal motility).</p>
+    <p><strong>Why it fits:</strong> Small fiber neuropathy can generate burning, shooting, or migrating pain without joint swelling. Autonomic involvement triggers acute episodes of diarrhea, abdominal cramping, and blood pressure fluctuations during attacks.</p>
+    <a class="source-link" href="https://my.clevelandclinic.org/health/diseases/17479-small-fiber-neuropathy" target="_blank">Cleveland Clinic's Overview of Small Fiber Neuropathy</a>
+  </div>
+
+  <div class="condition-card">
+    <h3>5. Mast Cell Activation Syndrome (MCAS) / Severe Hypersensitivity</h3>
+    <p><strong>What it is:</strong> An immune condition where mast cells inappropriately release massive surges of chemical mediators (such as histamine) throughout multiple body systems.</p>
+    <p><strong>Why it fits:</strong> Connects the doctor's initial "allergy" theory to severe multi-organ distress. An MCAS flare can produce sinus/eye inflammation, vascular headaches, lung tightness, and rapid gastrointestinal hyper-motility resulting in diarrhea.</p>
+    <a class="source-link" href="https://my.clevelandclinic.org/health/diseases/mast-cell-activation-syndrome" target="_blank">Cleveland Clinic's Guide on Mast Cell Activation Syndrome (MCAS)</a>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- SECTION 2: COMMUNICATION GUIDE & CLINICAL TRANSLATION -->
+  <h2>2. How to Speak to the Doctor: Overcoming Dismissal</h2>
+  <p>When patients report pain in internal organs like the "brain," "kidneys," or "lungs," physicians often struggle to align those descriptions with anatomical nerve pathways. This phrasing can lead busy clinicians to dismiss the issue as anxiety or psychosomatic distress. Translating sensations into precise clinical terminology changes the clinical perception.</p>
+
+  <h3>Symptom Translation Matrix</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Avoid Saying (Lay Description)</th>
+        <th style="width: 35%;">Say Instead (Clinical Description)</th>
+        <th style="width: 35%;">Why It Matters</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>"Pain in my brain."</td>
+        <td>"Deep, throbbing headache behind my eyes and temples, with scalp sensitivity."</td>
+        <td>Directs attention to temporal arteries and cranial nerves rather than subjective anxiety.</td>
+      </tr>
+      <tr>
+        <td>"Pain moved into my lungs."</td>
+        <td>"Pleuritic chest wall pain that worsens when taking a deep breath."</td>
+        <td>Points directly toward serositis, intercostal nerves, or vascular chest inflammation.</td>
+      </tr>
+      <tr>
+        <td>"Pain in my kidneys."</td>
+        <td>"Deep aching pain in the bilateral flanks and mid-to-lower back."</td>
+        <td>Matches physical examination landmarks and prompts a urinalysis/renal lab panel.</td>
+      </tr>
+      <tr>
+        <td>"It moves all over my body."</td>
+        <td>"The pain is migratory and episodic, following a structured 48-hour crescendo pattern."</td>
+        <td>Differentiates a cyclical inflammatory flare from generalized somatic complaining.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Representing Yourself: The 30-Second Opening Pitch</h3>
+  <div class="script-box">
+    "Doctor, I am here because I experience recurring, 48-hour episodes of severe migratory pain. It begins mildly in my temples and sinuses, intensifies into my chest and flank, and peaks with severe abdominal cramping and diarrhea. I have brought an objective 4-week log showing dates, pain progression, and vital sign readings. Given my age, I want to ensure we run baseline blood and urine screens for systemic inflammation and vasculitis."
+  </div>
+
+  <h3>Direct Questions to Ask the Doctor</h3>
+  <ul>
+    <li><strong>Inflammatory Markers:</strong> <em>"Can we check my ESR (sed rate) and CRP blood levels today to rule out Giant Cell Arteritis or active systemic inflammation?"</em></li>
+    <li><strong>Organ Function Screening:</strong> <em>"Could we run a CBC, Comprehensive Metabolic Panel, and a standard Urinalysis to check my kidney function and look for microscopic blood or protein?"</em></li>
+    <li><strong>Autoimmune/Vasculitis Workup:</strong> <em>"Given the involvement of my sinuses, lungs, and gut, is an ANCA panel or ANA test warranted?"</em></li>
+    <li><strong>Medication Audit:</strong> <em>"Could any of my current prescriptions, supplements, or their interactions be contributing to episodic nerve pain or gastrointestinal dysmotility?"</em></li>
+    <li><strong>Specialist Referrals:</strong> <em>"If basic blood work does not yield a clear answer, would you provide a referral to a <strong>Rheumatologist</strong> or a <strong>Neurologist</strong> for a comprehensive multi-system evaluation?"</em></li>
+  </ul>
+
+  <div class="page-break"></div>
+
+  <!-- SECTION 3: 4-WEEK PRINTABLE SYMPTOM LOG -->
+  <h2>3. Four-Week Symptom &amp; Vitals Tracking Log</h2>
+  <p>Fill out an entry whenever an episode occurs. <em>Tip: Take your temperature and blood pressure at the peak of the attack. An objective fever or blood pressure spike provides clear physical evidence that rules out hypochondria.</em></p>
+
+  <table class="log-table">
+    <thead>
+      <tr>
+        <th style="width: 12%;">Date &amp; Time Started</th>
+        <th style="width: 18%;">Progression Sequence<br><span style="font-weight:normal;">(Where it started &rarr; where it traveled)</span></th>
+        <th style="width: 12%;">Vitals at Peak<br><span style="font-weight:normal;">(Temp, BP, Pulse)</span></th>
+        <th style="width: 10%;">Peak Pain<br><span style="font-weight:normal;">(0 to 10)</span></th>
+        <th style="width: 28%;">Associated Signs<br><span style="font-weight:normal;">(Diarrhea, vision blur, scalp tender, rash)</span></th>
+        <th style="width: 20%;">Duration &amp; Resolution<br><span style="font-weight:normal;">(Total hours, what helped/didn't)</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WEEK 1</strong><br>Date: _____<br>Time: _____</td>
+        <td></td>
+        <td>Temp: _____<br>BP: ______<br>HR: ______</td>
+        <td>___ / 10</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>WEEK 1</strong><br>Date: _____<br>Time: _____</td>
+        <td></td>
+        <td>Temp: _____<br>BP: ______<br>HR: ______</td>
+        <td>___ / 10</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>WEEK 2</strong><br>Date: _____<br>Time: _____</td>
+        <td></td>
+        <td>Temp: _____<br>BP: ______<br>HR: ______</td>
+        <td>___ / 10</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>WEEK 2</strong><br>Date: _____<br>Time: _____</td>
+        <td></td>
+        <td>Temp: _____<br>BP: ______<br>HR: ______</td>
+        <td>___ / 10</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>WEEK 3</strong><br>Date: _____<br>Time: _____</td>
+        <td></td>
+        <td>Temp: _____<br>BP: ______<br>HR: ______</td>
+        <td>___ / 10</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>WEEK 3</strong><br>Date: _____<br>Time: _____</td>
+        <td></td>
+        <td>Temp: _____<br>BP: ______<br>HR: ______</td>
+        <td>___ / 10</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>WEEK 4</strong><br>Date: _____<br>Time: _____</td>
+        <td></td>
+        <td>Temp: _____<br>BP: ______<br>HR: ______</td>
+        <td>___ / 10</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>WEEK 4</strong><br>Date: _____<br>Time: _____</td>
+        <td></td>
+        <td>Temp: _____<br>BP: ______<br>HR: ______</td>
+        <td>___ / 10</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Daily Baseline Check (Between Attacks)</h3>
+  <p>Use this space to note how you feel on pain-free days (e.g., normal energy, residual stiffness, baseline bowel movements):</p>
+  <div style="border: 1px dashed var(--border); height: 80px; padding: 8px; font-size: 9pt; color: #718096;">
+    Notes on non-episode days:
+  </div>
+
+</div>
+
+</body>
+</html>
