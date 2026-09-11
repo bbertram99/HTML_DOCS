@@ -107,26 +107,19 @@
             </div>
 
             <!-- Global Controls -->
-            <div class="flex items-center gap-3 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700/60 text-sm">
-                <!-- 12/24 Hour Toggle -->
-                <div class="flex items-center bg-slate-900 rounded-lg p-0.5 text-xs font-semibold">
-                    <button id="toggle12" class="px-3 py-1.5 rounded-md transition-all text-slate-400 hover:text-white">12H</button>
-                    <button id="toggle24" class="px-3 py-1.5 rounded-md bg-indigo-600 text-white shadow">24H</button>
-                </div>
-                <!-- Reset to Live Button -->
-                <button id="resetLiveBtn" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700 transition hidden items-center gap-1.5">
-                    <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                    </svg>
-                    Resume Live
-                </button>
+        <div class="flex items-center gap-3 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700/60 text-sm">
+            <!-- 12/24 Hour Toggle -->
+            <div class="flex items-center bg-slate-900 rounded-lg p-0.5 text-xs font-semibold">
+                <button id="toggle12" class="px-3 py-1.5 rounded-md transition-all text-slate-400 hover:text-white">12H</button>
+                <button id="toggle24" class="px-3 py-1.5 rounded-md bg-indigo-600 text-white shadow">24H</button>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
             <!-- Ireland Card -->
             <div class="relative bg-slate-800/60 backdrop-blur border border-slate-700/60 rounded-2xl p-6 flex flex-col justify-between overflow-hidden group hover:border-emerald-500/50 transition duration-300">
@@ -374,55 +367,6 @@
             </div>
         </section>
 
-        <section class="bg-slate-800/40 border border-slate-700/60 rounded-2xl p-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
-                <div>
-                    <h3 class="text-md font-semibold text-white flex items-center gap-2">
-                        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Interactive Meeting Planner & Time Scrubber
-                    </h3>
-                    <p class="text-xs text-slate-400">Drag the slider to test meeting hours across Ireland, Nova Scotia, and Manitoba.</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span id="scrubberOffsetBadge" class="text-xs px-2.5 py-1 rounded-md bg-indigo-950/80 text-indigo-300 border border-indigo-700/50 font-mono-num font-medium">
-                        Live Time (0h offset)
-                    </span>
-                </div>
-            </div>
-
-            <!-- Scrubber Slider -->
-            <div class="space-y-4">
-                <input 
-                    type="range" 
-                    id="meetingSlider" 
-                    min="-12" 
-                    max="12" 
-                    step="0.5" 
-                    value="0" 
-                    class="slider-thumb w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
-                >
-                <div class="flex justify-between text-[11px] font-mono-num text-slate-400 px-1">
-                    <span>-12 hrs</span>
-                    <span>-8 hrs</span>
-                    <span>-4 hrs</span>
-                    <span class="text-indigo-400 font-bold">Now</span>
-                    <span>+4 hrs</span>
-                    <span>+8 hrs</span>
-                    <span>+12 hrs</span>
-                </div>
-            </div>
-
-            <!-- Meeting Work Hours Overlap Visualizer -->
-            <div class="mt-8 pt-6 border-t border-slate-700/40">
-                <div class="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">Work Hours Compatibility Guide (9 AM – 5 PM Standard Business Time)</div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs" id="workHoursGuide">
-                    <!-- Dynamic evaluation of whether the selected time falls into business hours -->
-                </div>
-            </div>
-        </section>
-
     </main>
 
     <script>
@@ -435,16 +379,10 @@
 
         // State variables
         let is24Hour = true;
-        let sliderOffsetHours = 0; // offset in hours applied by meeting planner
-        let isLiveMode = true;
 
         // Elements
         const toggle12Btn = document.getElementById('toggle12');
         const toggle24Btn = document.getElementById('toggle24');
-        const resetLiveBtn = document.getElementById('resetLiveBtn');
-        const meetingSlider = document.getElementById('meetingSlider');
-        const scrubberOffsetBadge = document.getElementById('scrubberOffsetBadge');
-        const liveStatusBadge = document.getElementById('liveStatusBadge');
 
         // Helper: Format Date object in target timezone
         function getTimezoneParts(date, timeZone) {
@@ -535,20 +473,18 @@
 
         function updateClocks() {
             const now = new Date();
-            // Apply scrubber offset
-            const activeTime = new Date(now.getTime() + (sliderOffsetHours * 3600 * 1000));
 
             // Ireland
-            const ieParts = getTimezoneParts(activeTime, TIMEZONES.ireland);
-            const ieOffsetMin = getTzOffsetMinutes(activeTime, TIMEZONES.ireland);
+            const ieParts = getTimezoneParts(now, TIMEZONES.ireland);
+            const ieOffsetMin = getTzOffsetMinutes(now, TIMEZONES.ireland);
 
             // Nova Scotia
-            const nsParts = getTimezoneParts(activeTime, TIMEZONES.novaScotia);
-            const nsOffsetMin = getTzOffsetMinutes(activeTime, TIMEZONES.novaScotia);
+            const nsParts = getTimezoneParts(now, TIMEZONES.novaScotia);
+            const nsOffsetMin = getTzOffsetMinutes(now, TIMEZONES.novaScotia);
 
             // Manitoba
-            const mbParts = getTimezoneParts(activeTime, TIMEZONES.manitoba);
-            const mbOffsetMin = getTzOffsetMinutes(activeTime, TIMEZONES.manitoba);
+            const mbParts = getTimezoneParts(now, TIMEZONES.manitoba);
+            const mbOffsetMin = getTzOffsetMinutes(now, TIMEZONES.manitoba);
 
             // Update Ireland UI
             document.getElementById('irelandDigitalTime').textContent = formatDigitalTime(ieParts.hour, ieParts.minute, ieParts.second, is24Hour);
@@ -623,37 +559,6 @@
 
             document.getElementById('matrixMbIe').textContent = `${-diffIeMbHours >= 0 ? '+' : ''}${-diffIeMbHours}h`;
             document.getElementById('matrixMbNs').textContent = `${-diffNsMbHours >= 0 ? '+' : ''}${-diffNsMbHours}h`;
-
-            // Update Work Hours Guide for Planner
-            updateWorkGuide(ieParts.hour, nsParts.hour, mbParts.hour);
-        }
-
-        function isWorkHour(hour) {
-            return hour >= 9 && hour < 17; // 9:00 to 17:00
-        }
-
-        function getWorkStatusHtml(name, hour) {
-            const inWork = isWorkHour(hour);
-            const statusBg = inWork ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-300' : 'bg-rose-950/30 border-rose-500/20 text-rose-300';
-            const statusDot = inWork ? 'bg-emerald-400' : 'bg-rose-400';
-            const statusText = inWork ? 'In Office Hours' : 'Outside Office Hours';
-            return `
-                <div class="p-3 rounded-xl border ${statusBg} flex items-center justify-between">
-                    <div class="font-medium text-slate-200">${name}</div>
-                    <div class="flex items-center gap-1.5 text-[11px]">
-                        <span class="w-2 h-2 rounded-full ${statusDot}"></span>
-                        <span>${statusText}</span>
-                    </div>
-                </div>
-            `;
-        }
-
-        function updateWorkGuide(ieHour, nsHour, mbHour) {
-            const container = document.getElementById('workHoursGuide');
-            container.innerHTML = 
-                getWorkStatusHtml('Ireland', ieHour) +
-                getWorkStatusHtml('Nova Scotia', nsHour) +
-                getWorkStatusHtml('Manitoba', mbHour);
         }
 
         // 12h / 24h Toggles
@@ -671,45 +576,8 @@
             updateClocks();
         });
 
-        // Meeting Planner Scrubber
-        meetingSlider.addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value);
-            sliderOffsetHours = val;
-            if (val === 0) {
-                isLiveMode = true;
-                liveStatusBadge.className = 'text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium';
-                liveStatusBadge.textContent = 'LIVE';
-                scrubberOffsetBadge.textContent = 'Live Time (0h offset)';
-                resetLiveBtn.classList.add('hidden');
-                resetLiveBtn.classList.remove('flex');
-            } else {
-                isLiveMode = false;
-                liveStatusBadge.className = 'text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-medium';
-                liveStatusBadge.textContent = 'SIMULATION';
-                const sign = val > 0 ? '+' : '';
-                scrubberOffsetBadge.textContent = `Offset: ${sign}${val} hours`;
-                resetLiveBtn.classList.remove('hidden');
-                resetLiveBtn.classList.add('flex');
-            }
-            updateClocks();
-        });
-
-        // Reset to Live Time
-        resetLiveBtn.addEventListener('click', () => {
-            sliderOffsetHours = 0;
-            meetingSlider.value = 0;
-            isLiveMode = true;
-            liveStatusBadge.className = 'text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium';
-            liveStatusBadge.textContent = 'LIVE';
-            scrubberOffsetBadge.textContent = 'Live Time (0h offset)';
-            resetLiveBtn.classList.add('hidden');
-            resetLiveBtn.classList.remove('flex');
-            updateClocks();
-        });
-
         // Main Clock Loop
         setInterval(() => {
-            // Clocks tick every second regardless of whether offset is simulated or live
             updateClocks();
         }, 1000);
 
