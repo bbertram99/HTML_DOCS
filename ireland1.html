@@ -1,204 +1,412 @@
-<div style="background-color:#0b1712;background-image:radial-gradient(circle at 15% 10%, rgba(52,211,153,0.08) 0%, transparent 40%),radial-gradient(circle at 85% 60%, rgba(212,175,55,0.05) 0%, transparent 45%);color:#e6ede9;font-family:Georgia,serif;padding:24px 16px;border-radius:10px;line-height:1.75;box-sizing:border-box;">
-  <!-- HEADER -->
-  <div style="text-align:center;margin-bottom:35px;padding-bottom:20px;border-bottom:2px solid #2e5944;">
-    <span style="display:block;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#d4af37;font-weight:bold;margin-bottom:6px;">Atlantic Crossing &bull; Expedition Log</span>
-    <h1 style="font-size:28px;color:#ffffff;margin:0 0 8px 0;font-weight:bold;line-height:1.2;">The Emerald Bound Chronicles</h1>
-    <p style="color:#8fa89b;font-style:italic;margin:0;font-size:16px;">Dispatches, layovers, and Atlantic waypoints en route to Ireland</p>
-    <div style="color:#d4af37;margin-top:14px;letter-spacing:6px;font-size:14px;">☘ ☘ ☘</div>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Emerald Bound Chronicles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #0b1712;
+      --bg-card: #12231c;
+      --bg-card-hover: #162b22;
+      --border-accent: #2e5944;
+      --border-subtle: #1c382b;
+      --clover-gold: #d4af37;
+      --celtic-green: #34d399;
+      --emerald-soft: #a7f3d0;
+      --text-main: #e6ede9;
+      --text-muted: #8fa89b;
+      --badge-bg: #1e3a2f;
+      --shadow-irish: rgba(0, 0, 0, 0.45);
+    }
 
-  <!-- SEPTEMBER 10 -->
-  <div style="margin-bottom:40px;">
-    <div style="border-bottom:1px solid #d4af37;padding-bottom:6px;margin-bottom:20px;">
-      <h2 style="font-size:20px;color:#d4af37;margin:0;text-transform:uppercase;letter-spacing:1px;">Thursday, September 10, 2026</h2>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(52, 211, 153, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 60%, rgba(212, 175, 55, 0.05) 0%, transparent 45%),
+        linear-gradient(to bottom, #070e0b, var(--bg-canvas));
+      color: var(--text-main);
+      font-family: 'Lora', Georgia, serif;
+      line-height: 1.75;
+      padding: 3rem 1.25rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid var(--border-accent);
+      position: relative;
+    }
+
+    header::after {
+      content: "☘ ☘ ☘";
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-canvas);
+      padding: 0 1rem;
+      color: var(--clover-gold);
+      font-size: 1.1rem;
+      letter-spacing: 0.5rem;
+    }
+
+    .site-tag {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      font-size: 0.8rem;
+      color: var(--clover-gold);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: 0.02em;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      font-style: italic;
+      margin-top: 0.75rem;
+    }
+
+    .day-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .day-banner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .day-banner h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.45rem;
+      color: var(--clover-gold);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .day-banner-line {
+      height: 1px;
+      background: linear-gradient(to right, var(--clover-gold), transparent);
+      width: 100%;
+    }
+
+    .entry {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--border-accent);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 25px -5px var(--shadow-irish);
+      transition: border-color 0.25s ease, transform 0.2s ease;
+    }
+
+    .entry:hover {
+      border-color: var(--border-accent);
+      border-left-color: var(--clover-gold);
+      transform: translateY(-2px);
+      background: var(--bg-card-hover);
+    }
+
+    .entry-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.85rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .entry-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 0.01em;
+    }
+
+    .badge-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .location-badge {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--emerald-soft);
+      background-color: var(--badge-bg);
+      border: 1px solid var(--border-accent);
+      padding: 0.2rem 0.65rem;
+      border-radius: 4px;
+      letter-spacing: 0.03em;
+    }
+
+    .time-badge {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem;
+      color: var(--clover-gold);
+      font-weight: 500;
+    }
+
+    .entry-body {
+      font-size: 1.05rem;
+      color: #d1ded7;
+    }
+
+    .entry-body p {
+      margin-bottom: 0.85rem;
+    }
+
+    .entry-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .entry-body blockquote {
+      border-left: 3px solid var(--clover-gold);
+      padding: 0.6rem 1rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: #f1f5f9;
+      background: rgba(212, 175, 55, 0.08);
+      border-radius: 0 4px 4px 0;
+    }
+
+    footer {
+      text-align: center;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <span class="site-tag">Atlantic Crossing &bull; Expedition Log</span>
+    <h1>The Emerald Bound Chronicles</h1>
+    <p>Dispatches, layovers, and Atlantic waypoints en route to Ireland</p>
+  </header>
+
+  <!-- SEPTEMBER 10, 2026 -->
+  <section class="day-section">
+    <div class="day-banner">
+      <h2>Thursday, September 10, 2026</h2>
+      <div class="day-banner-line"></div>
     </div>
 
-    <!-- Entry 1 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">Leaving Brandon for the Emerald Isle</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Brandon, MB &bull; Starbucks</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">9:02 AM</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">Leaving Brandon for the Emerald Isle</h3>
+        <div class="badge-group">
+          <span class="location-badge">Brandon, MB &bull; Starbucks</span>
+          <span class="time-badge">9:02 AM</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0 0 10px 0;">The journey officially begins[span_0](start_span)[span_0](end_span). I'm settled at Starbucks at 9:02 AM on September 10, getting ready to hit the road[span_1](start_span)[span_1](end_span). My plan for this trip is to capture the whole experience raw through voice journaling—hands-free, unfiltered, and without typing on a phone screen[span_2](start_span)[span_2](end_span). Later, I’ll shape all these audio dispatches and snapshots into a proper travelogue[span_3](start_span)[span_3](end_span).</p>
-        <p style="margin:0;">Fueling up for the long haul with a ham and Swiss baguette and a Venti refresher crafted with lemonade[span_4](start_span)[span_4](end_span). Refreshing, crisp, and just what I need before the Atlantic transit[span_5](start_span)[span_5](end_span). Next stop: Winnipeg[span_6](start_span)[span_6](end_span)!</p>
+      <div class="entry-body">
+        <p>The journey officially begins[span_0](start_span)[span_0](end_span). I'm settled at Starbucks at 9:02 AM on September 10, getting ready to hit the road[span_1](start_span)[span_1](end_span). My plan for this trip is to capture the whole experience raw through voice journaling—hands-free, unfiltered, and without typing on a phone screen[span_2](start_span)[span_2](end_span). Later, I’ll shape all these audio dispatches and snapshots into a proper travelogue[span_3](start_span)[span_3](end_span).</p>
+        <p>Fueling up for the long haul with a ham and Swiss baguette and a Venti refresher crafted with lemonade[span_4](start_span)[span_4](end_span). Refreshing, crisp, and just what I need before the Atlantic transit[span_5](start_span)[span_5](end_span). Next stop: Winnipeg[span_6](start_span)[span_6](end_span)!</p>
       </div>
-    </div>
+    </article>
 
-    <!-- Entry 2 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">Winnipeg Airport Waypoint</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Winnipeg Airport Terminal</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">Midday</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">Winnipeg Airport Waypoint</h3>
+        <div class="badge-group">
+          <span class="location-badge">Winnipeg Airport Terminal</span>
+          <span class="time-badge">Midday</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0 0 10px 0;">Arrived at the terminal in Winnipeg[span_7](start_span)[span_7](end_span). It has been quite a while since I last passed through here, and the terminal looks sharp and modern[span_8](start_span)[span_8](end_span). Flight boards show everything running on schedule, leaving me with an easy hour to unwind and explore the gates[span_9](start_span)[span_9](end_span).</p>
-        <p style="margin:0;">It crossed my mind while walking through the concourse: does Ireland have Starbucks[span_10](start_span)[span_10](end_span)? If so, hunting down a local mug is officially on my travel checklist[span_11](start_span)[span_11](end_span).</p>
+      <div class="entry-body">
+        <p>Arrived at the terminal in Winnipeg[span_7](start_span)[span_7](end_span). It has been quite a while since I last passed through here, and the terminal looks sharp and modern[span_8](start_span)[span_8](end_span). Flight boards show everything running on schedule, leaving me with an easy hour to unwind and explore the gates[span_9](start_span)[span_9](end_span).</p>
+        <p>It crossed my mind while walking through the concourse: does Ireland have Starbucks[span_10](start_span)[span_10](end_span)? If so, hunting down a local mug is officially on my travel checklist[span_11](start_span)[span_11](end_span).</p>
       </div>
-    </div>
+    </article>
 
-    <!-- Entry 3 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">Boarding & Atlantic Weather Delays</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Concourse Gate</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">Afternoon</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">Boarding & Atlantic Weather Delays</h3>
+        <div class="badge-group">
+          <span class="location-badge">Concourse Gate</span>
+          <span class="time-badge">Afternoon</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0;">Aboard the aircraft for the leg out to Halifax[span_12](start_span)[span_12](end_span). The captain came over the intercom with an update: bad weather on the East Coast has pushed our departure back by about an hour[span_13](start_span)[span_13](end_span). Once airborne, we're looking at a three-hour run[span_14](start_span)[span_14](end_span). Headphones are on, audiobooks are queued, and we’re ready to ride it out[span_15](start_span)[span_15](end_span).</p>
+      <div class="entry-body">
+        <p>Aboard the aircraft for the leg out to Halifax[span_12](start_span)[span_12](end_span). The captain came over the intercom with an update: bad weather on the East Coast has pushed our departure back by about an hour[span_13](start_span)[span_13](end_span). Once airborne, we're looking at a three-hour run[span_14](start_span)[span_14](end_span). Headphones are on, audiobooks are queued, and we’re ready to ride it out[span_15](start_span)[span_15](end_span).</p>
       </div>
-    </div>
+    </article>
 
-    <!-- Entry 4 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">Mid-Air Nostalgia</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Cruising Altitude</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">In Flight</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">Mid-Air Nostalgia</h3>
+        <div class="badge-group">
+          <span class="location-badge">Cruising Altitude</span>
+          <span class="time-badge">In Flight</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0;">You know you're flying in a vintage workhorse of an aircraft when there's still an authentic chrome cigarette ashtray mounted right on the lavatory door[span_16](start_span)[span_16](end_span)! A hilarious blast from the past at 30,000 feet[span_17](start_span)[span_17](end_span).</p>
+      <div class="entry-body">
+        <p>You know you're flying in a vintage workhorse of an aircraft when there's still an authentic chrome cigarette ashtray mounted right on the lavatory door[span_16](start_span)[span_16](end_span)! A hilarious blast from the past at 30,000 feet[span_17](start_span)[span_17](end_span).</p>
       </div>
-    </div>
+    </article>
 
-    <!-- Entry 5 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">Touchdown in Nova Scotia</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Halifax, NS</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">Evening</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">Touchdown in Nova Scotia</h3>
+        <div class="badge-group">
+          <span class="location-badge">Halifax, NS</span>
+          <span class="time-badge">Evening</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0 0 10px 0;">Touched down in Halifax about an hour ago[span_18](start_span)[span_18](end_span). Mom met me at arrivals, and we headed out to grab some groceries before making our way to their new condo for supper[span_19](start_span)[span_19](end_span). The weather here is mild and warm, and the flight over was smooth with plenty of great aerial views out the window[span_20](start_span)[span_20](end_span).</p>
-        <p style="margin:0;">Cruising from the terminal in my mom’s electric Volkswagen—I won't even attempt the proper German pronunciation, but it’s a remarkably smooth ride[span_21](start_span)[span_21](end_span). Great to be back on the East Coast[span_22](start_span)[span_22](end_span).</p>
+      <div class="entry-body">
+        <p>Touched down in Halifax about an hour ago[span_18](start_span)[span_18](end_span). Mom met me at arrivals, and we headed out to grab some groceries before making our way to their new condo for supper[span_19](start_span)[span_19](end_span). The weather here is mild and warm, and the flight over was smooth with plenty of great aerial views out the window[span_20](start_span)[span_20](end_span).</p>
+        <p>Cruising from the terminal in my mom’s electric Volkswagen—I won't even attempt the proper German pronunciation, but it’s a remarkably smooth ride[span_21](start_span)[span_21](end_span). Great to be back on the East Coast[span_22](start_span)[span_22](end_span).</p>
       </div>
-    </div>
-  </div>
+    </article>
+  </section>
 
-  <!-- SEPTEMBER 11 -->
-  <div style="margin-bottom:30px;">
-    <div style="border-bottom:1px solid #d4af37;padding-bottom:6px;margin-bottom:20px;">
-      <h2 style="font-size:20px;color:#d4af37;margin:0;text-transform:uppercase;letter-spacing:1px;">Friday, September 11, 2026</h2>
+  <!-- SEPTEMBER 11, 2026 -->
+  <section class="day-section">
+    <div class="day-banner">
+      <h2>Friday, September 11, 2026</h2>
+      <div class="day-banner-line"></div>
     </div>
 
-    <!-- Entry 6 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">Morning in Halifax: Sierra & Breakfast</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Halifax, NS</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">Morning</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">Morning in Halifax: Sierra & Breakfast</h3>
+        <div class="badge-group">
+          <span class="location-badge">Halifax, NS</span>
+          <span class="time-badge">Morning</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0;">Woke up well-rested after a solid night's sleep in a very comfortable guest bed[span_23](start_span)[span_23](end_span). Spent late last night diving into my book on Sierra On-Line game history[span_24](start_span)[span_24](end_span). The aroma of breakfast on the stove is filling the condo right now courtesy of Mom[span_25](start_span)[span_25](end_span). It’s a crisp, clear day in Halifax[span_26](start_span)[span_26](end_span). Catching up with Ashley later today, and getting ready for the transatlantic flight tonight[span_27](start_span)[span_27](end_span).</p>
+      <div class="entry-body">
+        <p>Woke up well-rested after a solid night's sleep in a very comfortable guest bed[span_23](start_span)[span_23](end_span). Spent late last night diving into my book on Sierra On-Line game history[span_24](start_span)[span_24](end_span). The aroma of breakfast on the stove is filling the condo right now courtesy of Mom[span_25](start_span)[span_25](end_span). It’s a crisp, clear day in Halifax[span_26](start_span)[span_26](end_span). Catching up with Ashley later today, and getting ready for the transatlantic flight tonight[span_27](start_span)[span_27](end_span).</p>
       </div>
-    </div>
+    </article>
 
-    <!-- Entry 7 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">A Meeting with Poppy</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Halifax, NS</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">Midday</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">A Meeting with Poppy</h3>
+        <div class="badge-group">
+          <span class="location-badge">Halifax, NS</span>
+          <span class="time-badge">Midday</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0;">Made an acquaintance today: Poppy[span_28](start_span)[span_28](end_span)! I think she likes me, even if she tested the waters with a few playful nips early on to establish boundaries[span_29](start_span)[span_29](end_span). Her absolute favorite hobby is locking eyes for intense, unwavering stare-downs[span_30](start_span)[span_30](end_span).</p>
+      <div class="entry-body">
+        <p>Made an acquaintance today: Poppy[span_28](start_span)[span_28](end_span)! I think she likes me, even if she tested the waters with a few playful nips early on to establish boundaries[span_29](start_span)[span_29](end_span). Her absolute favorite hobby is locking eyes for intense, unwavering stare-downs[span_30](start_span)[span_30](end_span).</p>
       </div>
-    </div>
+    </article>
 
-    <!-- Entry 8 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">Afternoon Catch-Up with Ashley</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Halifax, NS</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">Afternoon</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">Afternoon Catch-Up with Ashley</h3>
+        <div class="badge-group">
+          <span class="location-badge">Halifax, NS</span>
+          <span class="time-badge">Afternoon</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0;">Ashley stopped by Mom and Dad’s place for a great afternoon visit[span_31](start_span)[span_31](end_span). We covered a ton of ground and had a fantastic catch-up chat[span_32](start_span)[span_32](end_span). We’re heading over to her place later this evening for a farewell dinner before heading off to the terminal[span_33](start_span)[span_33](end_span).</p>
+      <div class="entry-body">
+        <p>Ashley stopped by Mom and Dad’s place for a great afternoon visit[span_31](start_span)[span_31](end_span). We covered a ton of ground and had a fantastic catch-up chat[span_32](start_span)[span_32](end_span). We’re heading over to her place later this evening for a farewell dinner before heading off to the terminal[span_33](start_span)[span_33](end_span).</p>
       </div>
-    </div>
+    </article>
 
-    <!-- Entry 9 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">The Romero Quest</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Halifax, NS</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">2:38 PM</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">The Romero Quest</h3>
+        <div class="badge-group">
+          <span class="location-badge">Halifax, NS</span>
+          <span class="time-badge">2:38 PM</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0 0 10px 0;">While talking with my sister, the conversation turned to John Romero and id Software[span_34](start_span)[span_34](end_span). After recently listening to his autobiography, I mentioned how fascinating his journey was and brought up that he currently lives and develops games in Ireland[span_35](start_span)[span_35](end_span). She looked him up on the spot and insisted: <em>"You have to try and reach out!"</em>[span_36](start_span)[span_36](end_span)</p>
-        <blockquote style="margin:12px 0;padding:8px 14px;border-left:3px solid #d4af37;background:rgba(212,175,55,0.08);color:#f1f5f9;font-style:italic;">
+      <div class="entry-body">
+        <p>While talking with my sister, the conversation turned to John Romero and id Software[span_34](start_span)[span_34](end_span). After recently listening to his autobiography, I mentioned how fascinating his journey was and brought up that he currently lives and develops games in Ireland[span_35](start_span)[span_35](end_span). She looked him up on the spot and insisted: <em>"You have to try and reach out!"</em>[span_36](start_span)[span_36](end_span)</p>
+        <blockquote>
           "Heading to Ireland for 12 days and wondering how cool it would be to say hi to John. Super short notice, but you never know unless you ask...[span_37](start_span)"[span_37](end_span)
         </blockquote>
-        <p style="margin:0;">I joined the official Romero Games Discord community and sent the message out into the world[span_38](start_span)[span_38](end_span). A long shot, but adventures favor the bold[span_39](start_span)[span_39](end_span). Let's see what happens[span_40](start_span)[span_40](end_span)!</p>
+        <p>I joined the official Romero Games Discord community and sent the message out into the world[span_38](start_span)[span_38](end_span). A long shot, but adventures favor the bold[span_39](start_span)[span_39](end_span). Let's see what happens[span_40](start_span)[span_40](end_span)!</p>
       </div>
-    </div>
+    </article>
 
-    <!-- Entry 10 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">Halifax Departures & Dublin Flight Paths</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Halifax Stanfield (YHZ)</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">Evening</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">Halifax Departures & Dublin Flight Paths</h3>
+        <div class="badge-group">
+          <span class="location-badge">Halifax Stanfield (YHZ)</span>
+          <span class="time-badge">Evening</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0 0 10px 0;">Waiting at the gate[span_41](start_span)[span_41](end_span). Dad misplaced his wallet somewhere along the way—classic travel chaos, but that's the nature of airport transit[span_42](start_span)[span_42](end_span).</p>
-        <p style="margin:0;">Checking flight tracking telemetry, it looks like Donald Trump's Air Force plane is slated to touch down in Dublin right around the same window we do[span_43](start_span)[span_43](end_span). It will be interesting to see if security holding patterns or motorcade ground holds affect our arrival into Ireland[span_44](start_span)[span_44](end_span). Time to board[span_45](start_span)[span_45](end_span)!</p>
+      <div class="entry-body">
+        <p>Waiting at the gate[span_41](start_span)[span_41](end_span). Dad misplaced his wallet somewhere along the way—classic travel chaos, but that's the nature of airport transit[span_42](start_span)[span_42](end_span).</p>
+        <p>Checking flight tracking telemetry, it looks like Donald Trump's Air Force plane is slated to touch down in Dublin right around the same window we do[span_43](start_span)[span_43](end_span). It will be interesting to see if security holding patterns or motorcade ground holds affect our arrival into Ireland[span_44](start_span)[span_44](end_span). Time to board[span_45](start_span)[span_45](end_span)!</p>
       </div>
-    </div>
+    </article>
 
-    <!-- Entry 11 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">Transatlantic Takeoff</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">Atlantic Airspace</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">Departure</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">Transatlantic Takeoff</h3>
+        <div class="badge-group">
+          <span class="location-badge">Atlantic Airspace</span>
+          <span class="time-badge">Departure</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0;">Boarded and wheels up[span_46](start_span)[span_46](end_span)! This aircraft is a massive step up from the regional hopper out of Winnipeg—spacious, comfortable, and built for oceanic crossing[span_47](start_span)[span_47](end_span). Settling in, leaning back, and getting ready for the overnight flight over the Atlantic[span_48](start_span)[span_48](end_span).</p>
+      <div class="entry-body">
+        <p>Boarded and wheels up[span_46](start_span)[span_46](end_span)! This aircraft is a massive step up from the regional hopper out of Winnipeg—spacious, comfortable, and built for oceanic crossing[span_47](start_span)[span_47](end_span). Settling in, leaning back, and getting ready for the overnight flight over the Atlantic[span_48](start_span)[span_48](end_span).</p>
       </div>
-    </div>
+    </article>
 
-    <!-- Entry 12 -->
-    <div style="background:#12231c;border:1px solid #1c382b;border-left:4px solid #2e5944;border-radius:6px;padding:18px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <span style="font-size:18px;font-weight:bold;color:#ffffff;">Air Force One & The Atlantic Air Race</span>
-        <div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;color:#a7f3d0;background:#1e3a2f;border:1px solid #2e5944;padding:2px 8px;border-radius:4px;margin-right:6px;">North Atlantic</span>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#d4af37;">Overnight</span>
+    <article class="entry">
+      <div class="entry-top">
+        <h3 class="entry-title">Air Force One & The Atlantic Air Race</h3>
+        <div class="badge-group">
+          <span class="location-badge">North Atlantic</span>
+          <span class="time-badge">Overnight</span>
         </div>
       </div>
-      <div style="color:#d1ded7;font-size:15px;">
-        <p style="margin:0;">Running live ADS-B flight telemetry over the Atlantic[span_49](start_span)[span_49](end_span). Air Force One is carving eastward ahead of us tracking at roughly 995 km/h, while our bird is maintaining a steady clip around 900 km/h[span_50](start_span)[span_50](end_span). I'll be checking back periodically across the ocean corridor to see if the tailwinds shift or if either plane opens up the throttle[span_51](start_span)[span_51](end_span).</p>
+      <div class="entry-body">
+        <p>Running live ADS-B flight telemetry over the Atlantic[span_49](start_span)[span_49](end_span). Air Force One is carving eastward ahead of us tracking at roughly 995 km/h, while our bird is maintaining a steady clip around 900 km/h[span_50](start_span)[span_50](end_span). I'll be checking back periodically across the ocean corridor to see if the tailwinds shift or if either plane opens up the throttle[span_51](start_span)[span_51](end_span).</p>
       </div>
-    </div>
-  </div>
+    </article>
+  </section>
 
-  <!-- FOOTER -->
-  <div style="text-align:center;padding-top:20px;border-top:1px solid #1c382b;color:#8fa89b;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;">
-    Slán go fóill &bull; Next stop: Dublin
-  </div>
+  <footer>
+    <p>Slán go fóill &bull; Next stop: Dublin</p>
+  </footer>
 </div>
+
+</body>
+</html>
