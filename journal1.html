@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Log: Across the Atlantic & Beyond</title>
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --surface: #ffffff;
+      --header-bg: #0f172a;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --accent: #0284c7;
+      --accent-soft: #e0f2fe;
+      --border: #e2e8f0;
+      --tag-bg: #f1f5f9;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.65;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: #ffffff;
+      padding: 3.5rem 1.5rem 2.5rem;
+      text-align: center;
+      border-bottom: 4px solid var(--accent);
+    }
+
+    header h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      color: #94a3b8;
+      font-size: 1.05rem;
+      margin-top: 0.5rem;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 2.5rem auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: 2.5fr 1fr;
+      gap: 2.5rem;
+    }
+
+    @media (max-width: 840px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .date-heading {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 700;
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 2px solid var(--accent-soft);
+    }
+
+    .date-heading:first-of-type {
+      margin-top: 0;
+    }
+
+    .post {
+      background: var(--surface);
+      padding: 1.75rem 2rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .post-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .post h2 {
+      font-size: 1.45rem;
+      color: #0f172a;
+      margin-bottom: 0.85rem;
+      line-height: 1.3;
+    }
+
+    .post p {
+      margin-bottom: 1rem;
+      color: #334155;
+    }
+
+    .photo-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 6px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+
+    .tag-container {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      background: var(--tag-bg);
+      color: #475569;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    aside {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .widget {
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .widget h3 {
+      font-size: 1.05rem;
+      color: #0f172a;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .widget ul {
+      list-style: none;
+    }
+
+    .widget li {
+      margin-bottom: 0.6rem;
+    }
+
+    .widget a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .widget a:hover {
+      text-decoration: underline;
+    }
+
+    .stat-badge {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Dispatches & Waypoints</h1>
+    <p>Transit notes, family visits, layovers, and transatlantic tracks[span_0](start_span)[span_0](end_span).</p>
+  </header>
+
+  <div class="container">
+    <main>
+      <div class="date-heading">Thursday, September 10, 2026[span_1](start_span)[span_1](end_span)</div>
+
+      <article class="post">
+        <div class="post-meta">Winnipeg, MB &bull; Departure Leg[span_2](start_span)[span_2](end_span)</div>
+        <h2>Winnipeg Airport[span_3](start_span)[span_3](end_span)</h2>
+        <p>Checked in and waiting at the gate[span_4](start_span)[span_4](end_span). The initial calm before embarking on the full transatlantic leg, wrapping up last-minute messages, and checking flight schedules[span_5](start_span)[span_5](end_span).</p>
+        <div class="tag-container">
+          <span class="tag">#Travel</span>
+          <span class="tag">#Winnipeg</span>
+          <span class="tag">#Airports</span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="post-meta">Transit[span_6](start_span)[span_6](end_span)</div>
+        <h2>Leaving Brennan for Ireland[span_7](start_span)[span_7](end_span)</h2>
+        <p>Saying goodbyes and setting off on the journey eastward toward Ireland[span_8](start_span)[span_8](end_span). Luggage accounted for, boarding passes loaded, and ready for the long stretch of flying ahead[span_9](start_span)[span_9](end_span).</p>
+        <div class="tag-container">
+          <span class="tag">#Family</span>
+          <span class="tag">#Departure</span>
+          <span class="tag">#Ireland</span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="post-meta">In Flight[span_10](start_span)[span_10](end_span)</div>
+        <h2>On the Plane[span_11](start_span)[span_11](end_span)!</h2>
+        <p>Settled into the cabin at altitude[span_12](start_span)[span_12](end_span). Watching flight telemetry scroll past and keeping track of the route toward the Atlantic coast[span_13](start_span)[span_13](end_span).</p>
+        <div class="tag-container">
+          <span class="tag">#Aviation</span>
+          <span class="tag">#FlightNotes</span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="post-meta">Halifax, NS &bull; Arrival Leg[span_14](start_span)[span_14](end_span)</div>
+        <h2>Arrived in Halifax[span_15](start_span)[span_15](end_span)</h2>
+        <p>Wheels down on the East Coast[span_16](start_span)[span_16](end_span). Disembarked and heading through arrivals into Halifax for an overnight stopover and family time before connecting overseas[span_17](start_span)[span_17](end_span).</p>
+        <div class="tag-container">
+          <span class="tag">#Halifax</span>
+          <span class="tag">#NovaScotia</span>
+          <span class="tag">#Stopover</span>
+        </div>
+      </article>
+
+      <div class="date-heading">Friday, September 11, 2026[span_18](start_span)[span_18](end_span)</div>
+
+      <article class="post">
+        <div class="post-meta">Halifax &bull; Exploration[span_19](start_span)[span_19](end_span)</div>
+        <h2>Day 2: Out and About[span_20](start_span)[span_20](end_span)</h2>
+        <p>Spending the day making the rounds through Halifax, catching up on rest, and getting some fresh ocean air between connection itineraries[span_21](start_span)[span_21](end_span).</p>
+        <div class="tag-container">
+          <span class="tag">#Halifax</span>
+          <span class="tag">#Day2</span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="post-meta">Walkabout[span_22](start_span)[span_22](end_span)</div>
+        <h2>Found This Dog[span_23](start_span)[span_23](end_span)</h2>
+        <p>A quick detour on foot and an impromptu friendly greeting while wandering the area[span_24](start_span)[span_24](end_span).</p>
+        <div class="photo-placeholder">
+          <span>&#128247; [Journal Photo: Found Dog Entry][span_25](start_span)[span_25](end_span)</span>
+        </div>
+        <div class="tag-container">
+          <span class="tag">#Encounter</span>
+          <span class="tag">#Dogs</span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="post-meta">Halifax &bull; Friends & Family[span_26](start_span)[span_26](end_span)</div>
+        <h2>Visit with Ashley[span_27](start_span)[span_27](end_span)</h2>
+        <p>Great catch-up session and relaxed visit while in town[span_28](start_span)[span_28](end_span). Always a highlight having quality time together whenever travels route through the Atlantic provinces[span_29](start_span)[span_29](end_span).</p>
+        <div class="tag-container">
+          <span class="tag">#Family</span>
+          <span class="tag">#CatchUp</span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="post-meta">Notes & Retrospective[span_30](start_span)[span_30](end_span)</div>
+        <h2>John Romero & Gaming Musings[span_31](start_span)[span_31](end_span)</h2>
+        <p>Reflecting on classic game design, Romero Games, and retro computing history while taking downtime between travel waves[span_32](start_span)[span_32](end_span).</p>
+        <div class="tag-container">
+          <span class="tag">#Gaming</span>
+          <span class="tag">#Retro</span>
+          <span class="tag">#JohnRomero</span>
+        </div>
+      </article>
+
+      <div class="date-heading">Saturday, September 12, 2026[span_33](start_span)[span_33](end_span)</div>
+
+      <article class="post">
+        <div class="post-meta">Halifax Stanfield &bull; Flight Connection[span_34](start_span)[span_34](end_span)</div>
+        <h2>Halifax Airport: New Day, Same Flight[span_35](start_span)[span_35](end_span)</h2>
+        <p>Back at the airport terminal getting ready for boarding[span_36](start_span)[span_36](end_span). Coffee in hand, waiting through security, and monitoring the gate status for departure[span_37](start_span)[span_37](end_span).</p>
+        <div class="tag-container">
+          <span class="tag">#Airport</span>
+          <span class="tag">#Halifax</span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="post-meta">Runway & Departure[span_38](start_span)[span_38](end_span)</div>
+        <h2>Take Off[span_39](start_span)[span_39](end_span)!</h2>
+        <p>Throttles up and climbing out over the Canadian coastline[span_40](start_span)[span_40](end_span). Ocean beneath us and setting our bearings direct across the North Atlantic[span_41](start_span)[span_41](end_span).</p>
+        <div class="tag-container">
+          <span class="tag">#Takeoff</span>
+          <span class="tag">#Transatlantic</span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="post-meta">Flight Track Observation[span_42](start_span)[span_42](end_span)</div>
+        <h2>Air Force One Race[span_43](start_span)[span_43](end_span)</h2>
+        <p>Watching nearby flight tracks and unusual air traffic patterns along the corridor during high-altitude cruising[span_44](start_span)[span_44](end_span).</p>
+        <div class="tag-container">
+          <span class="tag">#FlightRadar</span>
+          <span class="tag">#Aviation</span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="post-meta">Cruising Eastward[span_45](start_span)[span_45](end_span)</div>
+        <h2>Sunrise Approaches[span_46](start_span)[span_46](end_span)!</h2>
+        <p>Dawn creeping over the curvature of the Atlantic[span_47](start_span)[span_47](end_span). The edge of the horizon lighting up in gradient gold as we edge closer to destination airspace[span_48](start_span)[span_48](end_span).</p>
+        <div class="photo-placeholder">
+          <span>&#128247; [Journal Photo: Atlantic Sunrise Horizon][span_49](start_span)[span_49](end_span)</span>
+        </div>
+        <div class="tag-container">
+          <span class="tag">#Sunrise</span>
+          <span class="tag">#InFlight</span>
+          <span class="tag">#ArrivalNear</span>
+        </div>
+      </article>
+    </main>
+
+    <aside>
+      <div class="widget">
+        <span class="stat-badge">Active Trip</span>
+        <h3>Itinerary Overview</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          Logging legs from Manitoba through Nova Scotia and across the ocean to Ireland[span_50](start_span)[span_50](end_span).
+        </p>
+        <ul style="font-size: 0.85rem; color: #475569;">
+          <li>&bull; <strong>Sep 10:</strong> Winnipeg &rarr; Halifax[span_51](start_span)[span_51](end_span)</li>
+          <li>&bull; <strong>Sep 11:</strong> Halifax Sightseeing & Visits[span_52](start_span)[span_52](end_span)</li>
+          <li>&bull; <strong>Sep 12:</strong> Halifax &rarr; Transatlantic Hop[span_53](start_span)[span_53](end_span)</li>
+        </ul>
+      </div>
+
+      <div class="widget">
+        <h3>Quick Navigation</h3>
+        <ul>
+          <li><a href="#">Winnipeg Departure[span_54](start_span)[span_54](end_span)</a></li>
+          <li><a href="#">Halifax Stopover[span_55](start_span)[span_55](end_span)</a></li>
+          <li><a href="#">Ashley's Visit[span_56](start_span)[span_56](end_span)</a></li>
+          <li><a href="#">Atlantic Sunrise Flight[span_57](start_span)[span_57](end_span)</a></li>
+        </ul>
+      </div>
+
+      <div class="widget">
+        <h3>Trip Archives</h3>
+        <ul>
+          <li><a href="#">September 2026 (12 entries)[span_58](start_span)[span_58](end_span)</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    &copy; 2026 Travel & Journal Notes &bull; Blogger Template
+  </footer>
+
+</body>
+</html>
