@@ -3,16 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Camera Filter Studio</title>
+  <title>SnapFilter Studio</title>
+  <!-- MediaPipe Face Mesh for Snapchat-style AR tracking -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+
   <style>
     :root {
-      --bg-dark: #0f172a;
-      --bg-card: #1e293b;
-      --accent: #38bdf8;
-      --accent-hover: #0ea5e9;
+      --bg-dark: #090d16;
+      --bg-card: #131c2e;
+      --accent: #00f2fe;
+      --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --border: #334155;
+      --border: #24344d;
+      --active-green: #10b981;
     }
 
     * {
@@ -34,24 +39,68 @@
     }
 
     header {
-      padding: 12px 16px;
+      padding: 10px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: rgba(15, 23, 42, 0.95);
+      background-color: rgba(9, 13, 22, 0.95);
       border-bottom: 1px solid var(--border);
-      z-index: 10;
+      z-index: 20;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     h1 {
-      font-size: 1.1rem;
-      font-weight: 600;
+      font-size: 1.05rem;
+      font-weight: 700;
       letter-spacing: 0.5px;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .top-actions {
       display: flex;
+      align-items: center;
       gap: 10px;
+    }
+
+    /* Filter Toggle Button */
+    .btn-toggle-filter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #1e293b;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-toggle-filter.active {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--active-green);
+      color: #34d399;
+    }
+
+    .btn-toggle-filter .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #64748b;
+    }
+
+    .btn-toggle-filter.active .dot {
+      background: var(--active-green);
+      box-shadow: 0 0 8px var(--active-green);
     }
 
     .btn-icon {
@@ -59,58 +108,81 @@
       border: 1px solid var(--border);
       color: var(--text);
       border-radius: 50%;
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.2s, border-color 0.2s;
+      font-size: 0.95rem;
     }
 
-    .btn-icon:hover {
-      background-color: #334155;
-    }
-
-    /* Viewport Area */
+    /* Main Viewport */
     .viewport-container {
       position: relative;
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
       background: #000;
+      overflow: hidden;
     }
 
-    video, img#imagePreview {
+    /* Hidden video/img feed sources */
+    #sourceVideo, #sourceImage {
+      display: none;
+    }
+
+    /* Output Canvas displaying live video + AR face mesh */
+    #renderCanvas {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
       display: block;
-      transition: filter 0.15s ease-out;
     }
 
-    /* Hidden file input & capture canvas */
-    #fileInput, #captureCanvas {
+    #fileInput {
       display: none;
     }
 
-    /* Bottom Control Dashboard */
+    /* Status indicator */
+    .tracking-status {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 4px 10px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      font-size: 0.72rem;
+      color: #38bdf8;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Controls Bottom Deck */
     .controls-panel {
       background: var(--bg-card);
       border-top: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      z-index: 10;
+      z-index: 20;
     }
 
-    /* Presets Carousel */
+    /* Presets Strip */
+    .category-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      padding: 8px 14px 2px;
+    }
+
     .presets-bar {
       display: flex;
       gap: 10px;
-      padding: 12px;
+      padding: 6px 14px 12px;
       overflow-x: auto;
       scrollbar-width: none;
     }
@@ -119,44 +191,47 @@
       display: none;
     }
 
-    .preset-btn {
+    .preset-card {
       flex: 0 0 auto;
-      padding: 8px 14px;
-      background: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: #0d1525;
       border: 1px solid var(--border);
-      border-radius: 20px;
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      font-weight: 500;
+      border-radius: 14px;
+      padding: 8px 12px;
       cursor: pointer;
-      white-space: nowrap;
+      color: var(--text-muted);
+      font-size: 0.75rem;
       transition: all 0.2s ease;
     }
 
-    .preset-btn.active {
-      background: var(--accent);
-      color: #0f172a;
-      font-weight: 600;
-      border-color: var(--accent);
+    .preset-card .icon {
+      font-size: 1.3rem;
     }
 
-    /* Adjustment Sliders Tab */
+    .preset-card.active {
+      border-color: var(--accent);
+      background: rgba(0, 242, 254, 0.1);
+      color: #fff;
+    }
+
+    /* Fine-tune panel */
     .sliders-panel {
       display: none;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px 16px;
-      padding: 12px 16px;
-      background: rgba(15, 23, 42, 0.6);
+      gap: 8px 14px;
+      padding: 10px 16px;
+      background: rgba(9, 13, 22, 0.8);
       border-top: 1px solid var(--border);
-      max-height: 120px;
-      overflow-y: auto;
     }
 
     .slider-group {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      font-size: 0.75rem;
+      gap: 3px;
+      font-size: 0.72rem;
       color: var(--text-muted);
     }
 
@@ -166,23 +241,22 @@
     }
 
     .slider-group input[type="range"] {
-      accent-color: var(--accent);
-      cursor: pointer;
+      accent-color: #00f2fe;
     }
 
-    /* Action Bar (Capture / Download) */
+    /* Shutter Bar */
     .action-bar {
       display: flex;
       justify-content: space-around;
       align-items: center;
-      padding: 12px 16px 18px;
+      padding: 10px 16px 16px;
     }
 
-    .btn-toggle-sliders {
+    .btn-action-side {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -208,153 +282,251 @@
     .btn-shutter:active {
       transform: scale(0.92);
     }
-
-    .btn-download {
-      background: var(--accent);
-      color: #0f172a;
-      border: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 8px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: background-color 0.2s;
-    }
-
-    .btn-download:hover {
-      background-color: var(--accent-hover);
-    }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Camera Filter Studio</h1>
+    <div class="logo-area">
+      <h1>SnapFilter</h1>
+    </div>
+    
     <div class="top-actions">
-      <button id="btnSwitchCamera" class="btn-icon" title="Flip Camera">🔄</button>
-      <button id="btnUpload" class="btn-icon" title="Upload Image">📁</button>
+      <!-- Quick Filter ON / OFF Toggle -->
+      <button id="btnToggleFilter" class="btn-toggle-filter active" title="Toggle Filters">
+        <span class="dot"></span>
+        <span id="filterStateText">FILTER: ON</span>
+      </button>
+
+      <button id="btnSwitchCamera" class="btn-icon" title="Switch Camera">🔄</button>
+      <button id="btnUpload" class="btn-icon" title="Upload Photo">📁</button>
       <input type="file" id="fileInput" accept="image/*">
     </div>
   </header>
 
   <div class="viewport-container">
-    <video id="videoPreview" autoplay playsinline></video>
-    <img id="imagePreview" alt="Upload Preview" style="display: none;">
+    <div class="tracking-status" id="trackingStatus">Initializing camera & AI...</div>
+    
+    <!-- Render output -->
+    <canvas id="renderCanvas"></canvas>
+    
+    <!-- Hidden input elements for processing -->
+    <video id="sourceVideo" autoplay playsinline></video>
+    <img id="sourceImage" alt="Upload source">
   </div>
 
   <div class="controls-panel">
-    <!-- Presets -->
+    <div class="category-title">Snapchat Lenses &amp; Shaders</div>
     <div class="presets-bar" id="presetsBar">
-      <button class="preset-btn active" data-filter="normal">Normal</button>
-      <button class="preset-btn" data-filter="grayscale">B&amp;W</button>
-      <button class="preset-btn" data-filter="sepia">Sepia</button>
-      <button class="preset-btn" data-filter="vintage">Vintage</button>
-      <button class="preset-btn" data-filter="cyberpunk">Cyberpunk</button>
-      <button class="preset-btn" data-filter="dramatic">Dramatic</button>
-      <button class="preset-btn" data-filter="warm">Golden Hour</button>
-      <button class="preset-btn" data-filter="cool">Nordic Cold</button>
-      <button class="preset-btn" data-filter="invert">Negative</button>
+      <div class="preset-card active" data-filter="normal">
+        <span class="icon">✨</span>
+        <span>Natural</span>
+      </div>
+      <div class="preset-card" data-filter="puppy">
+        <span class="icon">🐶</span>
+        <span>Puppy</span>
+      </div>
+      <div class="preset-card" data-filter="sunglasses">
+        <span class="icon">🕶️</span>
+        <span>Thug Shades</span>
+      </div>
+      <div class="preset-card" data-filter="cyberpunk">
+        <span class="icon">🥽</span>
+        <span>Cyber Visor</span>
+      </div>
+      <div class="preset-card" data-filter="crown">
+        <span class="icon">👑</span>
+        <span>Gold Halo</span>
+      </div>
+      <div class="preset-card" data-filter="vhs">
+        <span class="icon">📼</span>
+        <span>VHS 90s</span>
+      </div>
+      <div class="preset-card" data-filter="thermal">
+        <span class="icon">🌡️</span>
+        <span>Thermal</span>
+      </div>
+      <div class="preset-card" data-filter="vintage">
+        <span class="icon">🎞️</span>
+        <span>Film Gold</span>
+      </div>
+      <div class="preset-card" data-filter="noir">
+        <span class="icon">🎬</span>
+        <span>Noir B&amp;W</span>
+      </div>
     </div>
 
-    <!-- Fine-Tuning Sliders -->
+    <!-- Sliders -->
     <div class="sliders-panel" id="slidersPanel">
       <div class="slider-group">
-        <div><span>Brightness</span><span id="valBrightness">100%</span></div>
-        <input type="range" id="sliderBrightness" min="20" max="200" value="100">
+        <div><span>Brightness</span><span id="lblBright">100%</span></div>
+        <input type="range" id="rngBright" min="20" max="200" value="100">
       </div>
       <div class="slider-group">
-        <div><span>Contrast</span><span id="valContrast">100%</span></div>
-        <input type="range" id="sliderContrast" min="20" max="200" value="100">
+        <div><span>Contrast</span><span id="lblContrast">100%</span></div>
+        <input type="range" id="rngContrast" min="20" max="200" value="100">
       </div>
       <div class="slider-group">
-        <div><span>Saturation</span><span id="valSaturation">100%</span></div>
-        <input type="range" id="sliderSaturation" min="0" max="300" value="100">
+        <div><span>Saturation</span><span id="lblSat">100%</span></div>
+        <input type="range" id="rngSat" min="0" max="250" value="100">
       </div>
       <div class="slider-group">
-        <div><span>Hue Rotate</span><span id="valHue">0°</span></div>
-        <input type="range" id="sliderHue" min="0" max="360" value="0">
+        <div><span>Hue</span><span id="lblHue">0°</span></div>
+        <input type="range" id="rngHue" min="0" max="360" value="0">
       </div>
     </div>
 
     <!-- Action Bar -->
     <div class="action-bar">
-      <button class="btn-toggle-sliders" id="btnToggleSliders">
-        <span>⚙️</span>
-        <span>Tune</span>
+      <button class="btn-action-side" id="btnToggleSliders">
+        <span style="font-size: 1.2rem;">⚙️</span>
+        <span>Sliders</span>
       </button>
 
-      <button class="btn-shutter" id="btnCapture" title="Snap & Download">📸</button>
+      <button class="btn-shutter" id="btnCapture" title="Take Snap">📸</button>
 
-      <button class="btn-download" id="btnDownload">
-        <span>Save</span> ⬇️
+      <button class="btn-action-side" id="btnDownload">
+        <span style="font-size: 1.2rem;">💾</span>
+        <span>Save</span>
       </button>
     </div>
   </div>
 
-  <canvas id="captureCanvas"></canvas>
-
   <script>
-    const video = document.getElementById('videoPreview');
-    const imgPreview = document.getElementById('imagePreview');
+    // Elements
+    const video = document.getElementById('sourceVideo');
+    const imgPreview = document.getElementById('sourceImage');
+    const canvas = document.getElementById('renderCanvas');
+    const ctx = canvas.getContext('2d');
+    const trackingStatus = document.getElementById('trackingStatus');
+    const btnToggleFilter = document.getElementById('btnToggleFilter');
+    const filterStateText = document.getElementById('filterStateText');
     const fileInput = document.getElementById('fileInput');
-    const captureCanvas = document.getElementById('captureCanvas');
-
-    const btnSwitchCamera = document.getElementById('btnSwitchCamera');
     const btnUpload = document.getElementById('btnUpload');
-    const btnToggleSliders = document.getElementById('btnToggleSliders');
+    const btnSwitchCamera = document.getElementById('btnSwitchCamera');
     const btnCapture = document.getElementById('btnCapture');
     const btnDownload = document.getElementById('btnDownload');
+    const btnToggleSliders = document.getElementById('btnToggleSliders');
     const slidersPanel = document.getElementById('slidersPanel');
 
-    // Filter adjustments state
+    // State
+    let isFilterEnabled = true;
+    let activeFilter = 'normal';
+    let isCamera = true;
+    let facingMode = 'user';
+    let currentStream = null;
+    let faceMesh = null;
+    let latestLandmarks = null;
+    let frameCount = 0;
+
     const adjustments = {
       brightness: 100,
       contrast: 100,
-      saturate: 100,
-      hueRotate: 0,
-      baseFilter: ''
+      saturation: 100,
+      hue: 0
     };
 
-    let currentStream = null;
-    let facingMode = 'user'; // 'user' (front) or 'environment' (back)
-    let isUsingCamera = true;
+    // Filter On/Off Switch
+    btnToggleFilter.addEventListener('click', () => {
+      isFilterEnabled = !isFilterEnabled;
+      btnToggleFilter.classList.toggle('active', isFilterEnabled);
+      filterStateText.textContent = isFilterEnabled ? "FILTER: ON" : "FILTER: OFF";
+      if (!isCamera) renderStaticImage();
+    });
 
-    // Filter preset definitions
-    const filterPresets = {
-      normal: { filter: '', brightness: 100, contrast: 100, saturate: 100, hue: 0 },
-      grayscale: { filter: 'grayscale(100%)', brightness: 100, contrast: 120, saturate: 0, hue: 0 },
-      sepia: { filter: 'sepia(100%)', brightness: 95, contrast: 110, saturate: 120, hue: 0 },
-      vintage: { filter: 'sepia(40%) contrast(120%) brightness(90%) hue-rotate(-15deg)', brightness: 90, contrast: 120, saturate: 85, hue: 345 },
-      cyberpunk: { filter: 'contrast(150%) saturate(220%) hue-rotate(185deg)', brightness: 110, contrast: 150, saturate: 220, hue: 185 },
-      dramatic: { filter: 'contrast(160%) brightness(85%)', brightness: 85, contrast: 160, saturate: 110, hue: 0 },
-      warm: { filter: 'sepia(30%) saturate(150%)', brightness: 105, contrast: 105, saturate: 150, hue: 10 },
-      cool: { filter: 'hue-rotate(190deg) saturate(90%)', brightness: 100, contrast: 115, saturate: 90, hue: 190 },
-      invert: { filter: 'invert(100%)', brightness: 100, contrast: 100, saturate: 100, hue: 0 }
-    };
+    // Preset selection
+    document.querySelectorAll('.preset-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        activeFilter = card.getAttribute('data-filter');
+        if (!isFilterEnabled) {
+          isFilterEnabled = true;
+          btnToggleFilter.classList.add('active');
+          filterStateText.textContent = "FILTER: ON";
+        }
+        if (!isCamera) renderStaticImage();
+      });
+    });
 
-    // Initialize Camera
+    // Slider Controls
+    function wireSlider(sliderId, labelId, prop, unit) {
+      const slider = document.getElementById(sliderId);
+      const label = document.getElementById(labelId);
+      slider.addEventListener('input', (e) => {
+        adjustments[prop] = e.target.value;
+        label.textContent = `${e.target.value}${unit}`;
+        if (!isCamera) renderStaticImage();
+      });
+    }
+    wireSlider('rngBright', 'lblBright', 'brightness', '%');
+    wireSlider('rngContrast', 'lblContrast', 'contrast', '%');
+    wireSlider('rngSat', 'lblSat', 'saturation', '%');
+    wireSlider('rngHue', 'lblHue', 'hue', '°');
+
+    btnToggleSliders.addEventListener('click', () => {
+      slidersPanel.style.display = (slidersPanel.style.display === 'grid') ? 'none' : 'grid';
+    });
+
+    // Initialize MediaPipe Face Mesh
+    function initFaceMesh() {
+      faceMesh = new FaceMesh({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+      });
+
+      faceMesh.setOptions({
+        maxNumFaces: 1,
+        refineLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+      });
+
+      faceMesh.onResults((results) => {
+        if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+          latestLandmarks = results.multiFaceLandmarks[0];
+          trackingStatus.textContent = "Face locked ✨";
+        } else {
+          latestLandmarks = null;
+          trackingStatus.textContent = "Detecting face...";
+        }
+        renderLiveFrame();
+      });
+    }
+
+    // Camera Init
     async function startCamera() {
       if (currentStream) {
-        currentStream.getTracks().forEach(track => track.stop());
+        currentStream.getTracks().forEach(t => t.stop());
       }
       try {
         currentStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: facingMode }, width: { ideal: 1920 }, height: { ideal: 1080 } },
+          video: {
+            facingMode: { ideal: facingMode },
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          },
           audio: false
         });
         video.srcObject = currentStream;
-        video.style.display = 'block';
-        imgPreview.style.display = 'none';
-        isUsingCamera = true;
+        await video.play();
+
+        isCamera = true;
+        canvas.width = video.videoWidth || 1280;
+        canvas.height = video.videoHeight || 720;
+        processCameraLoop();
       } catch (err) {
-        console.warn("Could not access camera or facing mode not supported:", err);
+        trackingStatus.textContent = "Camera error: " + err.message;
       }
     }
 
-    // Toggle Camera Facing
+    async function processCameraLoop() {
+      if (!isCamera) return;
+      if (video.readyState >= 2 && faceMesh) {
+        await faceMesh.send({ image: video });
+      }
+      requestAnimationFrame(processCameraLoop);
+    }
+
     btnSwitchCamera.addEventListener('click', () => {
       facingMode = (facingMode === 'user') ? 'environment' : 'user';
       startCamera();
@@ -362,7 +534,6 @@
 
     // File Upload Handler
     btnUpload.addEventListener('click', () => fileInput.click());
-
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -370,111 +541,262 @@
       const reader = new FileReader();
       reader.onload = (event) => {
         if (currentStream) {
-          currentStream.getTracks().forEach(track => track.stop());
+          currentStream.getTracks().forEach(t => t.stop());
         }
+        isCamera = false;
         imgPreview.src = event.target.result;
-        imgPreview.style.display = 'block';
-        video.style.display = 'none';
-        isUsingCamera = false;
+        imgPreview.onload = async () => {
+          canvas.width = imgPreview.naturalWidth;
+          canvas.height = imgPreview.naturalHeight;
+          trackingStatus.textContent = "Analyzing uploaded photo...";
+          if (faceMesh) {
+            await faceMesh.send({ image: imgPreview });
+          }
+          renderStaticImage();
+        };
       };
       reader.readAsDataURL(file);
     });
 
-    // Apply Filter Styles
-    function updateStyles() {
-      const filterString = `${adjustments.baseFilter} brightness(${adjustments.brightness}%) contrast(${adjustments.contrast}%) saturate(${adjustments.saturate}%) hue-rotate(${adjustments.hueRotate}deg)`;
-      const activeElement = isUsingCamera ? video : imgPreview;
-      activeElement.style.filter = filterString;
+    // Color Grading CSS Filter Computation
+    function getCssFilterString() {
+      if (!isFilterEnabled) return 'none';
+
+      let base = '';
+      if (activeFilter === 'vintage') {
+        base = 'sepia(45%) contrast(115%) brightness(95%) saturate(85%)';
+      } else if (activeFilter === 'noir') {
+        base = 'grayscale(100%) contrast(140%) brightness(90%)';
+      } else if (activeFilter === 'cyberpunk') {
+        base = 'contrast(125%) saturate(160%) hue-rotate(170deg)';
+      } else if (activeFilter === 'vhs') {
+        base = 'contrast(120%) saturate(130%) brightness(105%)';
+      } else if (activeFilter === 'thermal') {
+        base = 'invert(100%) saturate(300%) hue-rotate(90deg) contrast(140%)';
+      }
+
+      return `${base} brightness(${adjustments.brightness}%) contrast(${adjustments.contrast}%) saturate(${adjustments.saturation}%) hue-rotate(${adjustments.hue}deg)`.trim();
     }
 
-    // Preset Buttons Click
-    document.querySelectorAll('.preset-btn').forEach(button => {
-      button.addEventListener('click', () => {
-        document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        const presetKey = button.getAttribute('data-filter');
-        const p = filterPresets[presetKey];
-
-        adjustments.baseFilter = p.filter;
-        adjustments.brightness = p.brightness;
-        adjustments.contrast = p.contrast;
-        adjustments.saturate = p.saturate;
-        adjustments.hueRotate = p.hue;
-
-        // Sync slider values
-        document.getElementById('sliderBrightness').value = p.brightness;
-        document.getElementById('sliderContrast').value = p.contrast;
-        document.getElementById('sliderSaturation').value = p.saturate;
-        document.getElementById('sliderHue').value = p.hue;
-
-        document.getElementById('valBrightness').innerText = `${p.brightness}%`;
-        document.getElementById('valContrast').innerText = `${p.contrast}%`;
-        document.getElementById('valSaturation').innerText = `${p.saturate}%`;
-        document.getElementById('valHue').innerText = `${p.hue}°`;
-
-        updateStyles();
-      });
-    });
-
-    // Slider Controls Listeners
-    function setupSlider(id, labelId, property, suffix = '%') {
-      const slider = document.getElementById(id);
-      const label = document.getElementById(labelId);
-      slider.addEventListener('input', (e) => {
-        adjustments[property] = e.target.value;
-        label.innerText = `${e.target.value}${suffix}`;
-        updateStyles();
-      });
+    // AR Drawing Methods
+    function renderLiveFrame() {
+      if (!isCamera) return;
+      drawCompositedScene(video);
     }
 
-    setupSlider('sliderBrightness', 'valBrightness', 'brightness', '%');
-    setupSlider('sliderContrast', 'valContrast', 'contrast', '%');
-    setupSlider('sliderSaturation', 'valSaturation', 'saturate', '%');
-    setupSlider('sliderHue', 'valHue', 'hueRotate', '°');
+    function renderStaticImage() {
+      drawCompositedScene(imgPreview);
+    }
 
-    btnToggleSliders.addEventListener('click', () => {
-      slidersPanel.style.display = (slidersPanel.style.display === 'grid') ? 'none' : 'grid';
-    });
+    function drawCompositedScene(source) {
+      frameCount++;
+      const w = canvas.width;
+      const h = canvas.height;
 
-    // Capture & Download Rendering to Canvas
-    function captureAndDownload() {
-      const source = isUsingCamera ? video : imgPreview;
-      const width = isUsingCamera ? video.videoWidth : imgPreview.naturalWidth;
-      const height = isUsingCamera ? video.videoHeight : imgPreview.naturalHeight;
-
-      if (!width || !height) return;
-
-      captureCanvas.width = width;
-      captureCanvas.height = height;
-      const ctx = captureCanvas.getContext('2d');
-
-      // Recreate CSS filters inside Canvas 2D context
-      ctx.filter = `${adjustments.baseFilter} brightness(${adjustments.brightness}%) contrast(${adjustments.contrast}%) saturate(${adjustments.saturate}%) hue-rotate(${adjustments.hueRotate}deg)`;
-      
-      // Mirror if user front camera
-      if (isUsingCamera && facingMode === 'user') {
-        ctx.translate(width, 0);
+      ctx.save();
+      // Mirror if front selfie camera
+      const isMirrored = isCamera && facingMode === 'user';
+      if (isMirrored) {
+        ctx.translate(w, 0);
         ctx.scale(-1, 1);
       }
 
-      ctx.drawImage(source, 0, 0, width, height);
+      // Base Video / Image with Color Adjustments
+      ctx.filter = getCssFilterString();
+      ctx.drawImage(source, 0, 0, w, h);
+      ctx.filter = 'none'; // reset filter for AR drawing
 
-      // Download file
+      // Render AR Overlays if filter is ON
+      if (isFilterEnabled && latestLandmarks) {
+        renderARLayers(w, h);
+      }
+
+      // Screen Shader Overlays (VHS lines / timestamps)
+      if (isFilterEnabled && activeFilter === 'vhs') {
+        renderVHSEffects(w, h);
+      }
+
+      ctx.restore();
+    }
+
+    // AR Landmark Attachment Calculation
+    function getFaceTransform(lm, idxA, idxB, w, h) {
+      const p1 = { x: lm[idxA].x * w, y: lm[idxA].y * h };
+      const p2 = { x: lm[idxB].x * w, y: lm[idxB].y * h };
+      const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+      const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+      return { p1, p2, angle, dist };
+    }
+
+    function renderARLayers(w, h) {
+      const lm = latestLandmarks;
+      // Key facial points:
+      // 33: left outer eye, 263: right outer eye
+      // 1: nose tip, 10: forehead center, 152: chin
+      const eyeTransform = getFaceTransform(lm, 33, 263, w, h);
+      const nose = { x: lm[1].x * w, y: lm[1].y * h };
+      const forehead = { x: lm[10].x * w, y: lm[10].y * h };
+      const leftCheek = { x: lm[234].x * w, y: lm[234].y * h };
+      const rightCheek = { x: lm[454].x * w, y: lm[454].y * h };
+
+      ctx.save();
+
+      // 1. Puppy Filter (Snapchat classic dog)
+      if (activeFilter === 'puppy') {
+        // Snout / Nose
+        ctx.fillStyle = "#3e2723";
+        ctx.beginPath();
+        ctx.ellipse(nose.x, nose.y, eyeTransform.dist * 0.22, eyeTransform.dist * 0.16, eyeTransform.angle, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cheeks Blush
+        ctx.fillStyle = "rgba(255, 99, 132, 0.4)";
+        ctx.beginPath();
+        ctx.arc(leftCheek.x, leftCheek.y, eyeTransform.dist * 0.18, 0, Math.PI * 2);
+        ctx.arc(rightCheek.x, rightCheek.y, eyeTransform.dist * 0.18, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Ears
+        const earSize = eyeTransform.dist * 0.65;
+        drawPuppyEar(eyeTransform.p1.x - earSize * 0.3, eyeTransform.p1.y - earSize * 1.3, earSize, -0.4 + eyeTransform.angle);
+        drawPuppyEar(eyeTransform.p2.x + earSize * 0.3, eyeTransform.p2.y - earSize * 1.3, earSize, 0.4 + eyeTransform.angle);
+      }
+
+      // 2. Thug Life / Pixel Sunglasses
+      if (activeFilter === 'sunglasses') {
+        ctx.save();
+        const midX = (eyeTransform.p1.x + eyeTransform.p2.x) / 2;
+        const midY = (eyeTransform.p1.y + eyeTransform.p2.y) / 2;
+        ctx.translate(midX, midY);
+        ctx.rotate(eyeTransform.angle);
+
+        const glassW = eyeTransform.dist * 1.5;
+        const glassH = glassW * 0.32;
+
+        ctx.fillStyle = "#111";
+        ctx.fillRect(-glassW / 2, -glassH / 2, glassW, glassH);
+
+        // White reflection gloss stripes
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(-glassW * 0.35, -glassH * 0.35, glassW * 0.08, glassH * 0.7);
+        ctx.fillRect(glassW * 0.15, -glassH * 0.35, glassW * 0.08, glassH * 0.7);
+        ctx.restore();
+      }
+
+      // 3. Cyberpunk HUD Visor
+      if (activeFilter === 'cyberpunk') {
+        ctx.save();
+        const midX = (eyeTransform.p1.x + eyeTransform.p2.x) / 2;
+        const midY = (eyeTransform.p1.y + eyeTransform.p2.y) / 2;
+        ctx.translate(midX, midY);
+        ctx.rotate(eyeTransform.angle);
+
+        const visorW = eyeTransform.dist * 1.6;
+        const visorH = visorW * 0.3;
+
+        ctx.fillStyle = "rgba(0, 242, 254, 0.4)";
+        ctx.strokeStyle = "#00f2fe";
+        ctx.lineWidth = 3;
+        ctx.shadowColor = "#00f2fe";
+        ctx.shadowBlur = 15;
+
+        ctx.strokeRect(-visorW / 2, -visorH / 2, visorW, visorH);
+        ctx.fillRect(-visorW / 2, -visorH / 2, visorW, visorH);
+
+        // Tech target crosses
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-visorW * 0.25, -visorH * 0.3);
+        ctx.lineTo(-visorW * 0.25, visorH * 0.3);
+        ctx.moveTo(visorW * 0.25, -visorH * 0.3);
+        ctx.lineTo(visorW * 0.25, visorH * 0.3);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 4. Crown & Floating Sparkles
+      if (activeFilter === 'crown') {
+        ctx.save();
+        ctx.translate(forehead.x, forehead.y);
+        ctx.rotate(eyeTransform.angle);
+
+        const crownW = eyeTransform.dist * 1.2;
+        const crownH = crownW * 0.55;
+
+        ctx.fillStyle = "#fbbf24";
+        ctx.shadowColor = "#f59e0b";
+        ctx.shadowBlur = 20;
+
+        ctx.beginPath();
+        ctx.moveTo(-crownW / 2, 0);
+        ctx.lineTo(-crownW / 2, -crownH * 0.7);
+        ctx.lineTo(-crownW * 0.25, -crownH * 0.35);
+        ctx.lineTo(0, -crownH);
+        ctx.lineTo(crownW * 0.25, -crownH * 0.35);
+        ctx.lineTo(crownW / 2, -crownH * 0.7);
+        ctx.lineTo(crownW / 2, 0);
+        ctx.closePath();
+        ctx.fill();
+
+        // Shimmering Jewels
+        ctx.fillStyle = "#ef4444";
+        ctx.beginPath();
+        ctx.arc(0, -crownH * 0.5, crownW * 0.06, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      ctx.restore();
+    }
+
+    function drawPuppyEar(x, y, size, angle) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.fillStyle = "#8d6e63";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, size * 0.4, size * 0.8, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#d7ccc8";
+      ctx.beginPath();
+      ctx.ellipse(0, size * 0.15, size * 0.25, size * 0.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // VHS Scanline and OSD Overlay
+    function renderVHSEffects(w, h) {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.04)";
+      for (let y = 0; y < h; y += 4) {
+        ctx.fillRect(0, y, w, 1.5);
+      }
+
+      ctx.font = "bold 22px 'Courier New', monospace";
+      ctx.fillStyle = "#34d399";
+      ctx.fillText("REC ●", 30, 45);
+
+      const now = new Date();
+      ctx.fillText(`SEP 14 1996  ${now.toTimeString().split(' ')[0]}`, 30, h - 30);
+    }
+
+    // Save/Download Output Image
+    function saveSnapshot() {
       const link = document.createElement('a');
-      link.download = `filter-photo-${Date.now()}.png`;
-      link.href = captureCanvas.toDataURL('image/png');
+      link.download = `snapfilter-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
       link.click();
     }
 
-    btnCapture.addEventListener('click', captureAndDownload);
-    btnDownload.addEventListener('click', captureAndDownload);
+    btnCapture.addEventListener('click', saveSnapshot);
+    btnDownload.addEventListener('click', saveSnapshot);
 
-    // Initial Startup
+    // Bootstrap
     window.addEventListener('DOMContentLoaded', () => {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        startCamera();
-      }
+      initFaceMesh();
+      startCamera();
     });
   </script>
 </body>
