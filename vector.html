@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Sierra SCI0 Vector Illustrator</title>
+  <title>Sierra SCI0 Vector Studio - Vectorize & Draw</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -70,7 +70,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 44px;
+      min-height: 42px;
       padding: 6px 12px;
       background: #21262d;
       color: var(--text);
@@ -84,8 +84,9 @@
 
     .btn:active { background: var(--accent); color: #000; }
     .btn-accent { background: #238636; border-color: #2ea043; color: #fff; }
+    .btn.active { background: var(--sci-cyan); color: #000; font-weight: bold; }
 
-    /* Mobile safe hidden file input: NOT display:none so iOS/Android won't block change events */
+    /* Hidden file input for iOS & Android compatibility */
     .sr-only-input {
       position: absolute;
       width: 1px;
@@ -97,6 +98,17 @@
       white-space: nowrap;
       border: 0;
       opacity: 0;
+    }
+
+    /* Mode switcher */
+    .mode-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .mode-bar .btn {
+      flex: 1;
     }
 
     /* Comparison Stage */
@@ -111,7 +123,6 @@
     .split-stage {
       position: relative;
       width: 100%;
-      min-height: 320px; /* Prevents 0-height collapse on slow mobile image decode */
       background: #000;
       border: 2px solid #484f58;
       border-radius: 6px;
@@ -132,12 +143,15 @@
       width: 100%;
       height: 100%;
       display: block;
-      object-fit: fill; /* exact pixel-for-pixel coordinate alignment */
+      object-fit: fill;
       pointer-events: none;
     }
 
     #vectorLayer {
       z-index: 2;
+    }
+
+    #vectorLayer.clipped {
       clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
     }
 
@@ -148,6 +162,18 @@
       pointer-events: none;
     }
 
+    /* Drawing overlay inside vector layer */
+    #drawingCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 6;
+      cursor: crosshair;
+      touch-action: none; /* Drawing handles its own touches */
+    }
+
     #splitDivider {
       position: absolute;
       top: 0;
@@ -156,7 +182,7 @@
       width: 3px;
       background: var(--sci-cyan);
       box-shadow: 0 0 8px rgba(85, 255, 255, 0.8);
-      z-index: 3;
+      z-index: 7;
       transform: translateX(-50%);
       pointer-events: none;
     }
@@ -172,12 +198,12 @@
       border-radius: 50%;
       transform: translate(-50%, -50%);
       box-shadow: 0 2px 10px rgba(0,0,0,0.7);
-      z-index: 4;
+      z-index: 8;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: ew-resize;
-      touch-action: pan-y; /* Keeps vertical webpage scrolling fluid on phones */
+      touch-action: pan-y;
     }
 
     #splitThumb::after {
@@ -198,10 +224,32 @@
       background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(4px);
       pointer-events: none;
-      z-index: 5;
+      z-index: 9;
     }
     .tag-left { left: 8px; color: var(--sci-cyan); }
     .tag-right { right: 8px; color: #fff; }
+
+    /* Drawing Palette */
+    .palette-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 2px solid #30363d;
+      cursor: pointer;
+    }
+
+    .color-swatch.selected {
+      border-color: #fff;
+      transform: scale(1.15);
+    }
 
     /* Controls */
     .ctrl-group {
@@ -256,55 +304,83 @@
 <body>
 
   <header>
-    <h1>Sierra Graphic Vectorizer</h1>
-    <p>Compare original vs. ink & paint vectors pixel-for-pixel</p>
+    <h1>Sierra SCI0 Vector Studio</h1>
+    <p>Authentic vector conversion, aspect locking & direct drawing</p>
   </header>
 
+  <!-- Upload Card -->
   <section class="card">
     <div class="card-title">
-      <span>1. Image Input</span>
+      <span>1. Image Source</span>
       <button class="btn" style="min-height:28px; padding:2px 8px; font-size:0.75rem;" id="sampleBtn">Test Demo</button>
     </div>
     <div class="btn-row">
       <label class="btn" for="uploadFile">Upload Photo</label>
       <label class="btn" for="cameraFile">Take Photo</label>
     </div>
-    
-    <!-- Mobile-safe inputs (accessible to Safari/Android gestures) -->
     <input type="file" id="uploadFile" class="sr-only-input" accept="image/*">
     <input type="file" id="cameraFile" class="sr-only-input" accept="image/*" capture="environment">
-
-    <div id="statusText" style="font-size:0.8rem; color:var(--sci-cyan); text-align:center; margin-top:4px; min-height: 18px;">Ready</div>
+    <div id="statusText" style="font-size:0.8rem; color:var(--sci-cyan); text-align:center; margin-top:4px;">Ready</div>
   </section>
 
+  <!-- Viewport Card -->
   <section class="card">
     <div class="card-title">
-      <span>2. Comparison (Drag center slider)</span>
-      <span id="polyCount" style="font-size:0.75rem; color:#8b949e;">0 shapes</span>
+      <span>2. Canvas & Interactive Tools</span>
+      <span id="polyCount" style="font-size:0.75rem; color:#8b949e;">0 planes</span>
+    </div>
+
+    <!-- Mode Selector: Compare vs Draw -->
+    <div class="mode-bar">
+      <button class="btn active" id="modeCompareBtn">Compare Mode (Slider)</button>
+      <button class="btn" id="modeDrawBtn">Vector Inking Mode (Draw)</button>
     </div>
 
     <div class="viewport-outer">
       <div class="split-stage" id="splitStage">
-        <!-- Original Photo -->
+        <!-- Original Layer -->
         <div class="split-layer" id="origLayer">
           <img id="origImg" alt="Original source" />
         </div>
 
-        <!-- Vector SVG Overlay -->
-        <div class="split-layer" id="vectorLayer">
+        <!-- Vector SVG Layer -->
+        <div class="split-layer clipped" id="vectorLayer">
           <div id="svgHost" style="width:100%; height:100%;"></div>
         </div>
 
-        <!-- Split Handle -->
+        <!-- Dynamic Drawing Canvas (Matches SVG coordinates 1:1) -->
+        <canvas id="drawingCanvas"></canvas>
+
+        <!-- Split Slider Bar & Handle -->
         <div id="splitDivider"></div>
         <div id="splitThumb"></div>
 
-        <div class="stage-tag tag-left">VECTOR ART</div>
-        <div class="stage-tag tag-right">ORIGINAL</div>
+        <div class="stage-tag tag-left" id="leftTag">VECTOR ART</div>
+        <div class="stage-tag tag-right" id="rightTag">ORIGINAL</div>
       </div>
     </div>
   </section>
 
+  <!-- Inking Controls (Visible when Inking Mode is selected) -->
+  <section class="card" id="drawingPanel" style="display:none;">
+    <div class="card-title">
+      <span>Vector Pen Tools</span>
+      <button class="btn" style="min-height:28px; padding:2px 8px; font-size:0.75rem;" id="undoStrokeBtn">Undo Stroke</button>
+    </div>
+
+    <div class="ctrl-group">
+      <label>
+        <span>Pen Size</span>
+        <span id="brushSizeVal">2px</span>
+      </label>
+      <input type="range" id="brushSizeSlider" min="1" max="12" value="2">
+    </div>
+
+    <label style="font-size:0.8rem; color:#8b949e;">Ink Color (Sierra EGA Palette)</label>
+    <div class="palette-box" id="paletteBox"></div>
+  </section>
+
+  <!-- Vector Tuning Controls -->
   <section class="card">
     <div class="card-title">3. Vector & Color Tuning</div>
 
@@ -344,14 +420,16 @@
     </div>
   </section>
 
+  <!-- Action Dock -->
   <div class="dock">
-    <button class="btn" style="flex:1;" id="copyBtn">Copy SVG</button>
+    <button class="btn" style="flex:1;" id="clearStrokesBtn">Clear Drawing</button>
     <button class="btn btn-accent" style="flex:1;" id="downloadBtn">Download SVG</button>
   </div>
 
   <canvas id="workCanvas" style="display:none;"></canvas>
 
   <script>
+    // 16-color IBM EGA Palette
     const EGA = [
       [0,0,0], [0,0,170], [0,170,0], [0,170,170],
       [170,0,0], [170,0,170], [170,85,0], [170,170,170],
@@ -360,21 +438,37 @@
     ];
 
     let currentImg = null;
-    let cachedSvg = '';
+    let cachedSvgBody = '';
+    let currentObjectUrl = null;
+    let activeMode = 'compare'; // 'compare' | 'draw'
+
+    // Drawing State (Saved as vector paths)
+    let userStrokes = []; // array of { color, size, points: [{x, y}] }
+    let currentStroke = null;
+    let currentColor = '#000000';
+    let currentBrushSize = 2;
+
+    // Split State
     let splitPercent = 50;
     let isDragging = false;
-    let currentObjectUrl = null;
+    let targetW = 320;
+    let targetH = 240;
 
-    // Elements
+    // DOM References
     const splitStage = document.getElementById('splitStage');
     const origImg = document.getElementById('origImg');
     const vectorLayer = document.getElementById('vectorLayer');
+    const drawingCanvas = document.getElementById('drawingCanvas');
+    const dCtx = drawingCanvas.getContext('2d');
     const splitDivider = document.getElementById('splitDivider');
     const splitThumb = document.getElementById('splitThumb');
     const svgHost = document.getElementById('svgHost');
     const statusText = document.getElementById('statusText');
     const polyCount = document.getElementById('polyCount');
     const workCanvas = document.getElementById('workCanvas');
+    const drawingPanel = document.getElementById('drawingPanel');
+    const modeCompareBtn = document.getElementById('modeCompareBtn');
+    const modeDrawBtn = document.getElementById('modeDrawBtn');
 
     // Controls
     const patchSlider = document.getElementById('patchSlider');
@@ -385,7 +479,25 @@
     const quantVal = document.getElementById('quantVal');
     const egaPaletteCheck = document.getElementById('egaPaletteCheck');
     const inkLinesCheck = document.getElementById('inkLinesCheck');
+    const brushSizeSlider = document.getElementById('brushSizeSlider');
+    const brushSizeVal = document.getElementById('brushSizeVal');
 
+    // Build Palette Swatches
+    const palBox = document.getElementById('paletteBox');
+    EGA.forEach((c, idx) => {
+      const hex = `rgb(${c[0]},${c[1]},${c[2]})`;
+      const swatch = document.createElement('div');
+      swatch.className = 'color-swatch' + (idx === 0 ? ' selected' : '');
+      swatch.style.backgroundColor = hex;
+      swatch.addEventListener('click', () => {
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+        swatch.classList.add('selected');
+        currentColor = hex;
+      });
+      palBox.appendChild(swatch);
+    });
+
+    // Quantization & Color Matching
     function quantizeChannel(val, levels) {
       const step = 255 / (levels - 1);
       return Math.round(Math.round(val / step) * step);
@@ -405,44 +517,44 @@
       return match;
     }
 
-    function syncAspectRatio(w, h) {
+    // Lock exact aspect ratio from original image
+    function setAspectRatio(w, h) {
+      targetW = 320;
+      targetH = Math.max(32, Math.round(targetW * (h / w)));
       splitStage.style.aspectRatio = `${w} / ${h}`;
+      drawingCanvas.width = targetW;
+      drawingCanvas.height = targetH;
+      redrawUserStrokes();
     }
 
-    function updateSliderPosition(pct) {
-      splitPercent = Math.max(0, Math.min(100, pct));
-      splitDivider.style.left = `${splitPercent}%`;
-      splitThumb.style.left = `${splitPercent}%`;
-      vectorLayer.style.clipPath = `polygon(0 0, ${splitPercent}% 0, ${splitPercent}% 100%, 0 100%)`;
-    }
-
-    function handlePointerMove(clientX) {
-      const rect = splitStage.getBoundingClientRect();
-      if (!rect.width) return;
-      const x = clientX - rect.left;
-      const pct = (x / rect.width) * 100;
-      updateSliderPosition(pct);
-    }
-
-    // Touch & Mouse Handlers for Divider
-    splitThumb.addEventListener('mousedown', () => isDragging = true);
-    window.addEventListener('mouseup', () => isDragging = false);
-    window.addEventListener('mousemove', (e) => {
-      if (isDragging) handlePointerMove(e.clientX);
-    });
-
-    splitThumb.addEventListener('touchstart', () => {
-      isDragging = true;
-    }, { passive: true });
-
-    window.addEventListener('touchend', () => isDragging = false);
-    window.addEventListener('touchmove', (e) => {
-      if (isDragging && e.touches.length > 0) {
-        handlePointerMove(e.touches[0].clientX);
+    // Switch Modes
+    function setMode(mode) {
+      activeMode = mode;
+      if (mode === 'compare') {
+        modeCompareBtn.classList.add('active');
+        modeDrawBtn.classList.remove('active');
+        splitDivider.style.display = 'block';
+        splitThumb.style.display = 'flex';
+        vectorLayer.classList.add('clipped');
+        drawingPanel.style.display = 'none';
+        drawingCanvas.style.pointerEvents = 'none';
+        updateSliderPosition(splitPercent);
+      } else {
+        modeDrawBtn.classList.add('active');
+        modeCompareBtn.classList.remove('active');
+        splitDivider.style.display = 'none';
+        splitThumb.style.display = 'none';
+        vectorLayer.classList.remove('clipped');
+        vectorLayer.style.clipPath = 'none';
+        drawingPanel.style.display = 'block';
+        drawingCanvas.style.pointerEvents = 'auto'; // enable drawing
       }
-    }, { passive: true });
+    }
 
-    // Vectorize Function
+    modeCompareBtn.addEventListener('click', () => setMode('compare'));
+    modeDrawBtn.addEventListener('click', () => setMode('draw'));
+
+    // Vectorize Image Function
     function vectorizeImage() {
       if (!currentImg) return;
       statusText.textContent = "Processing vectors...";
@@ -458,12 +570,7 @@
           const imgW = currentImg.naturalWidth || currentImg.width || 320;
           const imgH = currentImg.naturalHeight || currentImg.height || 240;
 
-          // SCI native resolution target width
-          const targetW = 320;
-          const aspect = imgH / imgW;
-          const targetH = Math.max(32, Math.round(targetW * aspect));
-
-          syncAspectRatio(imgW, imgH);
+          setAspectRatio(imgW, imgH);
 
           workCanvas.width = targetW;
           workCanvas.height = targetH;
@@ -522,16 +629,10 @@
             }
           }
 
-          const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${targetW} ${targetH}" width="100%" height="100%" preserveAspectRatio="none">
-            <rect width="${targetW}" height="${targetH}" fill="#000000"/>
-            ${svgPaths}
-          </svg>`;
-
-          cachedSvg = svgMarkup;
-          svgHost.innerHTML = svgMarkup;
-          polyCount.textContent = `${shapeTotal} vector planes`;
-          statusText.textContent = `Aligned (${imgW}×${imgH})`;
-          updateSliderPosition(splitPercent);
+          cachedSvgBody = svgPaths;
+          renderCombinedSvg();
+          polyCount.textContent = `${shapeTotal} planes`;
+          statusText.textContent = `Aspect Locked: ${imgW}×${imgH}`;
         } catch (err) {
           console.error(err);
           statusText.textContent = "Error: " + err.message;
@@ -539,53 +640,179 @@
       }, 20);
     }
 
-    // High-performance image loader using ObjectURL (instant on mobile)
+    // Render Background SVG and append User Vector Strokes
+    function renderCombinedSvg() {
+      let drawnVectorSvg = '';
+      userStrokes.forEach(s => {
+        if (s.points.length === 1) {
+          drawnVectorSvg += `<circle cx="${s.points[0].x}" cy="${s.points[0].y}" r="${s.size / 2}" fill="${s.color}" />\n`;
+        } else if (s.points.length > 1) {
+          const ptStr = s.points.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+          drawnVectorSvg += `<polyline points="${ptStr}" stroke="${s.color}" stroke-width="${s.size}" fill="none" stroke-linecap="round" stroke-linejoin="round" />\n`;
+        }
+      });
+
+      const fullSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${targetW} ${targetH}" width="100%" height="100%" preserveAspectRatio="none">
+        <rect width="${targetW}" height="${targetH}" fill="#000000"/>
+        <g id="baseVectorArt">
+          ${cachedSvgBody}
+        </g>
+        <g id="userDrawingLayer">
+          ${drawnVectorSvg}
+        </g>
+      </svg>`;
+
+      svgHost.innerHTML = fullSvg;
+    }
+
+    // Re-draw vector strokes on the interactive canvas
+    function redrawUserStrokes() {
+      dCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+      userStrokes.forEach(stroke => {
+        if (!stroke.points.length) return;
+        dCtx.strokeStyle = stroke.color;
+        dCtx.lineWidth = stroke.size;
+        dCtx.lineCap = 'round';
+        dCtx.lineJoin = 'round';
+
+        if (stroke.points.length === 1) {
+          dCtx.fillStyle = stroke.color;
+          dCtx.beginPath();
+          dCtx.arc(stroke.points[0].x, stroke.points[0].y, stroke.size / 2, 0, Math.PI * 2);
+          dCtx.fill();
+        } else {
+          dCtx.beginPath();
+          dCtx.moveTo(stroke.points[0].x, stroke.points[0].y);
+          for (let i = 1; i < stroke.points.length; i++) {
+            dCtx.lineTo(stroke.points[i].x, stroke.points[i].y);
+          }
+          dCtx.stroke();
+        }
+      });
+    }
+
+    // Convert Screen Touch/Mouse coords to 320×Height Stage Coords
+    function getCanvasCoords(clientX, clientY) {
+      const rect = drawingCanvas.getBoundingClientRect();
+      const scaleX = targetW / rect.width;
+      const scaleY = targetH / rect.height;
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    // Drawing Handlers
+    let isPainting = false;
+
+    function startDraw(e) {
+      if (activeMode !== 'draw') return;
+      isPainting = true;
+      const pt = getCanvasCoords(e.clientX, e.clientY);
+      currentStroke = {
+        color: currentColor,
+        size: currentBrushSize,
+        points: [pt]
+      };
+      userStrokes.push(currentStroke);
+      redrawUserStrokes();
+    }
+
+    function moveDraw(e) {
+      if (!isPainting || activeMode !== 'draw' || !currentStroke) return;
+      const pt = getCanvasCoords(e.clientX, e.clientY);
+      currentStroke.points.push(pt);
+      redrawUserStrokes();
+    }
+
+    function endDraw() {
+      if (!isPainting) return;
+      isPainting = false;
+      currentStroke = null;
+      renderCombinedSvg(); // Sync into vector SVG elements
+    }
+
+    // Mouse events for drawing
+    drawingCanvas.addEventListener('mousedown', (e) => startDraw(e));
+    window.addEventListener('mousemove', (e) => moveDraw(e));
+    window.addEventListener('mouseup', () => endDraw());
+
+    // Touch events for drawing
+    drawingCanvas.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 0) startDraw(e.touches[0]);
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (isPainting && e.touches.length > 0) moveDraw(e.touches[0]);
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => endDraw());
+
+    // Split Slider Handlers (Compare Mode)
+    function updateSliderPosition(pct) {
+      splitPercent = Math.max(0, Math.min(100, pct));
+      splitDivider.style.left = `${splitPercent}%`;
+      splitThumb.style.left = `${splitPercent}%`;
+      vectorLayer.style.clipPath = `polygon(0 0, ${splitPercent}% 0, ${splitPercent}% 100%, 0 100%)`;
+    }
+
+    function handlePointerMove(clientX) {
+      if (activeMode !== 'compare') return;
+      const rect = splitStage.getBoundingClientRect();
+      if (!rect.width) return;
+      const x = clientX - rect.left;
+      updateSliderPosition((x / rect.width) * 100);
+    }
+
+    splitThumb.addEventListener('mousedown', () => isDragging = true);
+    window.addEventListener('mouseup', () => isDragging = false);
+    window.addEventListener('mousemove', (e) => {
+      if (isDragging) handlePointerMove(e.clientX);
+    });
+
+    splitThumb.addEventListener('touchstart', () => isDragging = true, { passive: true });
+    window.addEventListener('touchend', () => isDragging = false);
+    window.addEventListener('touchmove', (e) => {
+      if (isDragging && e.touches.length > 0) handlePointerMove(e.touches[0].clientX);
+    }, { passive: true });
+
+    // File Handling
     function loadImageFromFile(file) {
       if (!file) return;
+      statusText.textContent = "Loading image...";
 
-      statusText.textContent = "Loading file...";
-
-      // Revoke previous blob URL to prevent memory leaks
-      if (currentObjectUrl) {
-        URL.revokeObjectURL(currentObjectUrl);
-      }
-
+      if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
       currentObjectUrl = URL.createObjectURL(file);
-      const img = new Image();
 
+      const img = new Image();
       img.onload = () => {
         currentImg = img;
         origImg.src = currentObjectUrl;
-        syncAspectRatio(img.naturalWidth, img.naturalHeight);
+        userStrokes = []; // reset drawings for new picture
         vectorizeImage();
       };
-
       img.onerror = () => {
-        statusText.textContent = "Failed to load selected image.";
+        statusText.textContent = "Error loading image file.";
       };
-
       img.src = currentObjectUrl;
     }
 
-    // Attach listeners and reset value so the same file can be selected again
-    const uploadFile = document.getElementById('uploadFile');
-    const cameraFile = document.getElementById('cameraFile');
-
-    uploadFile.addEventListener('change', function(e) {
-      if (this.files && this.files[0]) {
-        loadImageFromFile(this.files[0]);
-      }
-      this.value = ''; // Reset for re-selection
+    document.getElementById('uploadFile').addEventListener('change', function() {
+      if (this.files && this.files[0]) loadImageFromFile(this.files[0]);
+      this.value = '';
     });
 
-    cameraFile.addEventListener('change', function(e) {
-      if (this.files && this.files[0]) {
-        loadImageFromFile(this.files[0]);
-      }
-      this.value = ''; // Reset for re-selection
+    document.getElementById('cameraFile').addEventListener('change', function() {
+      if (this.files && this.files[0]) loadImageFromFile(this.files[0]);
+      this.value = '';
     });
 
     // Sliders
+    brushSizeSlider.addEventListener('input', (e) => {
+      currentBrushSize = parseInt(e.target.value, 10);
+      brushSizeVal.textContent = currentBrushSize + 'px';
+    });
+
     patchSlider.addEventListener('input', (e) => {
       patchVal.textContent = e.target.value + 'px';
       vectorizeImage();
@@ -604,51 +831,62 @@
     egaPaletteCheck.addEventListener('change', vectorizeImage);
     inkLinesCheck.addEventListener('change', vectorizeImage);
 
-    // Sample Demo Loader
+    // Drawing Actions
+    document.getElementById('undoStrokeBtn').addEventListener('click', () => {
+      userStrokes.pop();
+      redrawUserStrokes();
+      renderCombinedSvg();
+    });
+
+    document.getElementById('clearStrokesBtn').addEventListener('click', () => {
+      if (confirm('Clear all drawn vector strokes?')) {
+        userStrokes = [];
+        redrawUserStrokes();
+        renderCombinedSvg();
+      }
+    });
+
+    // Sample Demo Generator
     document.getElementById('sampleBtn').addEventListener('click', () => {
       const c = document.createElement('canvas');
-      c.width = 300; c.height = 400;
+      c.width = 300; c.height = 400; // Native portrait
       const x = c.getContext('2d');
       x.fillStyle = "#1e2430"; x.fillRect(0,0,300,400);
-      x.fillStyle = "#8b2635"; x.fillRect(60, 140, 180, 260);
-      x.fillStyle = "#3e8e41"; x.fillRect(105, 50, 90, 60);
+      x.fillStyle = "#8b2635"; x.fillRect(60, 140, 180, 260); // Robe
+      x.fillStyle = "#3e8e41"; x.fillRect(105, 50, 90, 60);  // Hat
       x.fillStyle = "#e0a97a"; x.beginPath(); x.arc(150, 120, 42, 0, Math.PI*2); x.fill();
-      x.fillStyle = "#5c3a21"; x.fillRect(230, 80, 20, 320);
+      x.fillStyle = "#5c3a21"; x.fillRect(230, 80, 20, 320); // Staff
 
       const img = new Image();
       img.onload = () => {
         currentImg = img;
         origImg.src = img.src;
-        syncAspectRatio(img.naturalWidth, img.naturalHeight);
+        userStrokes = [];
         vectorizeImage();
       };
       img.src = c.toDataURL();
     });
 
-    // SVG Export Buttons
+    // SVG Export (Downloads fully merged vector image + your drawn vector strokes)
     document.getElementById('downloadBtn').addEventListener('click', () => {
-      if (!cachedSvg) return;
-      const blob = new Blob([cachedSvg], { type: 'image/svg+xml;charset=utf-8' });
+      const svgElement = svgHost.querySelector('svg');
+      if (!svgElement) return;
+
+      const svgData = new XMLSerializer().serializeToString(svgElement);
+      const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'sierra_vector_art.svg';
+      a.download = 'sierra_custom_vector_art.svg';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     });
 
-    document.getElementById('copyBtn').addEventListener('click', () => {
-      if (!cachedSvg) return;
-      navigator.clipboard.writeText(cachedSvg).then(() => {
-        const old = document.getElementById('copyBtn').textContent;
-        document.getElementById('copyBtn').textContent = 'Copied!';
-        setTimeout(() => document.getElementById('copyBtn').textContent = old, 1500);
-      });
-    });
-
+    // Run on mount
     window.addEventListener('DOMContentLoaded', () => {
+      setMode('compare');
       document.getElementById('sampleBtn').click();
     });
   </script>
