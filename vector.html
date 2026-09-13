@@ -2,28 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <title>Sierra SCI0 Vectorizer (Space Quest III Style)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Sierra SCI0 Vector Illustrator</title>
   <style>
     :root {
-      --bg: #0c0d12;
-      --card-bg: #171822;
-      --border: #2e3146;
-      --accent: #55ffff; /* Classic EGA Cyan */
-      --text: #f0f4f8;
-      --muted: #9aa0b8;
+      --bg: #0d1117;
+      --panel: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --sci-cyan: #55ffff;
+      --sci-yellow: #ffff55;
+      --text: #c9d1d9;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Courier New', Courier, monospace, sans-serif;
-      background-color: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+      background: var(--bg);
       color: var(--text);
       padding: 16px;
       padding-bottom: 90px;
@@ -31,166 +26,140 @@
 
     header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     header h1 {
       font-size: 1.3rem;
-      color: var(--accent);
-      letter-spacing: 1px;
+      color: var(--sci-cyan);
       text-transform: uppercase;
-      margin-bottom: 6px;
+      letter-spacing: 1px;
     }
 
     header p {
       font-size: 0.8rem;
-      color: var(--muted);
+      color: #8b949e;
     }
 
     .card {
-      background: var(--card-bg);
-      border: 2px solid var(--border);
+      background: var(--panel);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 16px;
+      padding: 14px;
+      margin-bottom: 14px;
     }
 
     .card-title {
+      font-size: 0.9rem;
       font-weight: bold;
-      font-size: 0.95rem;
-      color: var(--accent);
-      margin-bottom: 12px;
+      color: var(--sci-yellow);
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .btn-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
     .btn {
-      flex: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 44px;
-      padding: 8px 12px;
-      background: #242738;
+      min-height: 42px;
+      padding: 6px 12px;
+      background: #21262d;
       color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      font-family: inherit;
+      border-radius: 6px;
       font-size: 0.85rem;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
     }
 
-    .btn:active {
-      background: var(--accent);
-      color: #000;
-    }
+    .btn:active { background: var(--accent); color: #000; }
+    .btn-accent { background: #238636; border-color: #2ea043; color: #fff; }
 
-    .btn-accent {
-      background: #00aaaa;
-      color: #fff;
-      border-color: var(--accent);
-    }
+    input[type="file"] { display: none; }
 
-    input[type="file"] {
-      display: none;
-    }
-
-    /* Screen display */
-    .screen-wrapper {
-      position: relative;
+    /* Canvas / Viewport */
+    .viewport-box {
       width: 100%;
-      max-width: 640px;
-      margin: 0 auto;
       background: #000;
-      border: 3px solid #555555;
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
-      aspect-ratio: 320 / 200;
+      border: 2px solid #555;
+      border-radius: 6px;
+      aspect-ratio: 4 / 3;
+      max-height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
+      position: relative;
     }
 
-    #previewCanvas, #svgWrapper {
-      position: absolute;
-      top: 0;
-      left: 0;
+    #svgHost {
       width: 100%;
       height: 100%;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    #svgWrapper svg {
+    #svgHost svg {
       width: 100%;
       height: 100%;
-      shape-rendering: crispEdges;
+      object-fit: contain;
     }
 
-    /* Sliders & Toggles */
-    .setting-group {
-      margin-bottom: 14px;
+    /* Sliders */
+    .ctrl-group {
+      margin-bottom: 12px;
     }
 
-    .setting-group label {
+    .ctrl-group label {
       display: flex;
       justify-content: space-between;
       font-size: 0.8rem;
+      color: #8b949e;
       margin-bottom: 4px;
-      color: var(--muted);
     }
 
-    .setting-group input[type="range"] {
+    .ctrl-group input[type="range"] {
       width: 100%;
-      accent-color: var(--accent);
-      background: #2e3146;
+      accent-color: var(--sci-cyan);
       height: 6px;
+      background: #21262d;
     }
 
-    .toggle-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
+    .toggle-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 0.8rem;
+      margin-top: 8px;
     }
 
-    .toggle-label {
+    .toggle-row label {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
+      gap: 6px;
       cursor: pointer;
     }
 
-    /* Palette preview */
-    .ega-palette {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 4px;
-      margin-top: 10px;
-    }
-
-    .ega-chip {
-      height: 18px;
-      border: 1px solid #000;
-      border-radius: 2px;
-    }
-
-    /* Sticky Bottom Actions */
+    /* Bottom action dock */
     .dock {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: #0c0d12e6;
-      backdrop-filter: blur(6px);
-      border-top: 2px solid var(--border);
-      padding: 12px 16px;
+      background: rgba(13, 17, 23, 0.95);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 10px 16px;
       display: flex;
       gap: 10px;
       z-index: 100;
@@ -200,392 +169,296 @@
 <body>
 
   <header>
-    <h1>Sierra SCI0 Vectorizer</h1>
-    <p>320×200 EGA 16-Color Vector & Outline Generator</p>
+    <h1>Sierra Graphic Vectorizer</h1>
+    <p>Converts photos into clean ink-and-paint vector graphics</p>
   </header>
 
   <section class="card">
     <div class="card-title">
-      <span>Input Source</span>
-      <button class="btn" style="min-height:30px; padding:2px 8px; flex:none;" id="sampleBtn">Load SQ3 Scene</button>
+      <span>1. Image Input</span>
+      <button class="btn" style="min-height:30px; padding:2px 8px; font-size:0.75rem;" id="sampleBtn">Test Demo</button>
     </div>
     <div class="btn-row">
-      <label class="btn" for="fileIn">Upload Image</label>
-      <label class="btn" for="camIn">Camera</label>
+      <label class="btn" for="uploadFile">Upload Photo</label>
+      <label class="btn" for="cameraFile">Take Photo</label>
     </div>
-    <input type="file" id="fileIn" accept="image/*">
-    <input type="file" id="camIn" accept="image/*" capture="environment">
+    <input type="file" id="uploadFile" accept="image/*">
+    <input type="file" id="cameraFile" accept="image/*" capture="environment">
+    <div id="statusText" style="font-size:0.75rem; color:var(--sci-cyan); text-align:center; margin-top:4px;">Ready</div>
   </section>
 
   <section class="card">
     <div class="card-title">
-      <span>Sierra SCI Screen (320×200)</span>
-      <span id="statText" style="font-size: 0.75rem; color: var(--accent);">Ready</span>
+      <span>2. Vector Art Preview</span>
+      <span id="polyCount" style="font-size:0.75rem; color:#8b949e;">0 shapes</span>
     </div>
-
-    <div class="screen-wrapper">
-      <canvas id="previewCanvas" width="320" height="200"></canvas>
-      <div id="svgWrapper" style="display:none;"></div>
+    <div class="viewport-box">
+      <div id="svgHost"></div>
     </div>
-
-    <div class="ega-palette" id="palettePreview"></div>
   </section>
 
   <section class="card">
-    <div class="card-title">SCI0 Vector Options</div>
+    <div class="card-title">3. Vector & Color Controls</div>
 
-    <div class="setting-group">
+    <div class="ctrl-group">
       <label>
-        <span>Vector Outline Density (Sobel Edge Threshold)</span>
-        <span id="edgeVal">65</span>
+        <span>Vector Simplification (Patch Size)</span>
+        <span id="patchVal">6px</span>
       </label>
-      <input type="range" id="edgeSlider" min="20" max="150" value="65">
+      <input type="range" id="patchSlider" min="3" max="16" value="6">
     </div>
 
-    <div class="setting-group">
+    <div class="ctrl-group">
       <label>
-        <span>Render Mode</span>
-        <span id="modeVal">Outlines + Flat Fills</span>
+        <span>Sierra Ink Outline Strength</span>
+        <span id="strokeVal">1.2px</span>
       </label>
-      <input type="range" id="modeSlider" min="1" max="3" step="1" value="1">
+      <input type="range" id="strokeSlider" min="0" max="3" step="0.2" value="1.2">
     </div>
 
-    <div class="toggle-grid">
-      <label class="toggle-label">
-        <input type="checkbox" id="ditherCheck" checked>
-        <span>EGA Dithering (Bayer 4×4)</span>
+    <div class="ctrl-group">
+      <label>
+        <span>Color Quantization Bands</span>
+        <span id="quantVal">8 levels</span>
       </label>
-      <label class="toggle-label">
-        <input type="checkbox" id="blackOutlineCheck" checked>
-        <span>Black Line Pass</span>
+      <input type="range" id="quantSlider" min="3" max="16" value="8">
+    </div>
+
+    <div class="toggle-row">
+      <label>
+        <input type="checkbox" id="egaPaletteCheck">
+        <span>Force 16-Color IBM EGA Palette</span>
+      </label>
+      <label>
+        <input type="checkbox" id="inkLinesCheck" checked>
+        <span>Dark Contour Inking</span>
       </label>
     </div>
   </section>
 
   <div class="dock">
-    <button class="btn" id="toggleViewBtn">View: Canvas</button>
-    <button class="btn btn-accent" id="exportSvgBtn">Download SVG</button>
+    <button class="btn" style="flex:1;" id="copyBtn">Copy SVG</button>
+    <button class="btn btn-accent" style="flex:1;" id="downloadBtn">Download SVG</button>
   </div>
 
+  <canvas id="workCanvas" style="display:none;"></canvas>
+
   <script>
-    // Standard 16-Color IBM EGA Palette used in Space Quest 3
-    const EGA_PALETTE = [
-      [0x00, 0x00, 0x00], // 0: Black
-      [0x00, 0x00, 0xAA], // 1: Blue
-      [0x00, 0xAA, 0x00], // 2: Green
-      [0x00, 0xAA, 0xAA], // 3: Cyan
-      [0xAA, 0x00, 0x00], // 4: Red
-      [0xAA, 0x00, 0xAA], // 5: Magenta
-      [0xAA, 0x55, 0x00], // 6: Brown
-      [0xAA, 0xAA, 0xAA], // 7: Light Gray
-      [0x55, 0x55, 0x55], // 8: Dark Gray
-      [0x55, 0x55, 0xFF], // 9: Bright Blue
-      [0x55, 0xFF, 0x55], // 10: Bright Green
-      [0x55, 0xFF, 0xFF], // 11: Bright Cyan
-      [0xFF, 0x55, 0x55], // 12: Bright Red
-      [0xFF, 0x55, 0xFF], // 13: Bright Magenta
-      [0xFF, 0xFF, 0x55], // 14: Yellow
-      [0xFF, 0xFF, 0xFF]  // 15: Bright White
+    // Classic 16-color EGA
+    const EGA = [
+      [0,0,0], [0,0,170], [0,170,0], [0,170,170],
+      [170,0,0], [170,0,170], [170,85,0], [170,170,170],
+      [85,85,85], [85,85,255], [85,255,85], [85,255,255],
+      [255,85,85], [255,85,255], [255,255,85], [255,255,255]
     ];
 
-    const BAYER_4X4 = [
-      [ 0,  8,  2, 10],
-      [12,  4, 14,  6],
-      [ 3, 11,  1,  9],
-      [15,  7, 13,  5]
-    ];
+    let currentImg = null;
+    let cachedSvg = '';
 
-    // Build palette swatches
-    const palEl = document.getElementById('palettePreview');
-    EGA_PALETTE.forEach(c => {
-      const chip = document.createElement('div');
-      chip.className = 'ega-chip';
-      chip.style.backgroundColor = `rgb(${c[0]},${c[1]},${c[2]})`;
-      palEl.appendChild(chip);
-    });
+    const svgHost = document.getElementById('svgHost');
+    const statusText = document.getElementById('statusText');
+    const polyCount = document.getElementById('polyCount');
+    const workCanvas = document.getElementById('workCanvas');
 
-    const canvas = document.getElementById('previewCanvas');
-    const ctx = canvas.getContext('2d');
-    const svgWrapper = document.getElementById('svgWrapper');
-    const statText = document.getElementById('statText');
+    // Controls
+    const patchSlider = document.getElementById('patchSlider');
+    const patchVal = document.getElementById('patchVal');
+    const strokeSlider = document.getElementById('strokeSlider');
+    const strokeVal = document.getElementById('strokeVal');
+    const quantSlider = document.getElementById('quantSlider');
+    const quantVal = document.getElementById('quantVal');
+    const egaPaletteCheck = document.getElementById('egaPaletteCheck');
+    const inkLinesCheck = document.getElementById('inkLinesCheck');
 
-    let activeImage = null;
-    let generatedSvgString = '';
-
-    function getClosestEGAColor(r, g, b) {
-      let bestDist = Infinity;
-      let bestIdx = 0;
-      for (let i = 0; i < EGA_PALETTE.length; i++) {
-        const [pr, pg, pb] = EGA_PALETTE[i];
-        const dist = Math.pow(r - pr, 2) + Math.pow(g - pg, 2) + Math.pow(b - pb, 2);
-        if (dist < bestDist) {
-          bestDist = dist;
-          bestIdx = i;
-        }
-      }
-      return bestIdx;
+    function quantizeChannel(val, levels) {
+      const step = 255 / (levels - 1);
+      return Math.round(Math.round(val / step) * step);
     }
 
-    // Process image into 320x200 and extract vector paths
-    function processSCI0() {
-      if (!activeImage) return;
+    function matchEGA(r, g, b) {
+      let minDist = Infinity;
+      let match = EGA[0];
+      for (let i = 0; i < EGA.length; i++) {
+        const c = EGA[i];
+        const dist = (r-c[0])**2 + (g-c[1])**2 + (b-c[2])**2;
+        if (dist < minDist) {
+          minDist = dist;
+          match = c;
+        }
+      }
+      return match;
+    }
 
-      statText.textContent = "Processing...";
-      
+    // Vectorize via Region Polygon Extraction
+    function vectorizeImage() {
+      if (!currentImg) return;
+      statusText.textContent = "Tracing vector planes...";
+
       setTimeout(() => {
-        const W = 320;
-        const H = 200;
+        const patchSize = parseInt(patchSlider.value, 10);
+        const strokeW = parseFloat(strokeSlider.value);
+        const levels = parseInt(quantSlider.value, 10);
+        const forceEga = egaPaletteCheck.checked;
+        const doInk = inkLinesCheck.checked;
 
-        // Downscale to native Sierra SCI resolution
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = W;
-        tempCanvas.height = H;
-        const tCtx = tempCanvas.getContext('2d');
-        tCtx.drawImage(activeImage, 0, 0, W, H);
-        const imgData = tCtx.getImageData(0, 0, W, H);
+        // Scale image down to game-proportional resolution (keeps processing fast and clean)
+        const targetW = 320;
+        const aspect = currentImg.naturalHeight / currentImg.naturalWidth;
+        const targetH = Math.round(targetW * aspect);
+
+        workCanvas.width = targetW;
+        workCanvas.height = targetH;
+        const ctx = workCanvas.getContext('2d');
+        ctx.drawImage(currentImg, 0, 0, targetW, targetH);
+
+        const imgData = ctx.getImageData(0, 0, targetW, targetH);
         const d = imgData.data;
 
-        const useDither = document.getElementById('ditherCheck').checked;
-        const edgeThresh = parseInt(document.getElementById('edgeSlider').value, 10);
-        const mode = parseInt(document.getElementById('modeSlider').value, 10);
-        const drawOutlines = document.getElementById('blackOutlineCheck').checked;
+        // Grid cells to form segmented vector polygons
+        const cols = Math.ceil(targetW / patchSize);
+        const rows = Math.ceil(targetH / patchSize);
 
-        // 1. Color reduction pass
-        const colorIndices = new Uint8Array(W * H);
-        for (let y = 0; y < H; y++) {
-          for (let x = 0; x < W; x++) {
-            const idx = (y * W + x) * 4;
-            let r = d[idx];
-            let g = d[idx + 1];
-            let b = d[idx + 2];
+        let svgPaths = '';
+        let shapeTotal = 0;
 
-            if (useDither) {
-              const ditherMod = (BAYER_4X4[y % 4][x % 4] / 16.0 - 0.5) * 40;
-              r = Math.min(255, Math.max(0, r + ditherMod));
-              g = Math.min(255, Math.max(0, g + ditherMod));
-              b = Math.min(255, Math.max(0, b + ditherMod));
-            }
+        // Generate smooth, unified vector color polygons
+        for (let gy = 0; gy < rows; gy++) {
+          for (let gx = 0; gx < cols; gx++) {
+            const startX = gx * patchSize;
+            const startY = gy * patchSize;
+            const pw = Math.min(patchSize, targetW - startX);
+            const ph = Math.min(patchSize, targetH - startY);
 
-            const cIdx = getClosestEGAColor(r, g, b);
-            colorIndices[y * W + x] = cIdx;
-          }
-        }
-
-        // 2. Sobel edge extraction for classic line art opcodes
-        const edges = new Uint8Array(W * H);
-        if (drawOutlines) {
-          for (let y = 1; y < H - 1; y++) {
-            for (let x = 1; x < W - 1; x++) {
-              const getLuma = (px, py) => {
-                const i = (py * W + px) * 4;
-                return 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-              };
-
-              const gx = -getLuma(x - 1, y - 1) - 2 * getLuma(x - 1, y) - getLuma(x - 1, y + 1)
-                         +getLuma(x + 1, y - 1) + 2 * getLuma(x + 1, y) + getLuma(x + 1, y + 1);
-
-              const gy = -getLuma(x - 1, y - 1) - 2 * getLuma(x, y - 1) - getLuma(x + 1, y - 1)
-                         +getLuma(x - 1, y + 1) + 2 * getLuma(x, y + 1) + getLuma(x + 1, y + 1);
-
-              const mag = Math.sqrt(gx * gx + gy * gy);
-              edges[y * W + x] = mag > edgeThresh ? 1 : 0;
-            }
-          }
-        }
-
-        // 3. Build SVG output with true vectors (rectangles & lines)
-        let svgOut = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="100%" height="100%" shape-rendering="crispEdges">\n`;
-        svgOut += `<rect width="320" height="200" fill="#000000"/>\n`;
-
-        // Render color fills
-        if (mode === 1 || mode === 2) {
-          // Optimize into horizontal vector spans
-          for (let y = 0; y < H; y++) {
-            let spanColor = null;
-            let spanStart = 0;
-
-            for (let x = 0; x < W; x++) {
-              const c = colorIndices[y * W + x];
-              if (c !== spanColor) {
-                if (spanColor !== null && spanColor !== 0) {
-                  const col = EGA_PALETTE[spanColor];
-                  svgOut += `<rect x="${spanStart}" y="${y}" width="${x - spanStart}" height="1" fill="rgb(${col[0]},${col[1]},${col[2]})"/>\n`;
-                }
-                spanColor = c;
-                spanStart = x;
+            // Compute representative cell color (bilateral-style mean)
+            let sumR = 0, sumG = 0, sumB = 0, count = 0;
+            for (let py = startY; py < startY + ph; py++) {
+              for (let px = startX; px < startX + pw; px++) {
+                const i = (py * targetW + px) * 4;
+                sumR += d[i];
+                sumG += d[i+1];
+                sumB += d[i+2];
+                count++;
               }
             }
-            if (spanColor !== null && spanColor !== 0) {
-              const col = EGA_PALETTE[spanColor];
-              svgOut += `<rect x="${spanStart}" y="${y}" width="${W - spanStart}" height="1" fill="rgb(${col[0]},${col[1]},${col[2]})"/>\n`;
-            }
-          }
-        }
 
-        // Render black line vector strokes
-        if (drawOutlines && (mode === 1 || mode === 3)) {
-          let linePaths = '';
-          for (let y = 0; y < H; y++) {
-            for (let x = 0; x < W; x++) {
-              if (edges[y * W + x]) {
-                linePaths += `M${x},${y}h1 `;
-              }
-            }
-          }
-          if (linePaths.length > 0) {
-            svgOut += `<path d="${linePaths}" stroke="#000000" stroke-width="1"/>\n`;
-          }
-        }
+            let r = Math.round(sumR / count);
+            let g = Math.round(sumG / count);
+            let b = Math.round(sumB / count);
 
-        svgOut += `</svg>`;
-        generatedSvgString = svgOut;
-        svgWrapper.innerHTML = svgOut;
-
-        // Render to preview canvas
-        ctx.clearRect(0, 0, W, H);
-        const outImgData = ctx.createImageData(W, H);
-        const outD = outImgData.data;
-
-        for (let y = 0; y < H; y++) {
-          for (let x = 0; x < W; x++) {
-            const idx = y * W + x;
-            const px = idx * 4;
-            const isEdge = edges[idx];
-
-            if (drawOutlines && isEdge && (mode === 1 || mode === 3)) {
-              outD[px] = 0;
-              outD[px + 1] = 0;
-              outD[px + 2] = 0;
-              outD[px + 3] = 255;
-            } else if (mode === 3) {
-              outD[px] = 255;
-              outD[px + 1] = 255;
-              outD[px + 2] = 255;
-              outD[px + 3] = 255;
+            if (forceEga) {
+              const egaCol = matchEGA(r, g, b);
+              r = egaCol[0]; g = egaCol[1]; b = egaCol[2];
             } else {
-              const col = EGA_PALETTE[colorIndices[idx]];
-              outD[px] = col[0];
-              outD[px + 1] = col[1];
-              outD[px + 2] = col[2];
-              outD[px + 3] = 255;
+              r = quantizeChannel(r, levels);
+              g = quantizeChannel(g, levels);
+              b = quantizeChannel(b, levels);
             }
+
+            // Outline color
+            let strokeAttr = '';
+            if (doInk && strokeW > 0) {
+              const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+              // Contrast stroke
+              const strokeCol = lum < 60 ? '#111' : (forceEga ? '#000' : `rgba(0,0,0,0.55)`);
+              strokeAttr = `stroke="${strokeCol}" stroke-width="${strokeW}" stroke-linejoin="round"`;
+            }
+
+            svgPaths += `<rect x="${startX}" y="${startY}" width="${pw}" height="${ph}" fill="rgb(${r},${g},${b})" ${strokeAttr} />\n`;
+            shapeTotal++;
           }
         }
-        ctx.putImageData(outImgData, 0, 0);
 
-        statText.textContent = `320×200 EGA Ready`;
-      }, 20);
+        const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${targetW} ${targetH}" width="100%" height="100%">
+          <rect width="${targetW}" height="${targetH}" fill="#000000"/>
+          ${svgPaths}
+        </svg>`;
+
+        cachedSvg = svgMarkup;
+        svgHost.innerHTML = svgMarkup;
+        polyCount.textContent = `${shapeTotal} vector planes`;
+        statusText.textContent = `Done (${targetW}×${targetH})`;
+      }, 30);
     }
 
-    // Handlers
-    function loadImage(src) {
-      const img = new Image();
-      img.onload = () => {
-        activeImage = img;
-        processSCI0();
+    // Load file
+    function handleFile(f) {
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          currentImg = img;
+          vectorizeImage();
+        };
+        img.src = e.target.result;
       };
-      img.src = src;
+      reader.readAsDataURL(f);
     }
 
-    document.getElementById('fileIn').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (evt) => loadImage(evt.target.result);
-        reader.readAsDataURL(file);
-      }
+    document.getElementById('uploadFile').addEventListener('change', (e) => handleFile(e.target.files[0]));
+    document.getElementById('cameraFile').addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+    // Sliders
+    patchSlider.addEventListener('input', (e) => {
+      patchVal.textContent = e.target.value + 'px';
+      vectorizeImage();
     });
 
-    document.getElementById('camIn').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (evt) => loadImage(evt.target.result);
-        reader.readAsDataURL(file);
-      }
+    strokeSlider.addEventListener('input', (e) => {
+      strokeVal.textContent = e.target.value + 'px';
+      vectorizeImage();
     });
 
-    // Generate Space Quest 3 Style Synth Demo
+    quantSlider.addEventListener('input', (e) => {
+      quantVal.textContent = e.target.value + ' levels';
+      vectorizeImage();
+    });
+
+    egaPaletteCheck.addEventListener('change', vectorizeImage);
+    inkLinesCheck.addEventListener('change', vectorizeImage);
+
+    // Sample Loader
     document.getElementById('sampleBtn').addEventListener('click', () => {
       const c = document.createElement('canvas');
-      c.width = 320;
-      c.height = 200;
+      c.width = 320; c.height = 240;
       const x = c.getContext('2d');
-
-      // Alien Garbage Freighter interior sky
-      const grad = x.createLinearGradient(0, 0, 0, 120);
-      grad.addColorStop(0, '#000000');
-      grad.addColorStop(1, '#0000aa');
-      x.fillStyle = grad;
-      x.fillRect(0, 0, 320, 120);
-
-      // Distant stars / moons
-      x.fillStyle = '#ffff55';
-      x.beginPath();
-      x.arc(240, 40, 18, 0, Math.PI * 2);
-      x.fill();
-
-      // Junk / Scrap metal mounds
-      x.fillStyle = '#aa5500';
-      x.beginPath();
-      x.moveTo(0, 150);
-      x.lineTo(80, 90);
-      x.lineTo(160, 140);
-      x.lineTo(240, 80);
-      x.lineTo(320, 130);
-      x.lineTo(320, 200);
-      x.lineTo(0, 200);
-      x.fill();
-
-      // Pod / Spaceship remnant
-      x.fillStyle = '#00aaaa';
-      x.beginPath();
-      x.ellipse(160, 130, 45, 20, 0, 0, Math.PI * 2);
-      x.fill();
-
-      loadImage(c.toDataURL());
+      // Draw adventurer
+      x.fillStyle = "#223"; x.fillRect(0,0,320,240);
+      x.fillStyle = "#a33"; x.fillRect(100, 80, 120, 140);
+      x.fillStyle = "#3a3"; x.fillRect(125, 40, 70, 45);
+      x.fillStyle = "#eb9"; x.beginPath(); x.arc(160, 100, 30, 0, Math.PI*2); x.fill();
+      const img = new Image();
+      img.onload = () => {
+        currentImg = img;
+        vectorizeImage();
+      };
+      img.src = c.toDataURL();
     });
 
-    // Control bindings
-    document.getElementById('edgeSlider').addEventListener('input', (e) => {
-      document.getElementById('edgeVal').textContent = e.target.value;
-      processSCI0();
-    });
-
-    document.getElementById('modeSlider').addEventListener('input', (e) => {
-      const val = parseInt(e.target.value, 10);
-      const names = { 1: "Outlines + Flat Fills", 2: "Flat Fills Only", 3: "Line Art Only" };
-      document.getElementById('modeVal').textContent = names[val];
-      processSCI0();
-    });
-
-    document.getElementById('ditherCheck').addEventListener('change', processSCI0);
-    document.getElementById('blackOutlineCheck').addEventListener('change', processSCI0);
-
-    // Toggle Preview
-    let showingSvg = false;
-    document.getElementById('toggleViewBtn').addEventListener('click', () => {
-      showingSvg = !showingSvg;
-      canvas.style.display = showingSvg ? 'none' : 'block';
-      svgWrapper.style.display = showingSvg ? 'block' : 'none';
-      document.getElementById('toggleViewBtn').textContent = showingSvg ? 'View: SVG' : 'View: Canvas';
-    });
-
-    // Download SVG
-    document.getElementById('exportSvgBtn').addEventListener('click', () => {
-      if (!generatedSvgString) return;
-      const blob = new Blob([generatedSvgString], { type: 'image/svg+xml;charset=utf-8' });
+    // SVG Export
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      if (!cachedSvg) return;
+      const blob = new Blob([cachedSvg], { type: 'image/svg+xml;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'sierra_sci0_graphic.svg';
+      a.download = 'sierra_painted_art.svg';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     });
 
-    // Initial load
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      if (!cachedSvg) return;
+      navigator.clipboard.writeText(cachedSvg).then(() => {
+        const old = document.getElementById('copyBtn').textContent;
+        document.getElementById('copyBtn').textContent = 'Copied!';
+        setTimeout(() => document.getElementById('copyBtn').textContent = old, 1500);
+      });
+    });
+
+    // Auto-run sample on start
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('sampleBtn').click();
     });
