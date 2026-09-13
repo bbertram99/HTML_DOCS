@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ireland Road Trip Itinerary | Sept 12 - Sept 21</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            shamrock: {
+              50: '#ecfdf3',
+              100: '#d1fae1',
+              200: '#a7f3c9',
+              500: '#10b981',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22',
+            },
+            celtic: {
+              gold: '#d97706',
+              stone: '#1e293b',
+              parchment: '#fdfbf7',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            serif: ['"Cinzel"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom scrollbars and transitions */
+    ::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 9999px;
+    }
+    .custom-shadow {
+      box-shadow: 0 10px 30px -10px rgba(6, 78, 59, 0.12);
+    }
+    .glassmorphism {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+    }
+    .completed-item {
+      opacity: 0.55;
+      filter: grayscale(0.2);
+    }
+  </style>
+</head>
+<body class="bg-[#f7f8fa] text-slate-800 min-h-screen font-sans antialiased selection:bg-shamrock-200">
+
+  <!-- Header Section -->
+  <header class="bg-gradient-to-r from-shamrock-950 via-shamrock-900 to-shamrock-800 text-white sticky top-0 z-30 shadow-lg border-b border-emerald-700/40">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-300 shadow-inner">
+          <i data-lucide="compass" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-wide flex items-center gap-2">
+            Ireland Road Trip
+            <span class="text-xs font-sans px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-semibold">Sept 12–21</span>
+          </h1>
+          <p class="text-xs text-emerald-200/90 flex items-center gap-2">
+            <span>Dublin</span> • <span>Wicklow</span> • <span>Kilkenny</span> • <span>Kerry</span> • <span>Dingle</span> • <span>Moher</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Actions Header -->
+      <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+        <button id="openNotesBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-800/80 hover:bg-emerald-700 text-xs font-semibold text-emerald-100 border border-emerald-600/40 transition">
+          <i data-lucide="notebook-pen" class="w-4 h-4 text-amber-300"></i>
+          <span>Trip Notes & Checklist</span>
+        </button>
+        <button id="printBtn" onclick="window.print()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-800/80 hover:bg-emerald-700 text-xs font-semibold text-emerald-100 border border-emerald-600/40 transition" title="Print itinerary">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          <span class="hidden md:inline">Print</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Day Navigation Bar -->
+    <nav class="border-t border-emerald-800/60 bg-shamrock-950/70 backdrop-blur px-4 sm:px-6">
+      <div class="max-w-6xl mx-auto flex gap-2 py-2.5 overflow-x-auto no-scrollbar scroll-smooth" id="daysNavContainer">
+        <!-- Injected via JavaScript -->
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- Search & Quick Filter Bar -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-3">
+      <div class="relative w-full md:w-96">
+        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Search places, castles, drives, hotels..." 
+          class="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-shamrock-500 bg-slate-50/50"
+        />
+      </div>
+
+      <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end text-xs text-slate-500">
+        <span id="tripProgressText" class="font-medium">0 of 0 stops completed</span>
+        <button id="resetProgressBtn" class="text-rose-600 hover:text-rose-700 underline font-medium">Reset Progress</button>
+      </div>
+    </div>
+
+    <!-- Active Day Overview Card -->
+    <section id="dayHeaderCard" class="bg-white rounded-2xl p-5 sm:p-7 shadow-sm border border-slate-200 relative overflow-hidden">
+      <!-- Injected via JavaScript -->
+    </section>
+
+    <!-- Urgent Alerts & Reminders Banner (Dynamic based on day) -->
+    <div id="dayAlertBanner" class="hidden rounded-xl p-4 border flex items-start gap-3">
+      <!-- Injected dynamically -->
+    </div>
+
+    <!-- Timeline & Stops List -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-base font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+          <i data-lucide="map-pin" class="w-4 h-4 text-emerald-600"></i>
+          Schedule & Key Stops
+        </h2>
+        <span class="text-xs text-slate-500">Tap checkbox to mark as visited</span>
+      </div>
+
+      <div id="activitiesList" class="space-y-3.5">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Lodging Card for the Day -->
+    <section id="lodgingCard" class="bg-gradient-to-br from-amber-50/80 to-amber-100/40 rounded-2xl p-5 border border-amber-200/70 shadow-sm">
+      <!-- Injected via JavaScript -->
+    </section>
+
+  </main>
+
+  <div id="notesModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="clipboard-list" class="w-5 h-5 text-emerald-600"></i>
+          <h3 class="font-bold text-lg text-slate-800">Trip Notes & Quick Reminders</h3>
+        </div>
+        <button id="closeNotesBtn" class="text-slate-400 hover:text-slate-600 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Critical Advance Bookings -->
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-3.5 text-xs text-amber-900 space-y-2">
+        <h4 class="font-bold uppercase tracking-wide flex items-center gap-1.5 text-amber-800">
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i> Must-Book In Advance
+        </h4>
+        <ul class="list-disc pl-4 space-y-1">
+          <li><strong>Kilmainham Gaol (Dublin - Sept 13):</strong> Sells out 28 days in advance at midnight Irish time.</li>
+          <li><strong>Brú na Bóinne / Newgrange (Sept 20):</strong> Strictly booked online via OPW; spots fill rapidly.</li>
+          <li><strong>Gap of Dunloe (Sept 16):</strong> Check-in at 7 High St Killarney before 10:00 AM.</li>
+          <li><strong>Shannon Ferry (Sept 19):</strong> Tarbert to Killimer departs hourly, no reservation strictly required but check sail times.</li>
+        </ul>
+      </div>
+
+      <!-- User Scratchpad -->
+      <div class="space-y-2">
+        <label for="userNotes" class="block text-xs font-bold uppercase text-slate-500 tracking-wider">Your Personal Trip Notes (Saved Locally)</label>
+        <textarea id="userNotes" rows="5" placeholder="Confirmation numbers, eSIM details, rental insurance notes, restaurant recommendations..." class="w-full text-sm p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-sans"></textarea>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2 border-t">
+        <button id="saveNotesBtn" class="px-4 py-2 bg-shamrock-700 text-white rounded-xl text-xs font-semibold hover:bg-shamrock-800 transition">Save Notes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const itineraryData = [
+      {
+        id: "day-1",
+        dateStr: "Sept 12",
+        dayName: "Friday",
+        title: "Dublin Arrival & Historic Heart",
+        summaryBadge: "Dublin Arrival",
+        routeSummary: "Airport ➔ Harcourt Hotel ➔ St Stephen's Green ➔ Kildare St",
+        drivingNote: "No rental car yet. Take a taxi or Dublin Express from Terminal to hotel.",
+        alert: {
+          type: "info",
+          text: "Arrive 8:00 AM. Drop bags at Harcourt Hotel. Relax & adjust to local time before 1:00 PM Viking Splash Tour."
+        },
+        stay: {
+          name: "Harcourt Hotel, Dublin",
+          type: "Hotel (Night 1/2)",
+          note: "Harcourt Street, Dublin 2. Close to Luas green line.",
+          officialUrl: "https://www.harcourthotel.ie/",
+          mapsUrl: "https://www.google.com/maps/search/?api=1&query=Harcourt+Hotel+Dublin"
+        },
+        activities: [
+          {
+            id: "act-1-1",
+            time: "08:00 AM",
+            title: "Arrive at Dublin Airport (DUB)",
+            category: "Transit",
+            desc: "Clear customs, grab bags, take a licensed taxi or Dublin Express bus to hotel.",
+            officialUrl: "https://www.dublinairport.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dublin+Airport"
+          },
+          {
+            id: "act-1-2",
+            time: "10:30 AM",
+            title: "Check bags & Early Lunch near Harcourt",
+            category: "Food & Rest",
+            desc: "Leave bags with hotel reception. Relax and eat near Camden St / Harcourt St.",
+            officialUrl: "https://www.harcourthotel.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Harcourt+Hotel+Dublin"
+          },
+          {
+            id: "act-1-3",
+            time: "01:00 PM - 02:30 PM",
+            title: "Viking Splash Tour",
+            category: "Tour",
+            desc: "1.5 hours land & water tour in a WWII amphibious DUKW. Departs near St Stephen's Green.",
+            officialUrl: "https://vikingsplashtours.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Viking+Splash+Tours+Dublin"
+          },
+          {
+            id: "act-1-4",
+            time: "03:00 PM - 05:30 PM",
+            title: "National Museum of Archaeology & Little Museum of Dublin",
+            category: "Sightseeing",
+            desc: "View the famous bog bodies and Celtic gold at Archaeology (free entry), then visit the quirky Little Museum of Dublin on St Stephen's Green.",
+            officialUrl: "https://www.museum.ie/en-IE/Museums/Archaeology",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=National+Museum+of+Ireland+Archaeology"
+          },
+          {
+            id: "act-1-5",
+            time: "06:30 PM",
+            title: "Supper & Early Night at Harcourt Hotel",
+            category: "Dining / Rest",
+            desc: "Enjoy dinner in Dublin and head for an early rest to combat jet lag.",
+            officialUrl: "https://www.harcourthotel.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Harcourt+Hotel+Dublin"
+          }
+        ]
+      },
+      {
+        id: "day-2",
+        dateStr: "Sept 13",
+        dayName: "Saturday",
+        title: "Dublin's History & Cathedrals",
+        summaryBadge: "Dublin Highlights",
+        routeSummary: "Kilmainham Gaol ➔ Christ Church / Dublinia ➔ Trinity College",
+        drivingNote: "Walk or use Luas tram / Dublin buses / taxis inside city centre.",
+        alert: {
+          type: "warning",
+          text: "Kilmainham Gaol tickets must be booked online well in advance! You can't do every stop today—pick your favorites."
+        },
+        stay: {
+          name: "Harcourt Hotel, Dublin",
+          type: "Hotel (Night 2/2)",
+          note: "Breakfast included at hotel.",
+          officialUrl: "https://www.harcourthotel.ie/",
+          mapsUrl: "https://www.google.com/maps/search/?api=1&query=Harcourt+Hotel+Dublin"
+        },
+        activities: [
+          {
+            id: "act-2-1",
+            time: "Morning (Flexible)",
+            title: "Kilmainham Gaol Tour",
+            category: "Must-See Tour",
+            desc: "1 to 1.5 hour guided tour of the historic prison where 1916 Easter Rising leaders were held.",
+            officialUrl: "https://kilmainhamgaolmuseum.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Kilmainham+Gaol"
+          },
+          {
+            id: "act-2-2",
+            time: "Midday",
+            title: "Christ Church Cathedral & Dublinia",
+            category: "Historic Site",
+            desc: "Directly connected across the archway. Medieval crypts and interactive Viking Dublin heritage.",
+            officialUrl: "https://christchurchcathedral.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Christ+Church+Cathedral+Dublin"
+          },
+          {
+            id: "act-2-3",
+            time: "Afternoon Option",
+            title: "Dublin Castle",
+            category: "Historic Site",
+            desc: "Exterior grounds and courtyards (note: state apartments may have restricted access).",
+            officialUrl: "https://www.dublincastle.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dublin+Castle"
+          },
+          {
+            id: "act-2-4",
+            time: "Afternoon Option",
+            title: "Trinity College & Book of Kells",
+            category: "Culture",
+            desc: "Old Library and 9th-century illuminated Gospel manuscript.",
+            officialUrl: "https://www.tcd.ie/visitors/book-of-kells/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Trinity+College+Dublin"
+          },
+          {
+            id: "act-2-5",
+            time: "Alternative Options",
+            title: "EPIC Museum OR National Leprechaun Museum",
+            category: "Museum",
+            desc: "EPIC covers Irish emigration storytelling in the Docklands; Leprechaun Museum offers folklore storytelling near Jervis.",
+            officialUrl: "https://epicchq.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=EPIC+The+Irish+Emigration+Museum"
+          }
+        ]
+      },
+      {
+        id: "day-3",
+        dateStr: "Sept 14",
+        dayName: "Sunday",
+        title: "Wicklow Mountains & Kilkenny",
+        summaryBadge: "Wicklow & Kilkenny",
+        routeSummary: "Airport Car Pickup ➔ Powerscourt ➔ Sally Gap R115/R759 ➔ Glendalough ➔ Kilkenny",
+        drivingNote: "Estimated 3.5 - 4 hours total driving. Mountain pass on R115/R759 has narrow spots—drive slow & take photos!",
+        alert: {
+          type: "info",
+          text: "Leave hotel early to collect rental car from airport, then jump onto the M50 south towards Wicklow."
+        },
+        stay: {
+          name: "Langton House Hotel, Kilkenny",
+          type: "Hotel (Night 1/1)",
+          note: "John Street, Kilkenny. Superb location right in Kilkenny city centre.",
+          officialUrl: "https://www.langtons.ie/",
+          mapsUrl: "https://www.google.com/maps/search/?api=1&query=Langtons+Hotel+Kilkenny"
+        },
+        activities: [
+          {
+            id: "act-3-1",
+            time: "07:30 AM - 09:30 AM",
+            title: "Car Pickup & Drive South via M50 to Exit 117",
+            category: "Drive",
+            desc: "Pick up rental vehicle at airport, take M50 south around Dublin to R117 toward Enniskerry.",
+            officialUrl: "https://www.dublinairport.com/to-from-airport/car-rental",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dublin+Airport+Car+Rental"
+          },
+          {
+            id: "act-3-2",
+            time: "10:00 AM - 12:30 PM",
+            title: "Powerscourt Estate & Gardens",
+            category: "Gardens & Lunch",
+            desc: "Voted #3 garden in the world by National Geographic. Tour Italian and Japanese gardens; have lunch on-site.",
+            officialUrl: "https://powerscourt.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Powerscourt+House+and+Gardens"
+          },
+          {
+            id: "act-3-3",
+            time: "12:30 PM - 02:00 PM",
+            title: "Scenic Drive: Glencree, Old Military Rd (R115) & Sally Gap (R759)",
+            category: "Scenic Route",
+            desc: "Breathtaking peat bogs, heather valleys, and Lough Tay (Guinness Lake) view.",
+            officialUrl: "https://visitwicklow.ie/item/sally-gap-drive/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Sally+Gap+Wicklow"
+          },
+          {
+            id: "act-3-4",
+            time: "02:00 PM - 04:30 PM",
+            title: "Glendalough Monastic Ruins & Lakes",
+            category: "Heritage & Nature",
+            desc: "St. Kevin's 6th-century monastic city, 30m round tower, Upper and Lower lakes.",
+            officialUrl: "https://glendalough.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Glendalough+Monastic+Site"
+          },
+          {
+            id: "act-3-5",
+            time: "04:30 PM - 06:15 PM",
+            title: "Drive to Kilkenny via R756 & N81 (through Carlow)",
+            category: "Drive",
+            desc: "Scenic rural roads into the historic medieval capital of Kilkenny.",
+            officialUrl: "https://visitkilkenny.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Kilkenny+City+Centre"
+          },
+          {
+            id: "act-3-6",
+            time: "06:30 PM+",
+            title: "Kilkenny Medieval Mile & Supper",
+            category: "Explore & Dine",
+            desc: "Walk the Medieval Mile, view St. Canice's Cathedral and Kilkenny Castle exterior lit at night. Check in to Langton Hotel.",
+            officialUrl: "https://medievalmilemuseum.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Kilkenny+Castle"
+          }
+        ]
+      },
+      {
+        id: "day-4",
+        dateStr: "Sept 15",
+        dayName: "Monday",
+        title: "Castles, Caves & Blarney to Kerry",
+        summaryBadge: "Cashel to Killarney",
+        routeSummary: "Rock of Cashel ➔ Cahir Castle ➔ Mitchelstown Caves ➔ Blarney Castle ➔ Killarney",
+        drivingNote: "Packed driving day (approx 4 - 4.5 hours driving). Keep stops punctual to reach Blarney with daylight.",
+        alert: {
+          type: "warning",
+          text: "Blarney Castle grounds close entry late afternoon. Stick close to the schedule to give yourself 2+ hours there."
+        },
+        stay: {
+          name: "#9 Killarney Village Homes",
+          type: "Holiday Rental (Night 1/2)",
+          note: "Muckross Road, Killarney. Great base for Killarney National Park.",
+          officialUrl: "https://www.airbnb.com/",
+          mapsUrl: "https://www.google.com/maps/search/?api=1&query=Muckross+Road+Killarney"
+        },
+        activities: [
+          {
+            id: "act-4-1",
+            time: "09:00 AM - 11:15 AM",
+            title: "Drive to & Tour Rock of Cashel",
+            category: "Heritage",
+            desc: "Spectacular group of Celtic medieval architecture crowned on a high limestone hill.",
+            officialUrl: "https://cashel.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Rock+of+Cashel"
+          },
+          {
+            id: "act-4-2",
+            time: "11:30 AM - 12:45 PM",
+            title: "Quick Lunch & Drive to Cahir Castle",
+            category: "Castle & Lunch",
+            desc: "One of Ireland's largest and best preserved medieval fortresses on the River Suir.",
+            officialUrl: "https://heritageireland.ie/places-to-visit/cahir-castle/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Cahir+Castle"
+          },
+          {
+            id: "act-4-3",
+            time: "01:15 PM - 02:30 PM",
+            title: "Mitchelstown Cave",
+            category: "Underground Wonder",
+            desc: "Guided subterranean walk through huge dripstone caverns and stalactites.",
+            officialUrl: "https://mitchelstowncave.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Mitchelstown+Cave"
+          },
+          {
+            id: "act-4-4",
+            time: "03:30 PM - 06:00 PM",
+            title: "Blarney Castle & Gardens",
+            category: "Castle & Legend",
+            desc: "Kiss the legendary Blarney Stone for the gift of the gab and explore the Poison Garden.",
+            officialUrl: "https://www.blarneycastle.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Blarney+Castle"
+          },
+          {
+            id: "act-4-5",
+            time: "07:00 PM - 09:00 PM",
+            title: "Dinner & Drive to Killarney",
+            category: "Drive & Rest",
+            desc: "Drive via N22 into Killarney and check into #9 Killarney Village Homes on Muckross Rd.",
+            officialUrl: "https://killarney.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Muckross+Road+Killarney"
+          }
+        ]
+      },
+      {
+        id: "day-5",
+        dateStr: "Sept 16",
+        dayName: "Tuesday",
+        title: "Gap of Dunloe & Killarney National Park",
+        summaryBadge: "Gap of Dunloe",
+        routeSummary: "7 High St Killarney ➔ Gap of Dunloe (Boat/Pony) ➔ Torc Falls ➔ Muckross",
+        drivingNote: "Virtually no driving during the tour! Car stays parked in town during day tour.",
+        alert: {
+          type: "info",
+          text: "Check-in before 10:00 AM at 7 High Street for the 6-hour Gap of Dunloe adventure (bus + pony trap / walk + lake boat)."
+        },
+        stay: {
+          name: "#9 Killarney Village Homes",
+          type: "Holiday Rental (Night 2/2)",
+          note: "Muckross Road, Killarney.",
+          officialUrl: "https://www.airbnb.com/",
+          mapsUrl: "https://www.google.com/maps/search/?api=1&query=Muckross+Road+Killarney"
+        },
+        activities: [
+          {
+            id: "act-5-1",
+            time: "09:15 AM - 09:45 AM",
+            title: "Drive & Check-in at 7 High St, Killarney",
+            category: "Tour Check-in",
+            desc: "15 min drive from Muckross Rd. Meet tour operator (Deros / Gap of Dunloe tours) by 09:45 AM.",
+            officialUrl: "https://derostours.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=7+High+Street+Killarney"
+          },
+          {
+            id: "act-5-2",
+            time: "10:00 AM - 04:00 PM",
+            title: "Gap of Dunloe 6-Hour Tour",
+            category: "Highlight Adventure",
+            desc: "Classic mountain pass journey: bus to Kate Kearney's Cottage, traverse the dramatic gap (walk or hire jaunting car), then scenic open boat across the 3 Lakes of Killarney to Ross Castle.",
+            officialUrl: "https://gapofdunloetours.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Gap+of+Dunloe"
+          },
+          {
+            id: "act-5-3",
+            time: "04:30 PM - 06:30 PM",
+            title: "Torc Waterfall & Muckross House & Gardens",
+            category: "Nature & Estate",
+            desc: "Short walk to Torc Waterfall cascading in lush woodlands, then visit Muckross House on the shores of Muckross Lake.",
+            officialUrl: "https://www.muckross-house.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Torc+Waterfall+Killarney"
+          },
+          {
+            id: "act-5-4",
+            time: "07:00 PM",
+            title: "Supper in Killarney & Relax",
+            category: "Dining",
+            desc: "Enjoy traditional Kerry fare and live traditional Irish music in Killarney town.",
+            officialUrl: "https://killarney.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Killarney+Town+Centre"
+          }
+        ]
+      },
+      {
+        id: "day-6",
+        dateStr: "Sept 17",
+        dayName: "Wednesday",
+        title: "Ring of Kerry & On to Dingle",
+        summaryBadge: "Ring of Kerry",
+        routeSummary: "Killarney ➔ Kenmare (N71) ➔ Sneem ➔ Waterville ➔ Dingle",
+        drivingNote: "Approx 4.5 - 5 hours driving plus stops. Coach buses travel anti-clockwise—drive cautiously on winding coastal roads.",
+        alert: {
+          type: "info",
+          text: "Leave early to allow leisurely photo stops at Moll's Gap, Ladies View, and coastal cliffs."
+        },
+        stay: {
+          name: "6 Marian Park, Dingle",
+          type: "Airbnb / Rental (Night 1/2)",
+          note: "Easy walking distance to Dingle harbour, seafood bars, and pubs.",
+          officialUrl: "https://dingle-peninsula.com/",
+          mapsUrl: "https://www.google.com/maps/search/?api=1&query=Marian+Park+Dingle+Kerry"
+        },
+        activities: [
+          {
+            id: "act-6-1",
+            time: "08:30 AM - 10:00 AM",
+            title: "N71 via Ladies View & Moll's Gap to Kenmare",
+            category: "Scenic Mountain Road",
+            desc: "Stunning mountain vistas over the Lakes of Killarney toward colourful Kenmare heritage town.",
+            officialUrl: "https://www.gokenmare.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Ladies+View+Killarney"
+          },
+          {
+            id: "act-6-2",
+            time: "10:00 AM - 01:30 PM",
+            title: "Ring of Kerry Coastal Loop (Sneem, Caherdaniel, Coomakista)",
+            category: "Scenic Route",
+            desc: "Pass through Sneem, Derrynane, and stop at Coomakista Pass for views of Deenish and Scariff Islands.",
+            officialUrl: "https://www.theringofkerry.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Coomakista+Pass+Kerry"
+          },
+          {
+            id: "act-6-3",
+            time: "01:30 PM - 03:30 PM",
+            title: "Waterville & Cahersiveen Stops",
+            category: "Coastal Villages",
+            desc: "Coastal stroll in Charlie Chaplin's favorite getaway town, quick lunch, view Ballycarbery Castle / Stone Forts.",
+            officialUrl: "https://visitwaterville.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Waterville+Kerry"
+          },
+          {
+            id: "act-6-4",
+            time: "03:30 PM - 05:45 PM",
+            title: "Drive from Ring of Kerry to Dingle Peninsula",
+            category: "Drive",
+            desc: "Follow N70 to Castlemaine and onto N86 along Dingle Bay into Dingle harbour.",
+            officialUrl: "https://dingle-peninsula.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dingle+Town"
+          },
+          {
+            id: "act-6-5",
+            time: "06:30 PM+",
+            title: "Check into 6 Marian Park & Dingle Seafood Dinner",
+            category: "Food & Pubs",
+            desc: "Settle in, stroll Green Street, and visit Dick Mack's or Foxy John's for famous local hospitality.",
+            officialUrl: "https://dickmacks.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dingle+Harbour"
+          }
+        ]
+      },
+      {
+        id: "day-7",
+        dateStr: "Sept 18",
+        dayName: "Thursday",
+        title: "Dingle Peninsula & Slea Head Loop",
+        summaryBadge: "Dingle Peninsula",
+        routeSummary: "Dingle ➔ Slea Head Drive (R559) ➔ Dunmore Head ➔ Gallarus ➔ Dingle Town",
+        drivingNote: "Gentle loop (30 miles, ~3-4 hours with regular sightseeing stops).",
+        alert: {
+          type: "info",
+          text: "A relaxed day! Travel Slea Head clockwise (recommended) to avoid meeting tour buses head-on."
+        },
+        stay: {
+          name: "6 Marian Park, Dingle",
+          type: "Airbnb / Rental (Night 2/2)",
+          note: "Same accommodation in Dingle.",
+          officialUrl: "https://dingle-peninsula.com/",
+          mapsUrl: "https://www.google.com/maps/search/?api=1&query=Marian+Park+Dingle"
+        },
+        activities: [
+          {
+            id: "act-7-1",
+            time: "10:00 AM - 01:00 PM",
+            title: "Slea Head Drive (Wild Atlantic Way)",
+            category: "Coastal Highlights",
+            desc: "Dramatic cliffs, Beehive huts (Clochán), Dunmore Head (the westernmost point of mainland Ireland), and views of the Blasket Islands.",
+            officialUrl: "https://dingle-peninsula.com/explore/slea-head-drive.html",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dunmore+Head+Slea+Head+Drive"
+          },
+          {
+            id: "act-7-2",
+            time: "01:00 PM - 02:30 PM",
+            title: "Gallarus Oratory & Kilmalkedar Church",
+            category: "Early Christian Heritage",
+            desc: "Inspect the dry-stone inverted boat architecture intact after 1,200 years.",
+            officialUrl: "https://heritageireland.ie/places-to-visit/gallarus-visitor-centre/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Gallarus+Oratory"
+          },
+          {
+            id: "act-7-3",
+            time: "03:00 PM - 06:00 PM",
+            title: "Explore Dingle Town Craft Shops & Harbour",
+            category: "Town Walk",
+            desc: "Taste Murphy's Ice Cream (sea salt flavour), browse artisan weavers and jewellers.",
+            officialUrl: "https://www.murphysicecream.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Murphys+Ice+Cream+Dingle"
+          },
+          {
+            id: "act-7-4",
+            time: "07:00 PM",
+            title: "Early Night & Traditional Music",
+            category: "Evening",
+            desc: "Relax at the Airbnb and catch early music session.",
+            officialUrl: "https://dingle-peninsula.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dingle+Kerry"
+          }
+        ]
+      },
+      {
+        id: "day-8",
+        dateStr: "Sept 19",
+        dayName: "Friday",
+        title: "Shannon Ferry, Cliffs of Moher & The Burren",
+        summaryBadge: "Cliffs of Moher & Burren",
+        routeSummary: "Dingle ➔ Tarbert Ferry ➔ Kilkee Cliffs ➔ Cliffs of Moher ➔ Burren ➔ Kinvara",
+        drivingNote: "Total driving time ~4 hours + ferry crossing (20 mins). Check Shannon Ferries departures (runs hourly).",
+        alert: {
+          type: "warning",
+          text: "Shannon Ferry (Tarbert to Killimer) saves ~1.5 hours of driving around Limerick! No need to pre-book, drive on & pay."
+        },
+        stay: {
+          name: "Kinvara Guesthouse",
+          type: "Guesthouse (Night 1/1)",
+          note: "Main Street, Kinvara, Co. Galway. Near picturesque Dunguaire Castle on Galway Bay.",
+          officialUrl: "https://www.kinvaraguesthouse.ie/",
+          mapsUrl: "https://www.google.com/maps/search/?api=1&query=Kinvara+Guesthouse+Main+St"
+        },
+        activities: [
+          {
+            id: "act-8-1",
+            time: "07:45 AM - 09:45 AM",
+            title: "Drive N86 to Tralee & N69 to Tarbert Ferry",
+            category: "Transit Drive",
+            desc: "Early morning drive from Dingle to Tarbert Ferry Pier.",
+            officialUrl: "https://www.shannonferries.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Tarbert+Ferry+Pier"
+          },
+          {
+            id: "act-8-2",
+            time: "10:00 AM - 10:30 AM",
+            title: "Shannon Ferry Crossing (Tarbert ➔ Killimer)",
+            category: "Ferry Crossing",
+            desc: "20-minute relaxing Shannon estuary crossing into County Clare.",
+            officialUrl: "https://www.shannonferries.com/timetable-fares/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Shannon+Ferries+Killimer"
+          },
+          {
+            id: "act-8-3",
+            time: "11:00 AM - 12:15 PM",
+            title: "Scenic Kilkee Cliffs Drive (Loop Head preview)",
+            category: "Coastal View",
+            desc: "Less crowded, towering dramatic cliff edges right along the open Atlantic.",
+            officialUrl: "https://www.loophead.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Kilkee+Cliffs+Clare"
+          },
+          {
+            id: "act-8-4",
+            time: "01:15 PM - 03:45 PM",
+            title: "Cliffs of Moher & Coastal Walk",
+            category: "Iconic Landmark",
+            desc: "Iconic 700-foot sea cliffs plunging into the Atlantic Ocean with O'Brien's Tower.",
+            officialUrl: "https://www.cliffsofmoher.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Cliffs+of+Moher"
+          },
+          {
+            id: "act-8-5",
+            time: "04:00 PM - 06:00 PM",
+            title: "Explore The Burren National Park & Coastal N67",
+            category: "Limestone Landscape",
+            desc: "Drive through otherworldly glaciated karst limestone pavement and flora.",
+            officialUrl: "https://www.burrennationalpark.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=The+Burren+National+Park"
+          },
+          {
+            id: "act-8-6",
+            time: "06:30 PM+",
+            title: "Arrive Kinvara Guesthouse & Dunguaire Castle View",
+            category: "Check-in & Dinner",
+            desc: "Check in on Main Street, Kinvara. Dine near the harbour overlooking Dunguaire Castle.",
+            officialUrl: "https://www.kinvaraguesthouse.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dunguaire+Castle+Kinvara"
+          }
+        ]
+      },
+      {
+        id: "day-9",
+        dateStr: "Sept 20",
+        dayName: "Saturday",
+        title: "Trim Castle, Newgrange & Dublin Airport",
+        summaryBadge: "Trim & Newgrange",
+        routeSummary: "Kinvara ➔ M6/R160 to Trim Castle ➔ N51 to Newgrange ➔ Dublin Airport Clayton",
+        drivingNote: "Cross-country drive (~2 hrs to Trim, 35 mins to Newgrange, 40 mins to Airport).",
+        alert: {
+          type: "warning",
+          text: "Brú na Bóinne / Newgrange 3-3.5 hr tour MUST BE BOOKED IN ADVANCE. New Way car rental drop-off at Dublin Airport."
+        },
+        stay: {
+          name: "Clayton Hotel Dublin Airport",
+          type: "Airport Hotel (Night 1/1)",
+          note: "Stockhole Lane, Swords, Dublin. Free 24/7 airport shuttle (approx 7 mins to terminal).",
+          officialUrl: "https://www.claytonhoteldublinairport.com/",
+          mapsUrl: "https://www.google.com/maps/search/?api=1&query=Clayton+Hotel+Dublin+Airport+Stockhole+Lane"
+        },
+        activities: [
+          {
+            id: "act-9-1",
+            time: "08:30 AM - 10:45 AM",
+            title: "Drive Kinvara to Trim Castle via M18/M6 & R160/R161",
+            category: "Transit Drive",
+            desc: "Comfortable motorway and regional route into County Meath.",
+            officialUrl: "https://heritageireland.ie/places-to-visit/trim-castle/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Trim+Castle"
+          },
+          {
+            id: "act-9-2",
+            time: "11:00 AM - 12:30 PM",
+            title: "Trim Castle (Braveheart Castle)",
+            category: "Norman Castle",
+            desc: "Largest Anglo-Norman stone castle in Ireland, famous as the set for Braveheart.",
+            officialUrl: "https://heritageireland.ie/places-to-visit/trim-castle/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Trim+Castle"
+          },
+          {
+            id: "act-9-3",
+            time: "01:00 PM - 04:30 PM",
+            title: "Brú na Bóinne & Newgrange Tour",
+            category: "UNESCO Wonder",
+            desc: "3 to 3.5-hour tour of the 5,000-year-old Stone Age passage tomb, older than Stonehenge and the Pyramids.",
+            officialUrl: "https://www.newgrange.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Bru+na+Boinne+Visitor+Centre"
+          },
+          {
+            id: "act-9-4",
+            time: "05:15 PM - 06:30 PM",
+            title: "Drop off Car with New Way Car Hire",
+            category: "Rental Return",
+            desc: "Return vehicle smoothly at Dublin Airport facility with New Way.",
+            officialUrl: "https://www.newway.ie/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dublin+Airport+Car+Rental"
+          },
+          {
+            id: "act-9-5",
+            time: "07:00 PM",
+            title: "Check in at Clayton Hotel, Stockhole Lane",
+            category: "Rest & Pack",
+            desc: "Check in, have dinner at the hotel restaurant, prep luggage for early flight.",
+            officialUrl: "https://www.claytonhoteldublinairport.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Clayton+Hotel+Dublin+Airport"
+          }
+        ]
+      },
+      {
+        id: "day-10",
+        dateStr: "Sept 21",
+        dayName: "Sunday",
+        title: "Homeward Bound to Canada",
+        summaryBadge: "Departure",
+        routeSummary: "Clayton Hotel Shuttle ➔ Dublin Airport (DUB) ➔ Canada",
+        drivingNote: "No driving needed! Clayton Hotel runs complimentary 24/7 airport shuttles every 20-30 mins.",
+        alert: {
+          type: "warning",
+          text: "Be at airport check-in by 6:40 AM for Canada flights to clear security & US/International pre-clearance procedures if applicable."
+        },
+        stay: {
+          name: "Safe Travels Home!",
+          type: "Flight Day",
+          note: "Dublin Airport Terminal 1 or 2 to Canada.",
+          officialUrl: "https://www.dublinairport.com/",
+          mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dublin+Airport"
+        },
+        activities: [
+          {
+            id: "act-10-1",
+            time: "06:00 AM - 06:30 AM",
+            title: "Clayton Hotel Free Airport Shuttle",
+            category: "Transit",
+            desc: "Hop on the free airport shuttle outside hotel lobby (7-10 minute transit to terminal).",
+            officialUrl: "https://www.claytonhoteldublinairport.com/airport-shuttle-bus/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Clayton+Hotel+Dublin+Airport"
+          },
+          {
+            id: "act-10-2",
+            time: "06:40 AM Sharp",
+            title: "Dublin Airport Check-in & Security",
+            category: "Flight Check-in",
+            desc: "Arrive at terminal, check bags for Canadian departure, clear security screening and passport control.",
+            officialUrl: "https://www.dublinairport.com/flight-information/departures",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dublin+Airport+Terminal+2"
+          },
+          {
+            id: "act-10-3",
+            time: "Morning",
+            title: "Board Flight Home to Canada",
+            category: "Flight",
+            desc: "Grab an Irish breakfast tea and sandwich at the gate before flying back home.",
+            officialUrl: "https://www.dublinairport.com/",
+            mapsUrl: "https://www.google.com/maps/search/?api=1&query=Dublin+Airport"
+          }
+        ]
+      }
+    ];
+
+    let currentDayId = "day-1";
+    let completedStops = JSON.parse(localStorage.getItem('ireland_completed_stops') || '[]');
+    let searchQuery = "";
+
+    function saveCompletedStops() {
+      localStorage.setItem('ireland_completed_stops', JSON.stringify(completedStops));
+      updateProgressCounter();
+    }
+
+    function toggleStop(actId) {
+      if (completedStops.includes(actId)) {
+        completedStops = completedStops.filter(id => id !== actId);
+      } else {
+        completedStops.push(actId);
+      }
+      saveCompletedStops();
+      renderActivities();
+    }
+
+    function updateProgressCounter() {
+      const allActivities = itineraryData.flatMap(d => d.activities);
+      const total = allActivities.length;
+      const done = completedStops.length;
+      const progressElem = document.getElementById('tripProgressText');
+      if (progressElem) {
+        progressElem.textContent = `${done} of ${total} stops marked visited`;
+      }
+    }
+
+    // Render Navigation Day Pills
+    function renderDayNav() {
+      const container = document.getElementById('daysNavContainer');
+      container.innerHTML = itineraryData.map(day => {
+        const isActive = day.id === currentDayId;
+        const activeClass = isActive 
+          ? 'bg-amber-400 text-slate-950 font-bold shadow-md ring-2 ring-amber-300/60' 
+          : 'bg-emerald-900/80 text-emerald-100 hover:bg-emerald-800/90 font-medium';
+
+        return `
+          <button 
+            onclick="selectDay('${day.id}')" 
+            class="px-3.5 py-1.5 rounded-xl text-xs whitespace-nowrap transition-all flex items-center gap-2 ${activeClass}">
+            <span class="tracking-wide">${day.dateStr}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded-md ${isActive ? 'bg-amber-500/30 text-slate-900 font-semibold' : 'bg-black/20 text-emerald-300'}">
+              ${day.summaryBadge}
+            </span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectDay(dayId) {
+      currentDayId = dayId;
+      searchQuery = "";
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = "";
+      renderDayNav();
+      renderCurrentDay();
+    }
+
+    function renderCurrentDay() {
+      const day = itineraryData.find(d => d.id === currentDayId);
+      if (!day) return;
+
+      // Render Header Card
+      const headerElem = document.getElementById('dayHeaderCard');
+      headerElem.innerHTML = `
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4 border-slate-100">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-bold text-amber-700 bg-amber-100/70 border border-amber-300/60 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                ${day.dateStr} • ${day.dayName}
+              </span>
+              <span class="text-xs font-semibold text-emerald-800 bg-emerald-100/70 border border-emerald-300/60 px-2.5 py-0.5 rounded-full">
+                ${day.summaryBadge}
+              </span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-serif">${day.title}</h2>
+          </div>
+          <div class="text-left md:text-right">
+            <span class="text-[11px] uppercase font-bold text-slate-400 block tracking-wider">Route Highlights</span>
+            <span class="text-xs sm:text-sm font-semibold text-slate-700">${day.routeSummary}</span>
+          </div>
+        </div>
+
+        <div class="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-200/70">
+          <div class="flex items-center gap-2">
+            <i data-lucide="car" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+            <span><strong class="text-slate-800">Driving Notes:</strong> ${day.drivingNote}</span>
+          </div>
+        </div>
+      `;
+
+      // Render Alert Banner if exists
+      const alertElem = document.getElementById('dayAlertBanner');
+      if (day.alert) {
+        alertElem.className = day.alert.type === 'warning' 
+          ? "rounded-xl p-4 border bg-amber-50 border-amber-300/80 text-amber-900 flex items-start gap-3"
+          : "rounded-xl p-4 border bg-emerald-50 border-emerald-300/80 text-emerald-900 flex items-start gap-3";
+        
+        const iconName = day.alert.type === 'warning' ? 'alert-triangle' : 'info';
+        alertElem.innerHTML = `
+          <i data-lucide="${iconName}" class="w-5 h-5 shrink-0 mt-0.5 ${day.alert.type === 'warning' ? 'text-amber-600' : 'text-emerald-600'}"></i>
+          <div class="text-xs leading-relaxed">
+            <strong class="font-bold">${day.alert.type === 'warning' ? 'Important Reminder:' : 'Trip Tip:'}</strong> ${day.alert.text}
+          </div>
+        `;
+        alertElem.classList.remove('hidden');
+      } else {
+        alertElem.classList.add('hidden');
+      }
+
+      // Render Activities
+      renderActivities();
+
+      // Render Lodging Card
+      const lodgingElem = document.getElementById('lodgingCard');
+      lodgingElem.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-200/70 flex items-center justify-center text-amber-800 shrink-0 mt-0.5">
+              <i data-lucide="bed-double" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amber-800/80">${day.stay.type}</span>
+              <h4 class="font-bold text-slate-900 text-base">${day.stay.name}</h4>
+              <p class="text-xs text-slate-600 mt-0.5">${day.stay.note}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 self-end sm:self-center">
+            ${day.stay.officialUrl ? `
+              <a href="${day.stay.officialUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-amber-300 text-xs font-semibold text-amber-900 hover:bg-amber-50 shadow-sm transition">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                Website
+              </a>
+            ` : ''}
+            <a href="${day.stay.mapsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-700 text-white text-xs font-semibold hover:bg-emerald-800 shadow-sm transition">
+              <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
+              Google Maps
+            </a>
+          </div>
+        </div>
+      `;
+
+      lucide.createIcons();
+    }
+
+    function renderActivities() {
+      const container = document.getElementById('activitiesList');
+      const day = itineraryData.find(d => d.id === currentDayId);
+      if (!day) return;
+
+      let activitiesToRender = day.activities;
+
+      // Handle search filter across all days or within day
+      if (searchQuery.trim().length > 0) {
+        const query = searchQuery.toLowerCase();
+        activitiesToRender = itineraryData.flatMap(d => 
+          d.activities.map(a => ({ ...a, parentDay: d }))
+        ).filter(a => 
+          a.title.toLowerCase().includes(query) || 
+          a.desc.toLowerCase().includes(query) || 
+          a.category.toLowerCase().includes(query)
+        );
+      }
+
+      if (activitiesToRender.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-2xl p-8 text-center border border-dashed border-slate-300 text-slate-500">
+            <i data-lucide="search-x" class="w-8 h-8 mx-auto mb-2 text-slate-400"></i>
+            <p class="font-medium text-sm">No activities matched "${searchQuery}".</p>
+            <button onclick="document.getElementById('searchInput').value=''; searchQuery=''; renderActivities();" class="mt-2 text-xs text-emerald-600 font-semibold underline">Clear Search</button>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = activitiesToRender.map(act => {
+        const isCompleted = completedStops.includes(act.id);
+        const dayBadge = act.parentDay ? `
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 mr-2">
+            ${act.parentDay.dateStr}
+          </span>
+        ` : '';
+
+        return `
+          <div class="bg-white rounded-xl p-4 sm:p-5 border border-slate-200/90 shadow-sm transition-all hover:border-emerald-300 ${isCompleted ? 'completed-item bg-slate-50/70' : ''}">
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+              <div class="flex items-start gap-3">
+                <!-- Checkbox -->
+                <button 
+                  onclick="toggleStop('${act.id}')" 
+                  class="mt-1 w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${isCompleted ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-slate-300 bg-white hover:border-emerald-500'}"
+                  title="${isCompleted ? 'Mark as uncompleted' : 'Mark as completed'}">
+                  ${isCompleted ? '<i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>' : ''}
+                </button>
+
+                <div class="space-y-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    ${dayBadge}
+                    <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                      ${act.time}
+                    </span>
+                    <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">
+                      ${act.category}
+                    </span>
+                  </div>
+                  <h3 class="text-base font-bold text-slate-900 ${isCompleted ? 'line-through text-slate-500' : ''}">
+                    ${act.title}
+                  </h3>
+                  <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
+                    ${act.desc}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Quick Link Buttons -->
+              <div class="flex items-center gap-2 shrink-0 pt-2 sm:pt-0 self-end sm:self-start">
+                ${act.officialUrl ? `
+                  <a href="${act.officialUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition" title="Official Website">
+                    <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                    <span>Info</span>
+                  </a>
+                ` : ''}
+                <a href="${act.mapsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold transition" title="Open in Google Maps">
+                  <i data-lucide="map" class="w-3.5 h-3.5"></i>
+                  <span>Map</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Search Event Listener
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderActivities();
+      });
+
+      // Reset Progress
+      document.getElementById('resetProgressBtn').addEventListener('click', () => {
+        completedStops = [];
+        saveCompletedStops();
+        renderActivities();
+      });
+
+      // Notes Modal Logic
+      const notesModal = document.getElementById('notesModal');
+      const openNotesBtn = document.getElementById('openNotesBtn');
+      const closeNotesBtn = document.getElementById('closeNotesBtn');
+      const saveNotesBtn = document.getElementById('saveNotesBtn');
+      const userNotes = document.getElementById('userNotes');
+
+      userNotes.value = localStorage.getItem('ireland_trip_notes') || '';
+
+      openNotesBtn.addEventListener('click', () => {
+        notesModal.classList.remove('hidden');
+      });
+
+      closeNotesBtn.addEventListener('click', () => {
+        notesModal.classList.add('hidden');
+      });
+
+      saveNotesBtn.addEventListener('click', () => {
+        localStorage.setItem('ireland_trip_notes', userNotes.value);
+        notesModal.classList.add('hidden');
+      });
+
+      // Close modal on click outside
+      notesModal.addEventListener('click', (e) => {
+        if (e.target === notesModal) {
+          notesModal.classList.add('hidden');
+        }
+      });
+
+      // Initial Renders
+      renderDayNav();
+      renderCurrentDay();
+      updateProgressCounter();
+    });
+  </script>
+</body>
+</html>
