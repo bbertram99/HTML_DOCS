@@ -70,7 +70,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 42px;
+      min-height: 44px;
       padding: 6px 12px;
       background: #21262d;
       color: var(--text);
@@ -79,14 +79,27 @@
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
+      user-select: none;
     }
 
     .btn:active { background: var(--accent); color: #000; }
     .btn-accent { background: #238636; border-color: #2ea043; color: #fff; }
 
-    input[type="file"] { display: none; }
+    /* Mobile safe hidden file input: NOT display:none so iOS/Android won't block change events */
+    .sr-only-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+      opacity: 0;
+    }
 
-    /* Pixel-Accurate Split Comparison Stage */
+    /* Comparison Stage */
     .viewport-outer {
       width: 100%;
       max-width: 600px;
@@ -98,7 +111,7 @@
     .split-stage {
       position: relative;
       width: 100%;
-      max-height: 75vh;
+      min-height: 320px; /* Prevents 0-height collapse on slow mobile image decode */
       background: #000;
       border: 2px solid #484f58;
       border-radius: 6px;
@@ -115,16 +128,14 @@
       height: 100%;
     }
 
-    /* Original Photo (Bottom Layer, right revealed) */
     #origLayer img {
       width: 100%;
       height: 100%;
       display: block;
-      object-fit: fill; /* exact 1:1 match to viewBox */
+      object-fit: fill; /* exact pixel-for-pixel coordinate alignment */
       pointer-events: none;
     }
 
-    /* Vectorized SVG (Top Layer, left revealed) */
     #vectorLayer {
       z-index: 2;
       clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
@@ -137,13 +148,12 @@
       pointer-events: none;
     }
 
-    /* Split Bar & Grabber */
     #splitDivider {
       position: absolute;
       top: 0;
       bottom: 0;
       left: 50%;
-      width: 2px;
+      width: 3px;
       background: var(--sci-cyan);
       box-shadow: 0 0 8px rgba(85, 255, 255, 0.8);
       z-index: 3;
@@ -155,8 +165,8 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 38px;
-      height: 38px;
+      width: 44px;
+      height: 44px;
       background: #161b22;
       border: 2px solid var(--sci-cyan);
       border-radius: 50%;
@@ -167,17 +177,16 @@
       align-items: center;
       justify-content: center;
       cursor: ew-resize;
-      touch-action: pan-y; /* Keeps mobile vertical page scrolling smooth */
+      touch-action: pan-y; /* Keeps vertical webpage scrolling fluid on phones */
     }
 
     #splitThumb::after {
       content: "◀ ▶";
-      font-size: 10px;
+      font-size: 11px;
       color: var(--sci-cyan);
       font-weight: 800;
     }
 
-    /* Labels on canvas */
     .stage-tag {
       position: absolute;
       bottom: 8px;
@@ -229,7 +238,6 @@
       cursor: pointer;
     }
 
-    /* Bottom action dock */
     .dock {
       position: fixed;
       bottom: 0;
@@ -261,30 +269,33 @@
       <label class="btn" for="uploadFile">Upload Photo</label>
       <label class="btn" for="cameraFile">Take Photo</label>
     </div>
-    <input type="file" id="uploadFile" accept="image/*">
-    <input type="file" id="cameraFile" accept="image/*" capture="environment">
-    <div id="statusText" style="font-size:0.75rem; color:var(--sci-cyan); text-align:center; margin-top:4px;">Ready</div>
+    
+    <!-- Mobile-safe inputs (accessible to Safari/Android gestures) -->
+    <input type="file" id="uploadFile" class="sr-only-input" accept="image/*">
+    <input type="file" id="cameraFile" class="sr-only-input" accept="image/*" capture="environment">
+
+    <div id="statusText" style="font-size:0.8rem; color:var(--sci-cyan); text-align:center; margin-top:4px; min-height: 18px;">Ready</div>
   </section>
 
   <section class="card">
     <div class="card-title">
-      <span>2. Interactive Comparison (Drag slider)</span>
+      <span>2. Comparison (Drag center slider)</span>
       <span id="polyCount" style="font-size:0.75rem; color:#8b949e;">0 shapes</span>
     </div>
 
     <div class="viewport-outer">
       <div class="split-stage" id="splitStage">
-        <!-- Original Photo Layer -->
+        <!-- Original Photo -->
         <div class="split-layer" id="origLayer">
           <img id="origImg" alt="Original source" />
         </div>
 
-        <!-- Vector Art Layer (Clipped) -->
+        <!-- Vector SVG Overlay -->
         <div class="split-layer" id="vectorLayer">
           <div id="svgHost" style="width:100%; height:100%;"></div>
         </div>
 
-        <!-- Divider Line & Handle -->
+        <!-- Split Handle -->
         <div id="splitDivider"></div>
         <div id="splitThumb"></div>
 
@@ -352,6 +363,7 @@
     let cachedSvg = '';
     let splitPercent = 50;
     let isDragging = false;
+    let currentObjectUrl = null;
 
     // Elements
     const splitStage = document.getElementById('splitStage');
@@ -393,102 +405,10 @@
       return match;
     }
 
-    // Adjust the container height to match image's natural aspect ratio exactly
     function syncAspectRatio(w, h) {
       splitStage.style.aspectRatio = `${w} / ${h}`;
     }
 
-    // Vectorize with exact coordinate correspondence
-    function vectorizeImage() {
-      if (!currentImg) return;
-      statusText.textContent = "Processing pixel-accurate vectors...";
-
-      setTimeout(() => {
-        const patchSize = parseInt(patchSlider.value, 10);
-        const strokeW = parseFloat(strokeSlider.value);
-        const levels = parseInt(quantSlider.value, 10);
-        const forceEga = egaPaletteCheck.checked;
-        const doInk = inkLinesCheck.checked;
-
-        // Base resolution: keep width at 320 for authentic retro vector fidelity
-        const targetW = 320;
-        const aspect = currentImg.naturalHeight / currentImg.naturalWidth;
-        const targetH = Math.round(targetW * aspect);
-
-        syncAspectRatio(currentImg.naturalWidth, currentImg.naturalHeight);
-
-        workCanvas.width = targetW;
-        workCanvas.height = targetH;
-        const ctx = workCanvas.getContext('2d');
-        ctx.drawImage(currentImg, 0, 0, targetW, targetH);
-
-        const imgData = ctx.getImageData(0, 0, targetW, targetH);
-        const d = imgData.data;
-
-        const cols = Math.ceil(targetW / patchSize);
-        const rows = Math.ceil(targetH / patchSize);
-
-        let svgPaths = '';
-        let shapeTotal = 0;
-
-        for (let gy = 0; gy < rows; gy++) {
-          for (let gx = 0; gx < cols; gx++) {
-            const startX = gx * patchSize;
-            const startY = gy * patchSize;
-            const pw = Math.min(patchSize, targetW - startX);
-            const ph = Math.min(patchSize, targetH - startY);
-
-            let sumR = 0, sumG = 0, sumB = 0, count = 0;
-            for (let py = startY; py < startY + ph; py++) {
-              for (let px = startX; px < startX + pw; px++) {
-                const i = (py * targetW + px) * 4;
-                sumR += d[i];
-                sumG += d[i+1];
-                sumB += d[i+2];
-                count++;
-              }
-            }
-
-            let r = Math.round(sumR / count);
-            let g = Math.round(sumG / count);
-            let b = Math.round(sumB / count);
-
-            if (forceEga) {
-              const egaCol = matchEGA(r, g, b);
-              r = egaCol[0]; g = egaCol[1]; b = egaCol[2];
-            } else {
-              r = quantizeChannel(r, levels);
-              g = quantizeChannel(g, levels);
-              b = quantizeChannel(b, levels);
-            }
-
-            let strokeAttr = '';
-            if (doInk && strokeW > 0) {
-              const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-              const strokeCol = lum < 65 ? '#111' : (forceEga ? '#000' : 'rgba(0,0,0,0.55)');
-              strokeAttr = `stroke="${strokeCol}" stroke-width="${strokeW}" stroke-linejoin="round"`;
-            }
-
-            svgPaths += `<rect x="${startX}" y="${startY}" width="${pw}" height="${ph}" fill="rgb(${r},${g},${b})" ${strokeAttr} />\n`;
-            shapeTotal++;
-          }
-        }
-
-        // SVG explicitly matches the exact viewBox aspect ratio
-        const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${targetW} ${targetH}" width="100%" height="100%" preserveAspectRatio="none">
-          <rect width="${targetW}" height="${targetH}" fill="#000000"/>
-          ${svgPaths}
-        </svg>`;
-
-        cachedSvg = svgMarkup;
-        svgHost.innerHTML = svgMarkup;
-        polyCount.textContent = `${shapeTotal} vector planes`;
-        statusText.textContent = `Aligned (${currentImg.naturalWidth}×${currentImg.naturalHeight})`;
-        updateSliderPosition(splitPercent);
-      }, 30);
-    }
-
-    // Slider position updater
     function updateSliderPosition(pct) {
       splitPercent = Math.max(0, Math.min(100, pct));
       splitDivider.style.left = `${splitPercent}%`;
@@ -498,12 +418,13 @@
 
     function handlePointerMove(clientX) {
       const rect = splitStage.getBoundingClientRect();
+      if (!rect.width) return;
       const x = clientX - rect.left;
       const pct = (x / rect.width) * 100;
       updateSliderPosition(pct);
     }
 
-    // Touch & Mouse Events
+    // Touch & Mouse Handlers for Divider
     splitThumb.addEventListener('mousedown', () => isDragging = true);
     window.addEventListener('mouseup', () => isDragging = false);
     window.addEventListener('mousemove', (e) => {
@@ -521,25 +442,148 @@
       }
     }, { passive: true });
 
-    // File Ingestion
-    function handleFile(f) {
-      if (!f) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          currentImg = img;
-          origImg.src = img.src;
-          syncAspectRatio(img.naturalWidth, img.naturalHeight);
-          vectorizeImage();
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(f);
+    // Vectorize Function
+    function vectorizeImage() {
+      if (!currentImg) return;
+      statusText.textContent = "Processing vectors...";
+
+      setTimeout(() => {
+        try {
+          const patchSize = parseInt(patchSlider.value, 10);
+          const strokeW = parseFloat(strokeSlider.value);
+          const levels = parseInt(quantSlider.value, 10);
+          const forceEga = egaPaletteCheck.checked;
+          const doInk = inkLinesCheck.checked;
+
+          const imgW = currentImg.naturalWidth || currentImg.width || 320;
+          const imgH = currentImg.naturalHeight || currentImg.height || 240;
+
+          // SCI native resolution target width
+          const targetW = 320;
+          const aspect = imgH / imgW;
+          const targetH = Math.max(32, Math.round(targetW * aspect));
+
+          syncAspectRatio(imgW, imgH);
+
+          workCanvas.width = targetW;
+          workCanvas.height = targetH;
+          const ctx = workCanvas.getContext('2d');
+          ctx.drawImage(currentImg, 0, 0, targetW, targetH);
+
+          const imgData = ctx.getImageData(0, 0, targetW, targetH);
+          const d = imgData.data;
+
+          const cols = Math.ceil(targetW / patchSize);
+          const rows = Math.ceil(targetH / patchSize);
+
+          let svgPaths = '';
+          let shapeTotal = 0;
+
+          for (let gy = 0; gy < rows; gy++) {
+            for (let gx = 0; gx < cols; gx++) {
+              const startX = gx * patchSize;
+              const startY = gy * patchSize;
+              const pw = Math.min(patchSize, targetW - startX);
+              const ph = Math.min(patchSize, targetH - startY);
+
+              let sumR = 0, sumG = 0, sumB = 0, count = 0;
+              for (let py = startY; py < startY + ph; py++) {
+                for (let px = startX; px < startX + pw; px++) {
+                  const i = (py * targetW + px) * 4;
+                  sumR += d[i];
+                  sumG += d[i+1];
+                  sumB += d[i+2];
+                  count++;
+                }
+              }
+
+              let r = Math.round(sumR / count);
+              let g = Math.round(sumG / count);
+              let b = Math.round(sumB / count);
+
+              if (forceEga) {
+                const egaCol = matchEGA(r, g, b);
+                r = egaCol[0]; g = egaCol[1]; b = egaCol[2];
+              } else {
+                r = quantizeChannel(r, levels);
+                g = quantizeChannel(g, levels);
+                b = quantizeChannel(b, levels);
+              }
+
+              let strokeAttr = '';
+              if (doInk && strokeW > 0) {
+                const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+                const strokeCol = lum < 65 ? '#111' : (forceEga ? '#000' : 'rgba(0,0,0,0.55)');
+                strokeAttr = `stroke="${strokeCol}" stroke-width="${strokeW}" stroke-linejoin="round"`;
+              }
+
+              svgPaths += `<rect x="${startX}" y="${startY}" width="${pw}" height="${ph}" fill="rgb(${r},${g},${b})" ${strokeAttr} />\n`;
+              shapeTotal++;
+            }
+          }
+
+          const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${targetW} ${targetH}" width="100%" height="100%" preserveAspectRatio="none">
+            <rect width="${targetW}" height="${targetH}" fill="#000000"/>
+            ${svgPaths}
+          </svg>`;
+
+          cachedSvg = svgMarkup;
+          svgHost.innerHTML = svgMarkup;
+          polyCount.textContent = `${shapeTotal} vector planes`;
+          statusText.textContent = `Aligned (${imgW}×${imgH})`;
+          updateSliderPosition(splitPercent);
+        } catch (err) {
+          console.error(err);
+          statusText.textContent = "Error: " + err.message;
+        }
+      }, 20);
     }
 
-    document.getElementById('uploadFile').addEventListener('change', (e) => handleFile(e.target.files[0]));
-    document.getElementById('cameraFile').addEventListener('change', (e) => handleFile(e.target.files[0]));
+    // High-performance image loader using ObjectURL (instant on mobile)
+    function loadImageFromFile(file) {
+      if (!file) return;
+
+      statusText.textContent = "Loading file...";
+
+      // Revoke previous blob URL to prevent memory leaks
+      if (currentObjectUrl) {
+        URL.revokeObjectURL(currentObjectUrl);
+      }
+
+      currentObjectUrl = URL.createObjectURL(file);
+      const img = new Image();
+
+      img.onload = () => {
+        currentImg = img;
+        origImg.src = currentObjectUrl;
+        syncAspectRatio(img.naturalWidth, img.naturalHeight);
+        vectorizeImage();
+      };
+
+      img.onerror = () => {
+        statusText.textContent = "Failed to load selected image.";
+      };
+
+      img.src = currentObjectUrl;
+    }
+
+    // Attach listeners and reset value so the same file can be selected again
+    const uploadFile = document.getElementById('uploadFile');
+    const cameraFile = document.getElementById('cameraFile');
+
+    uploadFile.addEventListener('change', function(e) {
+      if (this.files && this.files[0]) {
+        loadImageFromFile(this.files[0]);
+      }
+      this.value = ''; // Reset for re-selection
+    });
+
+    cameraFile.addEventListener('change', function(e) {
+      if (this.files && this.files[0]) {
+        loadImageFromFile(this.files[0]);
+      }
+      this.value = ''; // Reset for re-selection
+    });
 
     // Sliders
     patchSlider.addEventListener('input', (e) => {
@@ -560,16 +604,17 @@
     egaPaletteCheck.addEventListener('change', vectorizeImage);
     inkLinesCheck.addEventListener('change', vectorizeImage);
 
-    // Sample Loader
+    // Sample Demo Loader
     document.getElementById('sampleBtn').addEventListener('click', () => {
       const c = document.createElement('canvas');
-      c.width = 300; c.height = 400; // 3:4 portrait aspect ratio
+      c.width = 300; c.height = 400;
       const x = c.getContext('2d');
       x.fillStyle = "#1e2430"; x.fillRect(0,0,300,400);
-      x.fillStyle = "#8b2635"; x.fillRect(60, 140, 180, 260); // Robe
-      x.fillStyle = "#3e8e41"; x.fillRect(105, 50, 90, 60);  // Hat
-      x.fillStyle = "#e0a97a"; x.beginPath(); x.arc(150, 120, 42, 0, Math.PI*2); x.fill(); // Face
-      x.fillStyle = "#5c3a21"; x.fillRect(230, 80, 20, 320); // Staff
+      x.fillStyle = "#8b2635"; x.fillRect(60, 140, 180, 260);
+      x.fillStyle = "#3e8e41"; x.fillRect(105, 50, 90, 60);
+      x.fillStyle = "#e0a97a"; x.beginPath(); x.arc(150, 120, 42, 0, Math.PI*2); x.fill();
+      x.fillStyle = "#5c3a21"; x.fillRect(230, 80, 20, 320);
+
       const img = new Image();
       img.onload = () => {
         currentImg = img;
@@ -580,7 +625,7 @@
       img.src = c.toDataURL();
     });
 
-    // SVG Export
+    // SVG Export Buttons
     document.getElementById('downloadBtn').addEventListener('click', () => {
       if (!cachedSvg) return;
       const blob = new Blob([cachedSvg], { type: 'image/svg+xml;charset=utf-8' });
