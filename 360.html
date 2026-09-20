@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>360° Panorama Viewer</title>
+
+  <!-- Pannellum 360 Viewer Library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pannellum/2.5.6/pannellum.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pannellum/2.5.6/pannellum.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #000;
+      color: #fff;
+    }
+
+    #panorama {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* Top Glass Header */
+    .top-bar {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .info-card {
+      pointer-events: auto;
+      background: rgba(18, 22, 28, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 10px 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .info-card h1 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-card p {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-top: 2px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 7px;
+      border-radius: 20px;
+      background: #2563eb;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* Action Buttons */
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .btn {
+      background: rgba(18, 22, 28, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.92);
+      background: rgba(40, 50, 65, 0.9);
+    }
+
+    .btn svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Bottom Gallery / Filter Tray */
+    .bottom-panel {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      width: calc(100% - 32px);
+      max-width: 800px;
+      background: rgba(18, 22, 28, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ccc;
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .chip.active, .chip:hover {
+      background: #fff;
+      color: #000;
+      font-weight: 600;
+    }
+
+    .carousel {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-top: 4px;
+      scrollbar-width: thin;
+    }
+
+    .carousel::-webkit-scrollbar { height: 4px; }
+    .carousel::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+    }
+
+    .thumb-card {
+      position: relative;
+      flex: 0 0 110px;
+      height: 70px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+      background: #222;
+    }
+
+    .thumb-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumb-card span {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      font-size: 0.65rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.9));
+      padding: 8px 4px 4px 4px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .thumb-card.active {
+      border-color: #3b82f6;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+    }
+
+    @media (max-width: 600px) {
+      .top-bar { top: 10px; left: 10px; right: 10px; }
+      .bottom-panel { bottom: 10px; width: calc(100% - 20px); padding: 10px; }
+      .thumb-card { flex: 0 0 95px; height: 60px; }
+      .info-card h1 { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="panorama"></div>
+
+  <!-- Header -->
+  <header class="top-bar">
+    <div class="info-card">
+      <h1 id="pano-title">Loading... <span id="pano-badge" class="badge"></span></h1>
+      <p id="pano-sub">Theme: <span id="pano-theme"></span></p>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn" id="rotate-btn" title="Toggle Auto-Rotation">
+        <svg viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+      </button>
+      <button class="btn" id="gyro-btn" title="Toggle Mobile Gyroscope">
+        <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      </button>
+      <button class="btn" id="fs-btn" title="Fullscreen">
+        <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Bottom Panel -->
+  <nav class="bottom-panel">
+    <div class="filter-bar" id="filter-bar">
+      <button class="chip active" onclick="applyFilter('All')">All</button>
+      <button class="chip" onclick="applyFilter('Ireland')">Ireland</button>
+      <button class="chip" onclick="applyFilter('Camera')">Camera</button>
+      <button class="chip" onclick="applyFilter('Drone')">Drone</button>
+    </div>
+    <div class="carousel" id="carousel"></div>
+  </nav>
+
+  <script>
+    /* =========================================================================
+     * 📍 EDIT YOUR 360 IMAGES HERE
+     * -------------------------------------------------------------------------
+     * - You can use:
+     *    1. Google Drive public share links
+     *    2. Direct URLs (Imgur, Cloudinary, AWS S3, GitHub raw, etc.)
+     *    3. Local relative file paths ("knowth.jpg")
+     * ========================================================================= */
+    const PANORAMAS = [
+      {
+        id: "ireland-knowth",
+        title: "Knowth Passage Tomb",
+        region: "Ireland",
+        theme: "Camera",
+        // Example: Paste your standard Google Drive share link here:
+        // url: "https://drive.google.com/file/d/1ABCXYZ_YOUR_FILE_ID/view?usp=sharing",
+        url: "ireland_knowth.jpg" 
+      },
+      {
+        id: "drone-sample",
+        title: "Coastal Drone View",
+        region: "Ireland",
+        theme: "Drone",
+        // Direct web link example
+        url: "https://pannellum.org/images/alma.jpg"
+      }
+      /*
+      // --- COPY & PASTE TEMPLATE ---
+      ,{
+        id: "unique-name",
+        title: "My 360 photos!",
+        region: "Ireland",
+        theme: "Insta 360",
+        url: "https://drive.google.com/file/d/1mD-phAsjzwNgxIhsIuwTs5l-eXZh8bxj/view?usp=drivesdk"
+      }
+      */
+    ];
+
+    /* =========================================================================
+     * GOOGLE DRIVE & CORS RESOLVER
+     * Automatically converts Google Drive sharing URLs into direct CORS streams
+     * ========================================================================= */
+    function cleanUrl(rawUrl) {
+      if (!rawUrl) return "";
+      
+      // Check for Google Drive links
+      const driveMatch = rawUrl.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|id=)([a-zA-Z0-9_-]{25,})/);
+      if (driveMatch && driveMatch[1]) {
+        const fileId = driveMatch[1];
+        // lh3.googleusercontent.com directly serves the raw image with proper headers
+        return `https://lh3.googleusercontent.com/d/${fileId}`;
+      }
+
+      return rawUrl;
+    }
+
+    /* =========================================================================
+     * CORE VIEWER ENGINE
+     * ========================================================================= */
+    let currentViewer = null;
+    let currentIndex = 0;
+    let isAutoRotating = false;
+
+    function initViewer(index) {
+      currentIndex = index;
+      const data = PANORAMAS[index];
+      const resolvedUrl = cleanUrl(data.url);
+
+      if (currentViewer) {
+        currentViewer.destroy();
+      }
+
+      currentViewer = pannellum.viewer('panorama', {
+        type: 'equirectangular',
+        panorama: resolvedUrl,
+        autoLoad: true,
+        showControls: false,
+        compass: false,
+        mouseZoom: true,
+        touchPanSpeedCoeffFactor: 1.2,
+        crossOrigin: 'anonymous'
+      });
+
+      // Update Top Labels
+      document.getElementById('pano-title').childNodes[0].nodeValue = data.title + " ";
+      document.getElementById('pano-badge').textContent = data.region;
+      document.getElementById('pano-theme').textContent = data.theme;
+
+      // Update Active Thumbnail UI
+      document.querySelectorAll('.thumb-card').forEach((el) => {
+        el.classList.toggle('active', el.dataset.id === data.id);
+      });
+    }
+
+    function renderThumbnails(filter = 'All') {
+      const carousel = document.getElementById('carousel');
+      carousel.innerHTML = '';
+
+      PANORAMAS.forEach((item, index) => {
+        const matches = filter === 'All' || 
+                        item.region.toLowerCase() === filter.toLowerCase() || 
+                        item.theme.toLowerCase() === filter.toLowerCase();
+
+        if (!matches) return;
+
+        const card = document.createElement('div');
+        card.className = `thumb-card ${index === currentIndex ? 'active' : ''}`;
+        card.dataset.id = item.id;
+        card.onclick = () => initViewer(index);
+
+        const thumbSrc = cleanUrl(item.thumb || item.url);
+
+        card.innerHTML = `
+          <img src="${thumbSrc}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2270%22 fill=%22%23222%22><text x=%2250%%22 y=%2250%%22 fill=%22%23777%22 font-size=%2210%22 text-anchor=%22middle%22 alignment-baseline=%22middle%22>360 Photo</text></svg>'">
+          <span>${item.title}</span>
+        `;
+        carousel.appendChild(card);
+      });
+    }
+
+    function applyFilter(category) {
+      document.querySelectorAll('.filter-bar .chip').forEach(chip => {
+        chip.classList.toggle('active', chip.textContent.trim().toLowerCase() === category.toLowerCase());
+      });
+      renderThumbnails(category);
+    }
+
+    // Controls
+    document.getElementById('rotate-btn').addEventListener('click', () => {
+      isAutoRotating = !isAutoRotating;
+      currentViewer.setAutoRotate(isAutoRotating ? -2 : 0);
+    });
+
+    document.getElementById('fs-btn').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    document.getElementById('gyro-btn').addEventListener('click', () => {
+      try {
+        currentViewer.startOrientation();
+      } catch (e) {
+        alert("Gyroscope not supported on this browser/connection.");
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderThumbnails();
+      initViewer(0);
+    });
+  </script>
+</body>
+</html>
