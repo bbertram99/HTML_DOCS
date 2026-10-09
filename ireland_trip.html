@@ -337,8 +337,10 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 280px;
+      min-height: 300px;
       width: 100%;
+      overflow: hidden;
+      touch-action: none;
     }
 
     .modal-photo {
@@ -347,6 +349,11 @@
       max-height: calc(88vh - 70px);
       object-fit: contain;
       margin: auto;
+      user-select: none;
+      -webkit-user-drag: none;
+      transform-origin: center center;
+      transition: transform 0.05s ease-out;
+      cursor: default;
     }
 
     .modal-panorama {
@@ -354,7 +361,8 @@
       height: min(75vh, 640px);
     }
 
-    .pano-ctrl-overlay {
+    .pano-ctrl-overlay,
+    .photo-ctrl-overlay {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -372,6 +380,12 @@
       font-size: 12px;
       font-weight: 600;
       backdrop-filter: blur(8px);
+      cursor: pointer;
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(23, 45, 35, 0.95);
+      border-color: var(--gold);
     }
 
     footer {
@@ -393,7 +407,6 @@
       }
       .modal-header {
         padding: 10px 14px;
-        gap: 8px;
       }
       .modal-header h3 {
         font-size: 15px;
@@ -1480,6 +1493,9 @@
         return el;
       }
 
+      /* =======================================================================
+       * ⛶ FULLSCREEN CONTROLLER
+       * ======================================================================= */
       const fullscreenBtn = document.getElementById("fullscreenDialog");
 
       function isFullscreenActive() {
@@ -1517,7 +1533,7 @@
               await document.documentElement.webkitRequestFullscreen();
             }
           } catch (err) {
-            // CSS full-window mode seamlessly covers mobile and restricted browsers
+            // CSS full-window mode covers mobile browsers seamlessly
           }
         } else {
           dialog.classList.remove("is-fullscreen");
@@ -1538,6 +1554,167 @@
       document.addEventListener("fullscreenchange", updateFullscreenUI);
       document.addEventListener("webkitfullscreenchange", updateFullscreenUI);
 
+      /* =======================================================================
+       * 🔍 PHOTO ZOOM & PAN ENGINE
+       * ======================================================================= */
+      function setupPhotoPanZoom(img, container) {
+        let scale = 1;
+        let panX = 0;
+        let panY = 0;
+        const minScale = 1;
+        const maxScale = 5;
+
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        let initialDist = 0;
+        let initialScale = 1;
+
+        function applyTransform(animate = false) {
+          img.style.transition = animate ? "transform 0.15s ease-out" : "none";
+          if (scale <= 1) {
+            scale = 1;
+            panX = 0;
+            panY = 0;
+            img.style.cursor = "default";
+          } else {
+            img.style.cursor = isDragging ? "grabbing" : "grab";
+          }
+          img.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+        }
+
+        function zoom(factor, cx, cy) {
+          const oldScale = scale;
+          scale = Math.min(maxScale, Math.max(minScale, scale * factor));
+          if (scale === oldScale) return;
+
+          if (scale <= 1) {
+            panX = 0;
+            panY = 0;
+          } else if (cx !== undefined && cy !== undefined) {
+            const rect = container.getBoundingClientRect();
+            const mouseX = cx - (rect.left + rect.width / 2);
+            const mouseY = cy - (rect.top + rect.height / 2);
+            const ratio = scale / oldScale;
+            panX = mouseX - (mouseX - panX) * ratio;
+            panY = mouseY - (mouseY - panY) * ratio;
+          }
+          applyTransform(true);
+        }
+
+        function reset() {
+          scale = 1;
+          panX = 0;
+          panY = 0;
+          applyTransform(true);
+        }
+
+        // On-screen Zoom Toolbar
+        const zoomBar = make("div", "photo-ctrl-overlay");
+        const inBtn = make("button", "ctrl-btn", "➕");
+        inBtn.title = "Zoom In";
+        inBtn.onclick = (e) => { e.stopPropagation(); zoom(1.3); };
+        const outBtn = make("button", "ctrl-btn", "➖");
+        outBtn.title = "Zoom Out";
+        outBtn.onclick = (e) => { e.stopPropagation(); zoom(0.75); };
+        const resetBtn = make("button", "ctrl-btn", "↺");
+        resetBtn.title = "Reset Zoom";
+        resetBtn.onclick = (e) => { e.stopPropagation(); reset(); };
+
+        zoomBar.append(inBtn, outBtn, resetBtn);
+        container.append(zoomBar);
+
+        // Desktop Mouse Wheel Zoom
+        container.addEventListener("wheel", (e) => {
+          e.preventDefault();
+          const factor = e.deltaY < 0 ? 1.2 : 0.8;
+          zoom(factor, e.clientX, e.clientY);
+        }, { passive: false });
+
+        // Desktop Mouse Drag to Pan
+        img.addEventListener("mousedown", (e) => {
+          if (scale <= 1) return;
+          e.preventDefault();
+          isDragging = true;
+          startX = e.clientX - panX;
+          startY = e.clientY - panY;
+          applyTransform(false);
+        });
+
+        window.addEventListener("mousemove", (e) => {
+          if (!isDragging) return;
+          e.preventDefault();
+          panX = e.clientX - startX;
+          panY = e.clientY - startY;
+          applyTransform(false);
+        });
+
+        window.addEventListener("mouseup", () => {
+          if (isDragging) {
+            isDragging = false;
+            applyTransform(true);
+          }
+        });
+
+        // Mobile Touch Gestures (Pinch-to-Zoom & Drag-to-Pan)
+        container.addEventListener("touchstart", (e) => {
+          if (e.touches.length === 1 && scale > 1) {
+            isDragging = true;
+            startX = e.touches[0].clientX - panX;
+            startY = e.touches[0].clientY - panY;
+            applyTransform(false);
+          } else if (e.touches.length === 2) {
+            isDragging = false;
+            initialDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialScale = scale;
+          }
+        }, { passive: true });
+
+        container.addEventListener("touchmove", (e) => {
+          if (e.touches.length === 1 && isDragging && scale > 1) {
+            e.preventDefault();
+            panX = e.touches[0].clientX - startX;
+            panY = e.touches[0].clientY - startY;
+            applyTransform(false);
+          } else if (e.touches.length === 2 && initialDist > 0) {
+            e.preventDefault();
+            const currentDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            scale = Math.min(maxScale, Math.max(minScale, initialScale * (currentDist / initialDist)));
+            applyTransform(false);
+          }
+        }, { passive: false });
+
+        container.addEventListener("touchend", (e) => {
+          if (e.touches.length === 0) {
+            isDragging = false;
+            if (scale <= 1) reset();
+            else applyTransform(true);
+          }
+        });
+
+        // Double-tap or double-click to toggle 1x and 2.5x zoom
+        let lastTap = 0;
+        container.addEventListener("click", (e) => {
+          const now = Date.now();
+          if (now - lastTap < 300) {
+            e.preventDefault();
+            if (scale > 1) reset();
+            else zoom(2.5, e.clientX, e.clientY);
+          }
+          lastTap = now;
+        });
+      }
+
+      /* =======================================================================
+       * 🖼 MEDIA DISPLAY (PHOTOS & PANORAMAS)
+       * ======================================================================= */
       function openMedia(item) {
         title.textContent = item.title || "Ireland Memory";
         content.replaceChildren();
@@ -1548,10 +1725,8 @@
           const driveId = extractDriveId(item.src);
           img.src = resolveHighResMedia(item.src);
           img.alt = item.title || "";
-          img.title = "Double-click to toggle fullscreen";
-          img.ondblclick = toggleFullscreen;
 
-          // Safe fallback: if raw =s0 times out or fails on mobile, fall back to Google's high-res thumbnail
+          // Fallback if raw CDN fails on cellular mobile data
           if (driveId) {
             img.onerror = () => {
               img.onerror = null;
@@ -1561,6 +1736,7 @@
 
           content.append(img);
           dialog.showModal();
+          setupPhotoPanZoom(img, content);
         }
 
         // 2. 360 PANORAMA (Full Resolution)
