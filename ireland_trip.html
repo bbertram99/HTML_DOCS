@@ -1,0 +1,1565 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Our Ireland | Vacation Gallery</title>
+
+  <!-- Pannellum 360° Library -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css" />
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #09110e;
+      --panel-dark: #10211a;
+      --card-bg: #142a21;
+      --card-border: #1e3d30;
+      --forest-accent: #2d664f;
+      --gold: #e5b869;
+      --text-main: #e6f1ec;
+      --text-muted: #8ea89d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button, a { font: inherit; cursor: pointer; text-decoration: none; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+    /* Header */
+    .hero {
+      padding: 34px 20px 54px;
+      background:
+        radial-gradient(circle at 85% 15%, #184837 0%, transparent 45%),
+        linear-gradient(135deg, #061611 0%, #0d261e 100%);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .wrap { max-width: 1120px; margin: auto; }
+    .brand { font: bold 22px Georgia, serif; color: var(--gold); }
+    .hero-copy { max-width: 720px; margin-top: 36px; }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 { font-family: Georgia, serif; line-height: 1.15; }
+    h1 { margin: 8px 0 12px; font-size: clamp(40px, 8vw, 84px); color: #fff; }
+    h2 { margin: 0 0 8px; font-size: clamp(24px, 3.5vw, 36px); color: #f0f7f3; }
+    h3 { margin: 0; font-size: 18px; }
+
+    .hero p {
+      max-width: 600px;
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: auto;
+      padding: 32px 20px 80px;
+    }
+
+    .muted { color: var(--text-muted); font-size: 15px; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin: 26px 0;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      padding: 10px 22px;
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      background: var(--panel-dark);
+      color: var(--text-muted);
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab[aria-selected="true"] {
+      border-color: var(--gold);
+      background: var(--forest-accent);
+      color: #fff;
+    }
+
+    .tab-panel[hidden] { display: none; }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      background: var(--card-bg);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(229, 184, 105, 0.4);
+    }
+
+    .card-trigger {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      color: inherit;
+    }
+
+    .thumbnail-box {
+      position: relative;
+      width: 100%;
+      height: 190px;
+      background: #08130e;
+      overflow: hidden;
+    }
+
+    .thumbnail {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .thumbnail {
+      transform: scale(1.03);
+    }
+
+    .play-badge {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
+      transition: background 0.2s;
+    }
+
+    .card:hover .play-badge {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .play-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(16, 33, 26, 0.85);
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-size: 22px;
+      padding-left: 3px;
+    }
+
+    .badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(9, 17, 14, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .placeholder {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      place-items: center;
+      background: linear-gradient(135deg, #10261e, #1c4535);
+      color: var(--gold);
+      font-size: 48px;
+    }
+
+    .card-body { padding: 16px; }
+    .card-body p { margin: 6px 0 0; color: var(--text-muted); font-size: 14px; }
+
+    .card-action {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Modal / Dialog */
+    dialog {
+      width: min(94vw, 1050px);
+      max-width: 94vw;
+      max-height: 94vh;
+      margin: auto;
+      padding: 0;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      background: var(--panel-dark);
+      color: var(--text-main);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.85);
+      overflow: hidden;
+    }
+
+    dialog::backdrop {
+      background: rgba(4, 10, 8, 0.85);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--card-border);
+      background: #0d1a15;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .close-button {
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: #172d23;
+      color: var(--gold);
+      font-weight: bold;
+      border: none;
+      transition: background 0.2s;
+    }
+
+    .close-button:hover { background: #224334; }
+
+    .modal-content {
+      position: relative;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+    }
+
+    .modal-photo {
+      display: block;
+      max-width: 100%;
+      max-height: calc(88vh - 70px);
+      object-fit: contain;
+      margin: auto;
+    }
+
+    .modal-panorama {
+      width: 100%;
+      height: min(75vh, 640px);
+    }
+
+    .pano-ctrl-overlay {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 100;
+      display: flex;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      background: rgba(13, 26, 21, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+    }
+
+    footer {
+      padding: 32px 20px;
+      border-top: 1px solid var(--card-border);
+      background: #060c0a;
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 650px) {
+      .hero-copy { margin-top: 24px; }
+      .modal-panorama { height: 60vh; }
+    }
+
+    @media (max-width: 650px) {
+      .music-ctrl {
+        bottom: 16px;
+        right: 16px;
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="brand">☘ Our Ireland</div>
+      <div class="hero-copy">
+        <div class="eyebrow">Vacation Archive · Éire</div>
+        <h1>Our Ireland</h1>
+        <p>Photographs, high-definition 360° views, and travel films from the road.</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="eyebrow">Archive</div>
+    <h2>Memories from the journey</h2>
+    <p class="muted">Select a media category below to explore.</p>
+
+    <div class="tabs" role="tablist" aria-label="Media types">
+      <button class="tab" id="tab-panoramas" type="button" role="tab" aria-controls="panel-panoramas" aria-selected="true" data-tab="panoramas">
+        ◎ 360° Panoramas
+      </button>
+      <button class="tab" id="tab-photos" type="button" role="tab" aria-controls="panel-photos" aria-selected="false" data-tab="photos">
+        📷 Photos
+      </button>
+      <button class="tab" id="tab-videos" type="button" role="tab" aria-controls="panel-videos" aria-selected="false" data-tab="videos">
+        ▶ Videos
+      </button>
+    </div>
+
+    <!-- 360 PANORAMAS -->
+    <section class="tab-panel" id="panel-panoramas" role="tabpanel" aria-labelledby="tab-panoramas">
+      <h2>360° Spherical Views</h2>
+      <p class="muted">Drag to look around. On mobile, tap Gyroscope to look around using your device motion.</p>
+      <div class="grid" id="panoramaGrid"></div>
+    </section>
+
+    <!-- PHOTOS -->
+    <section class="tab-panel" id="panel-photos" role="tabpanel" aria-labelledby="tab-photos" hidden>
+      <h2>Photo Gallery</h2>
+      <p class="muted">Click any photo to expand full resolution view.</p>
+      <div class="grid" id="photoGrid"></div>
+    </section>
+
+    <!-- VIDEOS -->
+    <section class="tab-panel" id="panel-videos" role="tabpanel" aria-labelledby="tab-videos" hidden>
+      <h2>Travel Films</h2>
+      <p class="muted">Launches directly into YouTube app on mobile or new tab on desktop.</p>
+      <div class="grid" id="videoGrid"></div>
+    </section>
+  </main>
+
+<footer>☘ Our Ireland · Captured & Preserved</footer>
+
+  <!-- Modal Dialog -->
+  <dialog id="mediaDialog" aria-labelledby="dialogTitle">
+    <div class="modal-header">
+      <h3 id="dialogTitle"></h3>
+      <button class="close-button" id="closeDialog" type="button" aria-label="Close">Close ✕</button>
+    </div>
+    <div class="modal-content" id="modalContent"></div>
+  </dialog>
+
+  <script>
+    /* =========================================================================
+     * 📍 IRELAND MEDIA REPOSITORY (PANORAMAS, VIDEOS & PHOTOS)
+     * ========================================================================= */
+    const MEDIA = [
+      // -----------------------------------------------------------------------
+      // 360° PANORAMAS
+      // -----------------------------------------------------------------------
+      {
+        type: "panorama",
+        title: "Askeaton Franciscan Friary (View 1)",
+        caption: "County Limerick · 14th-century cloister arcade & historic ruin along the River Deel",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1XXV0oxInO-MSrXSudiBd6qAyzUqPXpdP/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Askeaton Franciscan Friary (View 2)",
+        caption: "County Limerick · Inner nave and arched stonework of the medieval friary",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1gwPqfaeYvP88Ym_g9IvjZ1R4FtJnCML5/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Ballycarbery Castle (View 1)",
+        caption: "County Kerry · Ivy-draped 16th-century MacCarthy stronghold near Cahersiveen",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1Ufvyzc-ZSYaMs3jBrFuItt_d6-XkQ8Ws/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Ballycarbery Castle (View 2)",
+        caption: "County Kerry · Interior ground chamber ruins facing the coastal inlet",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1D5-NygcN0pcFHN1lpGXGkt3bW5-qApkU/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Ballycarbery Castle (View 3)",
+        caption: "County Kerry · High stone vantage looking toward Valentia Harbour",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1r1i5PlY5HwIUNAqz3ZSTGhFG7jH0lgqL/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Bunratty Castle",
+        caption: "County Clare · Renowned 15th-century tower house on the Ratty River",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1yt3SMfMGt0L2Vdo3fnyUQEsgHNn_SBGF/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Cahergal Stone Fort (View 1)",
+        caption: "Ring of Kerry · Impressive drystone ringfort dating from roughly 600 AD",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1kBVNkFFIepzv2y_t8E0CIbWqkFHTZ0sr/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Cahergal Stone Fort (View 2)",
+        caption: "Ring of Kerry · Terraced ramparts and circular inner stone roundhouse",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/18xrT8LFeB2W5_TXe90dlWO22OxFnqpdO/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Carrigafoyle Castle",
+        caption: "Shannon Estuary · 'Guardian of the Shannon' 15th-century fortified tower",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1qGT4D-4jUf71fSSx4A7Cr8ZqOxH1uK3a/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Cashel Murphy",
+        caption: "Dingle Peninsula · Ancient corbelled stone clochán (beehive hut) settlement",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1x0rfe6-onhbdRCj8f2NOuDVtn4UYYqlZ/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Conor Pass Waterfall",
+        caption: "Dingle Peninsula · Cascading mountain stream beside Ireland's highest mountain pass",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/15jDVigE2SHt57gBQnuqMVe96U66U7Wim/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Conor Pass Summit",
+        caption: "Dingle Peninsula · Panoramic overlook across the glaciated valleys and corrie lakes",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/16a6z_cCh4hz8-7iqlj10PiJIrc3NUTfC/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Coumeenoole Beach (View 1)",
+        caption: "Slea Head Drive · Rugged cove with crashing Atlantic surf at the peninsula's tip",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1qkyeMe_wuhf8ur-EO4G6Q1bhsBtk1yVT/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Coumeenoole Beach (View 2)",
+        caption: "Slea Head Drive · Golden sands tucked against jagged sea cliffs",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1nvry6s5AKOXdXIfDJoljtvg5aH_2fe9F/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Dunmore Head (View 1)",
+        caption: "County Kerry · Ireland’s westernmost continental point looking toward the Blasket Islands",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/108nwvm8sabIq_LWjxhh_B_vODMTS-GDe/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Dunmore Head (View 2)",
+        caption: "County Kerry · Windblown headland path above wild Atlantic swells",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1L5zCvIPjgaJokjXrK5iFNwEMITyAQqs3/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "The King Oak",
+        caption: "Charleville Forest, Offaly · Massive ancient oak tree estimated to be over 400 years old",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/18apGR-7uNIJrmU0E6RfbiWejB-oN6AJz/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Knowth Timber Circle",
+        caption: "Brú na Bóinne, Meath · Reconstruction of the Neolithic post circle beside the great passage mound",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1yUZtGm3BPWzrnXOSvQi6Do7o9tAvlz-n/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Ladies View",
+        caption: "Killarney National Park · Famous panoramic vantage overlooking the Upper Lake and Purple Mountain",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1NWdxlUO5ZGWX4nJer5dBN43fbbF-vZrC/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Newgrange Passage Tomb",
+        caption: "Boyne Valley, Meath · World Heritage 5,200-year-old megalithic mound and quartz wall",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/11jfKelxUvAS6WrMHcPxak8EYtItKluks/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Riasc Monastic Settlement",
+        caption: "Dingle Peninsula · 6th-century early Christian ruins and carved Pillar Stone",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1HbiVOoQr6mWwjKkk54M5M5HFdXmW4GCf/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Ring Of Kerry Coast",
+        caption: "Iveragh Peninsula · Sweeping Atlantic shoreline view along the iconic coastal drive",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1Nxc0f3EFmBOjFIL4Rcr8vT_TE1QlIJjj/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Slea Head Overlook",
+        caption: "Wild Atlantic Way · Dramatically perched coastal curve framed by Great Blasket Island",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1ZotGbodAxeYaUFBtBhEHRESYQrrU2cr7/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Staigue Fort (View 1)",
+        caption: "Ring of Kerry · Elaborate drystone hill ringfort built during the late Iron Age",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/12MtWNoG_IEzjWGfjhvKWLQVLA690y1g7/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Staigue Fort (View 2)",
+        caption: "Ring of Kerry · Internal X-shaped stone staircases and massive four-meter walls",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1gMWTzCxnzUpqTVto3NH91J2l6JQluZa7/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Torc Waterfall",
+        caption: "Killarney National Park · 20-meter cascade cascading through lush mossy woodland",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/19rluiY6rNFq-qZU_6LgXqmWT1rpggtdd/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Trim Castle (View 1)",
+        caption: "County Meath · Largest Anglo-Norman stone fortress in Ireland, set on the River Boyne",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1ZueUGR1VnVvP8gDA79GLN2v1lho-LtAC/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Trim Castle (View 2)",
+        caption: "County Meath · Massive 20-sided cruciform keep walls and green outer bawn",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1rrNrwsuqiZfBEHNgSrizc4QK19RQ3pcA/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Trim Castle (View 3)",
+        caption: "County Meath · River Boyne boundary walls looking back toward the fortified gates",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/19qGOSooL7LtYXBuSA2cfr45Hx3FzQfB9/view?usp=sharing"
+      },
+
+      // -----------------------------------------------------------------------
+      // TRAVEL VIDEOS
+      // -----------------------------------------------------------------------
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 1: Manitoba to Halifax",
+        caption: "The start of the journey heading east toward the Atlantic",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=xrQCTwT7hEg"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 2: Halifax to Dublin",
+        caption: "Transatlantic flight and touch-down on the Emerald Isle",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=gZQ90ztDed4"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 3: Touring around Dublin",
+        caption: "Walking the lively streets, bridges, and city center of Dublin",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=VoGunw3ubcc"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 4: Museum tours!",
+        caption: "Exploring Dublin's rich history, artifacts, and heritage exhibits",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=F65dApIQomg"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 5: From Kilkenny to Killarney!",
+        caption: "Traveling southwest through medieval towns into the heart of Kerry",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=YYbJz9FHhks"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 6: Castle Day!",
+        caption: "First round of historic castle exploration across the Irish countryside",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=QHBO1yw3A-k"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 6: MORE Castles! :)",
+        caption: "Continuing the stronghold trail with more stone keeps and towers",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=s9vHMspevQ4"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 7: Killarney Lake Tour & Horse Carriage Ride!",
+        caption: "Scenic jaunting car ride and cruising the tranquil Lakes of Killarney",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=dVsIBZ9z3nk"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 8: The Long Way to Dingle",
+        caption: "Scenic backroads, steep mountain passes, and arrival on the Dingle Peninsula",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=QazmD_K5BPg"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 9: The Coast Keeps Unfolding",
+        caption: "Atlantic coastal views, steep headlands, and sweeping shorelines",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=GATnyswmHJI"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 10: Cross-Country Castles & Coastal Cliffs",
+        caption: "Tower houses, jagged ocean cliffs, and traveling across countryside landscapes",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=5FXumvv7jMg"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 11: Castle hunt & Ancient Sites!",
+        caption: "Megalithic passage mounds and ancient stone strongholds",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=wm0QNu0XGOE"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 12: Across the Atlantic, heading home!",
+        caption: "Wrapping up the Irish adventure and beginning the long flight back",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=wsqfTHDg74Q"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 13: Homeward bound!",
+        caption: "Final leg of the journey returning home with memories of Éire",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=m7Co1n_DKZI"
+      },
+
+      // -----------------------------------------------------------------------
+      // PHOTOS (89 HIGH-RES DRIVE IMAGES)
+      // -----------------------------------------------------------------------
+      {
+        type: "photo",
+        title: "Monasterevin Sword Replica Museum Display",
+        caption: "A high-quality replica of the 16th-century Monasterevin sword is displayed in a museum glass case, detailing its significance as a transitional claymore-style weapon.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1n3vA1b8dKRBRlaGpKCaigz2A70YNjDgr/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Temple Church London Gothic Interior",
+        caption: "Interior view capturing dramatic Gothic ribbed vaulting, soaring stone pillars, and light-filled stained-glass windows.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1qnVxcFQpCPYNeH4b8eXoSuRiI5vMC9rH/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Christ Church Cathedral Dublin Interior Nave",
+        caption: "A symmetric interior view of the nave of Christ Church Cathedral in Dublin, showcasing Gothic revival stone architecture, ribbed vaulted ceilings, and hanging lanterns.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/17wYTwtnBbAdI53pe2YiACxz1RQSO6FQR/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Killarney National Park Rocky Overlook Sunbeams",
+        caption: "A panoramic landscape view from a weathered, rocky outcrop overlooking a forested valley with sunbeams piercing through broken clouds.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1d-nVczjvgpIJ3eSuVLlpaiUm7_4jj6Fr/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Stone Arch Bridge Willow Tree Garden Path",
+        caption: "A tranquil garden scene featuring a stone arch bridge partially framed by weeping willow branches and a gravel path leading to stone steps.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1KvQKx2IaxciuRrqjouwZL2RFUJ2qQ7J9/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Rock of Cashel Stone Cathedral Ruins Ireland",
+        caption: "A low-angle view of the iconic Rock of Cashel ruins in County Tipperary, featuring a towering round tower and ancient Gothic architecture silhouetted against a bright sky.",
+        theme: "Tipperary",
+        src: "https://drive.google.com/file/d/1h6GYSZPbXbU4FeyCGmep6n19GsKrnq8q/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilkenny Castle Tapestry Room",
+        caption: "Historic tapestry room within Kilkenny Castle, featuring large, elaborate classical wall tapestries on rich walls with antique furnishings.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1aMBl3chszbkhaN8hc6CqZFX8lMff_iXR/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Christ Church Cathedral Interior Stained Glass Rose Window",
+        caption: "A detailed rose window featuring a central stained-glass depiction of Christ as the Good Shepherd surrounded by lambs and circular medallions of biblical virtues.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1E8wIn_VnL_6nlL_1RU_sl69R8ZqtMUBO/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Welcome to Dublin sign Saint Audoens Church",
+        caption: "Posing beside the 'Welcome to Dublin' sign placed in front of the historic stone facade of St. Audoen's Church on a paved city square.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1Mve4EjqU40-FsIjOvsGDoq6Nf3hm1mA6/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kerry Cliffs Skellig Islands Atlantic Ocean",
+        caption: "A dramatic view of the jagged Kerry Cliffs in Ireland, with steep grassy rocky slopes descending into the churning Atlantic Ocean toward the distant Skellig Islands.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1jkD0A3AOn4CXg6TcHYCGPHSZxeCT9Yle/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ladies View Killarney National Park Ireland",
+        caption: "A panoramic vista of a lush, wooded valley set against rolling, cloud-draped hills and dramatic light filtering across the Killarney landscape.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1n3kkJj-sQ1rpt9k_1zNbXaYv5UF3zEzG/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ballycarberry Castle Ruins 2",
+        caption: "Low-angle perspective capturing the dramatic ivy-draped facade, vaulted archways, and jagged stone ramparts of Ballycarbery Castle near Cahersiveen.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1xQPv_oJqAzd7vxvLRki-dTnH_7j8tAfv/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Glendalough St Kevins Kitchen Round Tower",
+        caption: "St. Kevin's Kitchen and iconic early Christian monastic ruins situated at Glendalough under a bright blue sky with scattered clouds.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/10FwtnwSZE3SKh1_ZiHoQdcIWbOqEHnbY/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Torc Waterfall Killarney National Park Ireland",
+        caption: "The multi-tiered Torc Waterfall cascading down a lush, forest-covered hillside over mossy rocks and fern-lined banks in Killarney National Park.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1vpMg4mtHeKZekdSaH91UMaXxkCiR2GOU/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "R566 Portmagee coastal cliffs crashing waves",
+        caption: "High-angle view overlooking rugged, dark rocky cliffs along the Kerry coastline where Atlantic waves crash against the shoreline.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1iNSA7dqQkaVk0YDrzih0w6OOApsiVncC/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kerry Cliffs Coastal Scenery Portmagee",
+        caption: "Striking perspective of dramatic, stratified rock cliffs along the coast near Portmagee, meeting the deep blue swells of the Atlantic Ocean.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1dtjDdUVfEG2TfwVO3Av4xGJ9cQ-34bDL/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Gap of Dunloe Jaunting Car Ride County Kerry",
+        caption: "Riding a traditional horse-drawn jaunting car crossing an ancient stone arch bridge nestled in the rugged mountain pass of Dunloe.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1nrjsv0FB744jT7bmn_P02nfoxenWz4z9/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Gap of Dunloe horse carriage view Kerry Ireland",
+        caption: "Rugged highland views across the Gap of Dunloe from a horse-drawn carriage, framed by steep grassy slopes and winding mountain roadways.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/11gYhE7fj5L41aUSzVZMGAbM4yaYkuclO/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Gap of Dunloe Stone Bridge Kerry",
+        caption: "A historic stone arch bridge spans still peat-stained waters against the backdrop of mossy, boulder-strewn slopes in the Gap of Dunloe.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1e_TU_JX1x0XGOYPMV-w5HE7pI9zF19jL/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "horse drawn carriage ride Dunloe Gap Kerry",
+        caption: "First-person perspective traveling behind a horse carriage along the rural single-lane road cutting through the wild Kerry peaks.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1vupgfabks-MyIR7kYVt8ChLWIVkMp_VU/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Gap of Dunloe horse carriage ride Kerry Ireland",
+        caption: "Navigating the scenic valley floor surrounded by dramatic green mountainsides, flowering roadside gorse, and passing carriage tours.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1UyvXI5N3DTQ1plMdSFMFFRmxxAOiGKPu/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Old Weir Bridge Killarney National Park",
+        caption: "The double-arched stone Old Weir Bridge spanning the tranquil meeting of the waters in Killarney National Park amidst mature oak trees.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1tg1YCXayoClXplnpUQBa2ldiDYzsYlcy/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ross Castle Boat Tour Killarney Lake",
+        caption: "Tour boat excursion cruising across Lough Leane with the fortified stone tower of 15th-century Ross Castle standing on the shoreline.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1xtB0alsaqDru1w-YtH5FHkvPDGGzUxqJ/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Old Weir Bridge Area Killarney Landscape",
+        caption: "Rugged countryside trail near the Old Weir Bridge featuring ancient twisted trees, rocky hillsides, and pristine parkland scenery.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1vpKr7gzyE8foA939LxBFOAGwRKgma44d/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ross Castle Killarney National Park Ireland",
+        caption: "Full view of Ross Castle rising above emerald parkland lawns and rocky shoreline borders along Lough Leane.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1TNvsz80djuKoT8k0kkE6JmU-89Eh8o9_/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ross Castle Killarney Lakeside View",
+        caption: "Sun rays breaking through dramatic clouds over Lough Leane, illuminating the ancient stone masonry of Ross Castle.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1HT586iu_arrJTGsL6lZXAjOuio4WEwwZ/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilkenny Castle Picture Gallery",
+        caption: "Interior view of the Picture Gallery at Kilkenny Castle, displaying historic portraiture against deep red walls under a high timber roof with skylights.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1o4bA8D1sc8cDW3rcAMoFUgAOIbDTX-zt/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilkenny Castle Long Gallery Interior",
+        caption: "Looking down the grand expanse of the Long Gallery inside Kilkenny Castle, showcasing ornate wooden beams and polished floors.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1kILznVx8fRC35i_16XDz31a2dzwYZ9Nc/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Witchs Yew Tree Wishing Steps Blarney Cork",
+        caption: "The mystical Wishing Steps and historic yew woodland at Blarney, featuring winding stone staircases bordered by dense canopy trees.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1sdYLSeRfPLhW3jzmAEiNYvByDreDS2FD/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Temple Bar Essex Street East Dublin Night",
+        caption: "Twilight evening scene along the cobblestone corners of Temple Bar in Dublin, featuring warm pub lights, string bulbs, and classic Victorian facades.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1b9_R7RRJKrfS2T0AP2FJSwh8iTfGO8Pc/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilmainham Jail Museum Prison Corridor Dublin",
+        caption: "Arched stone ceiling corridors and heavy iron cell doors inside the historic Kilmainham Gaol in Dublin.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1Pd6kZkJJpgF7aRRSmU-r4MqHn8ooVxEn/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dun Chaoin coastal rock formations Ireland",
+        caption: "Craggy dark volcanic sea stacks rising out of the foam and surf along the sandy cove of Dún Chaoin on the Dingle Peninsula.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1Vq29g3Fg_pxRC9XgDYEtxMe-p119iTq9/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dingle Peninsula rugged cliffs R559 Ireland",
+        caption: "Sheer coastal drops along the R559 Slea Head Drive looking out over crashing Atlantic breakers and jagged headlands.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1NAnpfF0egqtcjK2qTt0EIF8Q31ryGT5e/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dun Chaoin coastal cliffs sea stacks",
+        caption: "Wild Atlantic coastline framing dramatic sea stacks and foam-crested turquoise waves at the western edge of Dingle.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1jDZEyaJKfPxxedHg531RHexoHfFYiyOf/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Inch Beach Sunset Kerry Ireland",
+        caption: "Golden hour sunset reflections across the broad sands of Inch Beach in County Kerry, overlooking Dingle Bay.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/14jDgg5x__QKajP-jHGjnce1LawCemeVY/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "aerial view river landscape clouds",
+        caption: "Airplane window perspective over winding river waterways, green agricultural mosaics, and scattered cloud formations.",
+        theme: "Camera",
+        src: "https://drive.google.com/file/d/1KWAtOseopr8Ce0_rjC9Vq4p4gh0WstTt/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "aerial view clouds landscape",
+        caption: "Cruising altitude flight view showing layered cumulus clouds drifting over distant coastlines and terrain.",
+        theme: "Camera",
+        src: "https://drive.google.com/file/d/11dQJRX2LCA7ieHliviuGn8bXzEVt7jNh/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Walton Woods Road Hants County IMG E3407",
+        caption: "Rural scenic route en route through Walton Woods Road, Hants County, Nova Scotia during the journey.",
+        theme: "Transit",
+        src: "https://drive.google.com/file/d/1l8TbHC57j3ss_rD3gKYkH0ct9B21MYaF/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Rural Countryside Sunset Field View",
+        caption: "Evening twilight over rolling agricultural pastures, silhouettes of woodland treelines, and sunset colors.",
+        theme: "Camera",
+        src: "https://drive.google.com/file/d/1ppMRPmLl782wMYrxXsFsRTDCeN4wLDWY/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Newgrange Folly Selfie",
+        caption: "Standing in green pastures before the 19th-century Newgrange Folly tower built on the hills overlooking the Boyne Valley.",
+        theme: "Meath",
+        src: "https://drive.google.com/file/d/1ub97BDd5dYvcpptNqdy3WZOTF2VMFSul/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Knowth Neolithic Mound Meath Ireland",
+        caption: "The great prehistoric passage mound at Knowth rising from the lush green Boyne Valley under bright open skies.",
+        theme: "Meath",
+        src: "https://drive.google.com/file/d/11LGI2Zp0FfgXJe_Anf7WvQwpoSdN0f27/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Mellifont Knowth Passage Tombs Meath Ireland",
+        caption: "Wide-angle panoramic perspective of the Neolithic passage tombs at Knowth, surrounded by carved kerbstones and satellite mounds.",
+        theme: "Meath",
+        src: "https://drive.google.com/file/d/1g3GTtHtJ72c_TkAj6wlJjxG1Kp0XJGw9/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Trim Castle Medieval Keep Ireland",
+        caption: "The imposing stone keep of Trim Castle in County Meath, Ireland's largest Anglo-Norman fortress, set against bright lawns.",
+        theme: "Meath",
+        src: "https://drive.google.com/file/d/1h7_42elsXGxgElWfZmEaCYRLMNfLo1LY/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "King Oak",
+        caption: "The legendary King Oak on the Charleville Castle estate near Tullamore in County Offaly, with massive sprawling boughs estimated to be centuries old.",
+        theme: "Offaly",
+        src: "https://drive.google.com/file/d/1RulD48ArXdqGWhBaZkSTD1tGrAFt9J8t/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Charleville Castle Entrance Offaly",
+        caption: "Dramatic Gothic entrance and battlement towers of Charleville Castle framed through ancient woodland foliage in County Offaly.",
+        theme: "Offaly",
+        src: "https://drive.google.com/file/d/1Aoc3gBhq1CmZdtyDko-SrKSzj9oKT78e/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Parkes Castle Lough Gill Leitrim Ireland",
+        caption: "Historic stone bawn and restored plantation castle situated on the shores of Lough Gill in County Leitrim.",
+        theme: "Meath",
+        src: "https://drive.google.com/file/d/188s4UrzQWssemhK0veci_d4mDRtG-Mpk/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dunguaire Castle Kinvara Galway Ireland",
+        caption: "16th-century tower house of Dunguaire Castle perched atop a rocky promontory overlooking Kinvara Bay in County Galway.",
+        theme: "Galway",
+        src: "https://drive.google.com/file/d/1N6Pn7MzJFczlI_r7qLLlpXfYtiGjs89y/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Doonagore Castle Doolin Ireland Coastal Landscape",
+        caption: "Doonagore Castle round tower house overlooking the green hills of Doolin, the Atlantic Ocean, and the Aran Islands horizon.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/1UP7Yk_EE3In8yd3CGzLQ3l_SKCgq8roo/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Doonagore Castle County Clare Sunset",
+        caption: "Golden hour sunset casting warm evening light over Doonagore Castle and the rolling coastal hills of County Clare.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/1kutTEa0ITDuJE2oWb4my4hpEOJ5wnCCC/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Doonagore Castle County Clare Ireland",
+        caption: "Close-up vantage of the round tower house and surrounding walled bawn of Doonagore Castle set against blue skies.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/1z5dtnSz8y2LUePFrWfchbu5jsZfSw6dE/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Cliffs of Moher Ireland Coastal View",
+        caption: "Sweeping view of the world-famous Cliffs of Moher dropping sheer into the crashing waves of the Atlantic Ocean.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/1icuclQiqaWNhzRW_ndT2bgABVzqc7maU/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Bunratty Castle Library and Ceilings",
+        caption: "Interior view showcasing an intricately carved and painted vaulted ceiling, period furnishings, and stone fireplace within Bunratty Castle.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/1zSsReZr3YuWaK9OmkEvPDMsPZTrpQcWq/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Bunratty Castle Great Hall Tapestry",
+        caption: "A large historical Renaissance tapestry depicting biblical and chivalric scenes mounted on the stone walls inside the Great Hall of Bunratty Castle.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/110J75VX72dKYNimQmZfscLnhrhW9PMgz/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Bunratty Castle Stone Keep Ireland",
+        caption: "Exterior view of Bunratty Castle's massive fortified rectangular keep and defensive parapets in County Clare.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/17ip-xazZMVJO82HxiXcgN0WGMw6sjVzm/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Askeaton Franciscan Friary",
+        caption: "The preserved 15th-century cloister arcade at Askeaton Friary, featuring elegant pointed Gothic arches and stone vaulted walkways.",
+        theme: "Limerick",
+        src: "https://drive.google.com/file/d/1zBQFaqsr0-8JwaZci1Ah4H4iguXtlbce/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Askeaton Franciscan Friary 2",
+        caption: "Gravel ambulatory path lined with twin columns, ancient carved grave slabs, and moss-dusted masonry at Askeaton Friary.",
+        theme: "Limerick",
+        src: "https://drive.google.com/file/d/1Y2MM_4CD03QII_KXy1AHnaiQVMnQ-jwW/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Carrigafoyle Castle Ruins Ireland",
+        caption: "Five-story tower fortress of Carrigafoyle Castle standing directly on the shores of the Shannon Estuary.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1Y68AVOk3uWZyyW0RWuZPRgRYtg6FVGIj/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Gap of Dunloe Mountain Stream Kerry",
+        caption: "Rushing mountain stream tumbling over mossy boulders through the wild peat valley of the Gap of Dunloe.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1xg620iC-9byTeetIoKH6G4btVZFznpTi/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Slea Head Coastline Dingle Peninsula Ireland",
+        caption: "Dramatic coastal cliffs, jagged offshore rock stacks, and wild Atlantic surf sweeping the tip of the Dingle Peninsula.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/175_oUU16nqLmHVVxqVPojK9fkPrTKCV4/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dunmore Head Promontory Fort Coastal View",
+        caption: "Rolling green headland pastures bordered by drystone walls at Dunmore Head, Ireland's westernmost mainland point.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/11AOFA3JcqNWsH_1reTpUCELEnBPmjzNH/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ballycarberry Castle Ruins",
+        caption: "Ivy-covered ramparts of Ballycarbery Castle standing on a grassy rise overlooking the coastal inlet near Cahersiveen.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1BWlQMw7jMBntmMFuIbWpctrBUgHfpbcb/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kerry Cliffs Coastal Views Skellig Islands",
+        caption: "Looking south along the Kerry Cliffs dropping sheer into the ocean, with the distant silhouettes of Little Skellig and Skellig Michael.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1cRcOpcVIOa4xA6Kglhh7ylTzdy7am4R_/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dad at Kerry Cliffs Coastal View",
+        caption: "Standing at the safety railing along the high headland of the Kerry Cliffs, with dramatic coastal drops and open sea behind.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1KC9Ue-fzWGndXcFxqUoWh0ZzhF-6WZ4v/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "N71 Killarney National Park Dramatic Sky",
+        caption: "Sweeping highland view along the N71 roadway looking over the Killarney lakes and mountains under sunbeams breaking through cloud cover.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1vr56x8M52eGAaFqcr0bzqlb5Ks4G67z7/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Torc Waterfall Muckross Road Killarney",
+        caption: "Vertical view of the roaring multi-tier cascade of Torc Waterfall framed by ancient dripping moss and dense ferns.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1DfFXzaJumRgQwB9paaS7fhSSmzZAZS9x/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Muckross Road Killarney Rocky Stream Waterfall",
+        caption: "Tranquil rocky mountain stream cascading through autumn woodland foliage near Muckross in Killarney National Park.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1Fx5Enjj5luUXUzbyCi4ULzigmTLLT-17/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Old Weir Bridge Stone Bridge",
+        caption: "Stone arches of Old Weir Bridge framed by mature Scots pines and reflection pools at the Meeting of the Waters.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1UEcIdn9bPTEEKQJldo0OfQBY1z7xdNsu/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle Stone Keep Ireland",
+        caption: "Looking up toward the towering machicolations and battlements of Blarney Castle keep illuminated by bright sunshine.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1lz03CNdcRql1zN4QiYKby6Tqoir-wTaW/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle Gardens Stone Wall Tower",
+        caption: "Strolling through the lower floral gardens of Blarney Castle along stone perimeter walls with tower views above.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1CoSdIFYc4Kn6jmOFZvv9FhUnVHFQpK4h/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "blarney castle stone tower gardens ireland",
+        caption: "Woodland stream and footbridge crossing in the lush forested glen beneath the stone walls of Blarney Castle.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1qGXDKbMyS_vUW3G1uVJdeC_Ni_tEdObb/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle wooden stocks dad",
+        caption: "Posing inside the vintage wooden pillory stocks inscribed with 'Blarney Castle and Gardens' on the outdoor castle grounds.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1ZK1WGctBzRS6wFyGCq50HucavnjbeFYh/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle Stone Towers Gardens",
+        caption: "High vantage looking down from the top battlements of Blarney Castle over the estate grounds, gardens, and surrounding countryside.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1DnZGqJnVnBq_ju3ygsvJopPQuOh-jUA3/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle Stone Tower Ireland",
+        caption: "Low-angle viewpoint of the main Blarney Castle residential tower and watchtower rising from the hillside.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1Yv4BL7zLS0qVddrY_RzVlnfYlhGTzEHG/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle Stone Sculpture Garden",
+        caption: "Upright megalithic-style stone circle sculpture with circular carved aperture situated on the grounds of Blarney Castle.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1Uv2rOP-pLk7JKficT-aZEUSO8RqqRaXA/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Rock of Cashel Stone Round Tower and Statue",
+        caption: "The ancient limestone round tower and cathedral ruins of the Rock of Cashel silhouetted behind a weathered graveyard statue.",
+        theme: "Tipperary",
+        src: "https://drive.google.com/file/d/1NNNR5GK_ONHVFVPgcWLt9hrWL0qyDDuN/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Rock of Cashel historic ruins Ireland",
+        caption: "Massive cathedral walls, carved Celtic high crosses, and green graveyard lawns atop the ancient Rock of Cashel.",
+        theme: "Tipperary",
+        src: "https://drive.google.com/file/d/17K3IZUrL1WCycUuwjpwevi9DoRvdH-oA/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Rock of Cashel medieval ruins Tipperary Ireland",
+        caption: "Exterior view of the fortress and ecclesiastical complex crowning the limestone outcrop high above the Tipperary plains.",
+        theme: "Tipperary",
+        src: "https://drive.google.com/file/d/1wk11nugOUNwKGHfKKEslkBro0OAA9RUY/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilkenny Castle River Nore View",
+        caption: "Kilkenny Castle rising above the banks and stone weirs of the River Nore, with swans gliding along the water.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1a80LrsuZBJmDHgonIxCMoZqKPpGG_Hr2/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilkenny Castle Stone Architecture Canal Walk",
+        caption: "Fortified limestone corner drum towers and crenellated parapets of Kilkenny Castle viewed from the Canal Walk path.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1TOM5ybKz49uB8fRBPky5n2x6PrUJKFwf/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kytelers Inn Kilkenny Ireland Night",
+        caption: "Evening street scene outside Kyteler's Inn in Kilkenny, established in 1324, illuminated with warm lights and floral hanging baskets.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1luqZjgQ6pgLorRMBbzqpmE-yySzlswpR/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Glendalough Monastic Site Round Tower",
+        caption: "The 30-meter high early medieval stone round tower of Glendalough standing among lichen-covered gravestones and mountain forests.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/1YjzWp5ae1v140Zwxv6aI2v5U4L5fOa9n/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Glendalough Upper Lake Wicklow Mountains",
+        caption: "Standing along the pebbled shoreline of Glendalough Upper Lake looking into the dramatic glacier-carved mountain valley.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/1Yz_bEKVcKtf3_AGY6biveQLkuVe3SZ_Y/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Wicklow Mountains Road View Ireland",
+        caption: "Winding highland road descending through the expansive heather, fern bogs, and scenic valley passes of County Wicklow.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/17AToNAO1RfNdAJzt7rf5vghMcc75mDbv/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Glendalough Valley View Military Road",
+        caption: "High panoramic overlook along the Military Road looking across conifer plantations and glacial rivers in the Wicklow Mountains.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/1wRkIAClb1rOO0DLxfxBIfS9Nd2fHqUXS/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Wicklow Mountains Military Road Stream",
+        caption: "Clear mountain brook winding across peat terrain with grazing sheep along the Military Road in the Wicklow highlands.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/1Nk5DTXZjHQagP5XOg8fwE8It1md7aGAj/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Christ Church Cathedral Interior Dublin",
+        caption: "Grand Gothic vaulted nave, ribbed arches, and stained-glass chancel illumination inside Dublin's Christ Church Cathedral.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1T512oaluKnikwr83PB2cU_0J2YXN-h5K/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "St Michael le Pole Stained Glass Window Dublin",
+        caption: "Intricate stained-glass window panel set within historic stonework illustrating medieval trades and heritage motifs.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1ruCcA6i034x2G8thzSOrTo6Q745GbnGg/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Christ Church Cathedral Dublin Gothic Architecture",
+        caption: "Exterior perspective of Christ Church Cathedral's central tower, Gothic flying arches, and weathered grey stonework in Dublin.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1tCfjSwZskPzX59zgIYPpIV3PJOjaj07y/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dublin Welcome Sign Christ Church Cathedral",
+        caption: "Posing with the 'Welcome to Dublin' landmark sign on the plaza in front of Christ Church Cathedral.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1hfDI602x2bSU6_9TSfRKhCr4WwRugOZq/view?usp=drivesdk"
+      }
+    ];
+
+    // =========================================================================
+    // SYSTEM CORE & HIGH-RES MEDIA LOADER
+    // =========================================================================
+    (() => {
+      "use strict";
+
+      const dialog = document.getElementById("mediaDialog");
+      const content = document.getElementById("modalContent");
+      const title = document.getElementById("dialogTitle");
+
+      const grids = {
+        photo: document.getElementById("photoGrid"),
+        panorama: document.getElementById("panoramaGrid"),
+        video: document.getElementById("videoGrid")
+      };
+
+      let pannellumViewer = null;
+
+      function extractDriveId(url) {
+        if (!url) return null;
+        const match = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)|id=)([a-zA-Z0-9_-]{25,})/);
+        return match ? match[1] : null;
+      }
+
+      function extractYouTubeId(url) {
+        if (!url) return null;
+        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+        return match ? match[1] : null;
+      }
+
+      // HIGH RES DIRECT CDN RESOLUTION
+      function resolveHighResMedia(raw) {
+        if (!raw) return "";
+        const id = extractDriveId(raw);
+        if (id) {
+          // =s0 forces Google to output the full original resolution without downsampling
+          return `https://lh3.googleusercontent.com/d/${id}=s0`;
+        }
+        return raw;
+      }
+
+      // THUMBNAILS FOR CARDS
+      function resolveThumb(item) {
+        if (item.thumb) return resolveHighResMedia(item.thumb);
+        if (item.type === "photo") {
+          const id = extractDriveId(item.src);
+          return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w600` : item.src;
+        }
+        if (item.type === "panorama") {
+          const id = extractDriveId(item.panoramaSrc);
+          return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w600` : item.panoramaSrc;
+        }
+        if (item.type === "video") {
+          const ytId = extractYouTubeId(item.youtubeUrl);
+          return ytId ? `https://i.ytimg.com/vi/${ytId}/hqdefault.jpg` : "";
+        }
+        return "";
+      }
+
+      function make(tag, className, text) {
+        const el = document.createElement(tag);
+        if (className) el.className = className;
+        if (text !== undefined) el.textContent = text;
+        return el;
+      }
+
+      function openMedia(item) {
+        title.textContent = item.title || "Ireland Memory";
+        content.replaceChildren();
+
+        // 1. PHOTO
+        if (item.type === "photo") {
+          const img = make("img", "modal-photo");
+          img.src = resolveHighResMedia(item.src);
+          img.alt = item.title || "";
+          content.append(img);
+          dialog.showModal();
+        }
+
+        // 2. 360 PANORAMA (Full Resolution)
+        if (item.type === "panorama") {
+          const panoBox = make("div", "modal-panorama");
+          panoBox.id = "activePannellum";
+          content.append(panoBox);
+
+          const ctrlBox = make("div", "pano-ctrl-overlay");
+          const gyroBtn = make("button", "ctrl-btn", "📱 Gyroscope");
+          gyroBtn.onclick = () => {
+            if (pannellumViewer) {
+              try {
+                pannellumViewer.startOrientation();
+              } catch (e) {
+                alert("Motion sensors not supported or require permissions.");
+              }
+            }
+          };
+          ctrlBox.append(gyroBtn);
+          content.append(ctrlBox);
+
+          dialog.showModal();
+
+          try {
+            pannellumViewer = pannellum.viewer("activePannellum", {
+              type: "equirectangular",
+              panorama: resolveHighResMedia(item.panoramaSrc),
+              autoLoad: true,
+              autoRotate: -1.2,
+              showControls: true,
+              showFullscreenCtrl: true,
+              mouseZoom: true
+            });
+          } catch (e) {
+            content.replaceChildren(make("div", "empty", "Could not load 360 panorama."));
+          }
+        }
+      }
+
+      function buildCard(item) {
+        const card = make("div", "card");
+
+        // Videos act as direct link triggers to YouTube App / Site
+        if (item.type === "video") {
+          const link = make("a", "card-trigger");
+          link.href = item.youtubeUrl;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+
+          const thumbBox = make("div", "thumbnail-box");
+          const thumbUrl = resolveThumb(item);
+          if (thumbUrl) {
+            const img = make("img", "thumbnail");
+            img.src = thumbUrl;
+            img.loading = "lazy";
+            thumbBox.append(img);
+          }
+
+          const playBadge = make("div", "play-badge");
+          playBadge.innerHTML = `<div class="play-icon">▶</div>`;
+          thumbBox.append(playBadge);
+
+          if (item.theme) thumbBox.append(make("span", "badge", item.theme));
+          link.append(thumbBox);
+
+          const body = make("div", "card-body");
+          body.append(make("h3", "", item.title || "Untitled"));
+          if (item.caption) body.append(make("p", "", item.caption));
+          body.append(make("span", "card-action", "Open in YouTube ↗"));
+
+          link.append(body);
+          card.append(link);
+          return card;
+        }
+
+        // Photos & Panoramas open in the in-page modal
+        const btn = make("button", "card-trigger");
+        const thumbBox = make("div", "thumbnail-box");
+        const thumbUrl = resolveThumb(item);
+
+        if (thumbUrl) {
+          const img = make("img", "thumbnail");
+          img.src = thumbUrl;
+          img.loading = "lazy";
+          img.alt = item.title || "";
+          thumbBox.append(img);
+        } else {
+          thumbBox.append(make("span", "placeholder", item.type === "panorama" ? "◎" : "☘"));
+        }
+
+        if (item.theme) thumbBox.append(make("span", "badge", item.theme));
+        btn.append(thumbBox);
+
+        const body = make("div", "card-body");
+        body.append(make("h3", "", item.title || "Untitled"));
+        if (item.caption) body.append(make("p", "", item.caption));
+        body.append(make("span", "card-action", item.type === "panorama" ? "Explore 360° ↗" : "View Photo ↗"));
+
+        btn.append(body);
+        btn.onclick = () => openMedia(item);
+        card.append(btn);
+
+        return card;
+      }
+
+      for (const item of MEDIA) {
+        if (grids[item.type]) {
+          grids[item.type].append(buildCard(item));
+        }
+      }
+
+      // Tabs Logic
+      document.querySelectorAll(".tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+          const target = tab.dataset.tab;
+          document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.tab === target)));
+          document.querySelectorAll(".tab-panel").forEach(p => p.hidden = p.id !== `panel-${target}`);
+        });
+      });
+
+      // Dialog Close & Cleanup
+      document.getElementById("closeDialog").onclick = () => dialog.close();
+      dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
+      dialog.addEventListener("close", () => {
+        if (pannellumViewer) {
+          pannellumViewer.destroy();
+          pannellumViewer = null;
+        }
+        content.replaceChildren();
+      });
+
+      // Dialog Close & Cleanup
+      document.getElementById("closeDialog").onclick = () => dialog.close();
+      dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
+      dialog.addEventListener("close", () => {
+        if (pannellumViewer) {
+          pannellumViewer.destroy();
+          pannellumViewer = null;
+        }
+        content.replaceChildren();
+      });
+    })();
+  </script>
+</body>
+</html>
