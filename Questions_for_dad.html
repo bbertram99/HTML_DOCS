@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health & Symptom Questionnaire</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --yes-bg: #dcfce7;
+      --yes-border: #16a34a;
+      --yes-text: #14532d;
+      --no-bg: #fee2e2;
+      --no-border: #dc2626;
+      --no-text: #7f1d1d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 20px 15px 60px;
+      line-height: 1.5;
+      font-size: 18px;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--card-bg);
+      padding: 24px 28px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      margin-bottom: 24px;
+      border-top: 6px solid var(--primary);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 26px;
+      color: #0f172a;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 17px;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0 0 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .question-row {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 18px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .question-row:last-child {
+      border-bottom: none;
+      padding-bottom: 4px;
+    }
+
+    .question-text {
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .q-number {
+      font-weight: 700;
+      color: var(--primary);
+      margin-right: 6px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 18px;
+      user-select: none;
+      transition: all 0.15s ease;
+      background: #f8fafc;
+      min-width: 120px;
+      justify-content: center;
+    }
+
+    .checkbox-label:hover {
+      border-color: #94a3b8;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .checkbox-label.yes-selected {
+      background-color: var(--yes-bg);
+      border-color: var(--yes-border);
+      color: var(--yes-text);
+    }
+
+    .checkbox-label.no-selected {
+      background-color: var(--no-bg);
+      border-color: var(--no-border);
+      color: var(--no-text);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 14px;
+      font-size: 17px;
+      font-family: inherit;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      resize: vertical;
+      margin-top: 8px;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .submit-area {
+      background: var(--card-bg);
+      padding: 26px 28px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      text-align: center;
+    }
+
+    .btn-submit {
+      background-color: var(--primary);
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 700;
+      padding: 16px 36px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 420px;
+      transition: background-color 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .fallback-box {
+      display: none;
+      margin-top: 24px;
+      padding: 20px;
+      background: #f0fdf4;
+      border: 2px solid #86efac;
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    .fallback-box h3 {
+      margin: 0 0 10px;
+      color: #166534;
+      font-size: 20px;
+    }
+
+    .action-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 14px 0;
+    }
+
+    .btn-secondary {
+      display: inline-block;
+      text-decoration: none;
+      background: #15803d;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background: #166534;
+    }
+
+    .summary-preview {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 14px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 14px;
+      white-space: pre-wrap;
+      max-height: 260px;
+      overflow-y: auto;
+      margin-top: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .question-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .question-text {
+        flex: 1;
+        padding-right: 20px;
+      }
+      .checkbox-group {
+        flex-shrink: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Symptom & History Checklist</h1>
+    <p>Please check <strong>Yes</strong> or <strong>No</strong> for each question below. If you aren't completely sure on a question, you can leave it blank or add a note at the bottom. When finished, click the <strong>Submit Answers</strong> button at the bottom to send your answers to Brent.</p>
+  </header>
+
+  <form id="symptomForm">
+    <div id="questionsContainer"></div>
+
+    <div class="section-card">
+      <div class="section-title">Additional Notes or Medications</div>
+      <label for="extraNotes" style="font-weight: 500; display: block; margin-bottom: 6px;">
+        Please list any regular daily medications you take, or any other details about the pain you want to share:
+      </label>
+      <textarea id="extraNotes" placeholder="Type any extra notes or medications here..."></textarea>
+    </div>
+
+    <div class="submit-area">
+      <button type="submit" class="btn-submit">Submit &amp; Send Answers to Brent</button>
+
+      <div id="resultBox" class="fallback-box">
+        <h3>Answers Ready to Send!</h3>
+        <p style="margin: 0 0 10px; font-size: 16px; color: #1e293b;">
+          Your email program should open automatically. If it didn't open, click one of the buttons below, or paste the copied answers directly into an email to <strong>bbertram99@gmail.com</strong>:
+        </p>
+        <div class="action-links">
+          <a id="mailtoLink" href="#" class="btn-secondary">Open Default Email App</a>
+          <a id="gmailLink" href="#" target="_blank" rel="noopener" class="btn-secondary" style="background:#1d4ed8;">Open in Gmail (Browser)</a>
+          <button type="button" id="copyBtn" class="btn-secondary" style="background:#334155;">Copy Answers to Clipboard</button>
+        </div>
+        <div id="summaryPreview" class="summary-preview"></div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  const sections = [
+    {
+      title: "Part 1: The PET Scan & Surgery Relief Window",
+      questions: [
+        { id: 1, text: "Before the PET scan, did they make you fast or eat a strict zero-sugar/low-carb diet for 24 hours?" },
+        { id: 2, text: "Did the pain get better within 48 hours of the PET scan itself (weeks before you actually had the prostate surgery)?" },
+        { id: 3, text: "Did they give you pills to take the day before the PET scan because of a history of allergies or asthma?" },
+        { id: 4, text: "Before your prostate surgery, did they tell you to temporarily stop taking any of your regular daily medications (like cholesterol pills or blood thinners)?" },
+        { id: 5, text: "Have you ever noticed the pain disappear at other times when you had to take a course of antibiotics (like for a sinus, tooth, or urinary infection)?" }
+      ]
+    },
+    {
+      title: "Part 2: How the Pain Behaves",
+      questions: [
+        { id: 6, text: "When the sharp pain hits, does bending, twisting, coughing, or pressing on the spot with your hand make it worse?" },
+        { id: 7, text: "Does the skin over the painful area ever feel sensitive to the touch (like a sunburn or a bruise where even a shirt rubbing it bothers you)?" },
+        { id: 8, text: "Can an attack start and stop while you are sitting completely still in a chair or lying in bed?" },
+        { id: 9, text: "Does the pain ever wake you up out of a dead sleep in the middle of the night?" },
+        { id: 10, text: "Do standard anti-inflammatory pills (like Advil, Motrin, Aleve, or Aspirin) take the edge off at all?" }
+      ]
+    },
+    {
+      title: "Part 3: Stomach, Food & Allergy Clues",
+      questions: [
+        { id: 11, text: "Do the abdominal pain and diarrhea usually hit within 30 to 90 minutes after eating a meal?" },
+        { id: 12, text: "When the pain flares up, does your face, neck, or chest ever feel warm or look flushed/red?" },
+        { id: 13, text: "Does taking an over-the-counter allergy pill (like Reactine, Claritin, Benadryl, or Pepcid) ever calm the symptoms down?" },
+        { id: 14, text: "Have you ever had to do a full bowel prep (like for a colonoscopy), and did your body pain feel better for a few days afterward?" },
+        { id: 15, text: "Have you lost weight without trying over the last year?" }
+      ]
+    },
+    {
+      title: "Part 4: Other Body Clues",
+      questions: [
+        { id: 16, text: "When your sinuses act up, do you get thick bloody crusts or nosebleeds?" },
+        { id: 17, text: "Have you noticed any new wheezing, asthma, or shortness of breath over the last few years?" },
+        { id: 18, text: "Do you ever get small red or purple spots on your legs/skin, or frequent mouth/tongue sores?" },
+        { id: 19, text: "Do your eyes ever get unusually red, dry, or painful when the body pain flares?" },
+        { id: 20, text: "Do you ever feel feverish, chilly, or have night sweats when the pain is bad?" }
+      ]
+    },
+    {
+      title: "Part 5: Past & Current Medications",
+      questions: [
+        { id: 21, text: "Are you currently taking a cholesterol medication (a statin like Crestor/rosuvastatin or Lipitor/atorvastatin)?" },
+        { id: 22, text: "Before your pain first started years ago (or during prostate exams/infections), were you ever prescribed an antibiotic called Cipro (ciprofloxacin) or Levaquin?" }
+      ]
+    }
+  ];
+
+  const container = document.getElementById("questionsContainer");
+
+  sections.forEach(section => {
+    const card = document.createElement("div");
+    card.className = "section-card";
+
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.textContent = section.title;
+    card.appendChild(title);
+
+    section.questions.forEach(q => {
+      const row = document.createElement("div");
+      row.className = "question-row";
+
+      const textDiv = document.createElement("div");
+      textDiv.className = "question-text";
+      textDiv.innerHTML = `<span class="q-number">${q.id}.</span> ${q.text}`;
+
+      const group = document.createElement("div");
+      group.className = "checkbox-group";
+
+      // Yes Checkbox
+      const yesLabel = document.createElement("label");
+      yesLabel.className = "checkbox-label";
+      yesLabel.id = `label-yes-${q.id}`;
+      const yesInput = document.createElement("input");
+      yesInput.type = "checkbox";
+      yesInput.name = `q_${q.id}`;
+      yesInput.value = "YES";
+      yesInput.dataset.qid = q.id;
+      yesLabel.appendChild(yesInput);
+      yesLabel.appendChild(document.createTextNode("Yes"));
+
+      // No Checkbox
+      const noLabel = document.createElement("label");
+      noLabel.className = "checkbox-label";
+      noLabel.id = `label-no-${q.id}`;
+      const noInput = document.createElement("input");
+      noInput.type = "checkbox";
+      noInput.name = `q_${q.id}`;
+      noInput.value = "NO";
+      noInput.dataset.qid = q.id;
+      noLabel.appendChild(noInput);
+      noLabel.appendChild(document.createTextNode("No"));
+
+      // Mutually exclusive checkbox logic
+      yesInput.addEventListener("change", () => {
+        if (yesInput.checked) {
+          noInput.checked = false;
+          yesLabel.classList.add("yes-selected");
+          noLabel.classList.remove("no-selected");
+        } else {
+          yesLabel.classList.remove("yes-selected");
+        }
+      });
+
+      noInput.addEventListener("change", () => {
+        if (noInput.checked) {
+          yesInput.checked = false;
+          noLabel.classList.add("no-selected");
+          yesLabel.classList.remove("yes-selected");
+        } else {
+          noLabel.classList.remove("no-selected");
+        }
+      });
+
+      group.appendChild(yesLabel);
+      group.appendChild(noLabel);
+
+      row.appendChild(textDiv);
+      row.appendChild(group);
+      card.appendChild(row);
+    });
+
+    container.appendChild(card);
+  });
+
+  document.getElementById("symptomForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let reportLines = [];
+    reportLines.push("DAD'S SYMPTOM QUESTIONNAIRE ANSWERS");
+    reportLines.push("====================================");
+    reportLines.push("");
+
+    sections.forEach(section => {
+      reportLines.push(section.title.toUpperCase());
+      reportLines.push("------------------------------------");
+      section.questions.forEach(q => {
+        const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+        const answer = checked ? checked.value : "NOT ANSWERED";
+        reportLines.push(`Q${q.id}: [${answer}] - ${q.text}`);
+      });
+      reportLines.push("");
+    });
+
+    const notes = document.getElementById("extraNotes").value.trim();
+    reportLines.push("ADDITIONAL NOTES / MEDICATIONS:");
+    reportLines.push("------------------------------------");
+    reportLines.push(notes ? notes : "None provided.");
+
+    const finalBody = reportLines.join("\n");
+    const recipient = "bbertram99@gmail.com";
+    const subject = "Symptom Checklist Answers";
+
+    // Populate links
+    const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(finalBody)}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(finalBody)}`;
+
+    document.getElementById("mailtoLink").href = mailtoUrl;
+    document.getElementById("gmailLink").href = gmailUrl;
+    document.getElementById("summaryPreview").textContent = finalBody;
+    document.getElementById("resultBox").style.display = "block";
+
+    // Copy to clipboard automatically as backup
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(finalBody).catch(() => {});
+    }
+
+    // Trigger default email client
+    window.location.href = mailtoUrl;
+
+    // Scroll down to confirmation box
+    document.getElementById("resultBox").scrollIntoView({ behavior: "smooth" });
+  });
+
+  document.getElementById("copyBtn").addEventListener("click", function() {
+    const text = document.getElementById("summaryPreview").textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById("copyBtn");
+      btn.textContent = "Copied to Clipboard!";
+      setTimeout(() => {
+        btn.textContent = "Copy Answers to Clipboard";
+      }, 2500);
+    });
+  });
+</script>
+
+</body>
+</html>
