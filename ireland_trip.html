@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Our Ireland | Vacation Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09110e">
+  <meta name="description" content="A family travel journal, photographs, 360° views, and travel films from our September 2026 journey through Ireland.">
+  <title>Ireland, in the Margins | Our Ireland</title>
 
   <!-- Pannellum 360° Library -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css" />
@@ -36,16 +38,34 @@
 
     /* Header */
     .hero {
-      padding: 34px 20px 54px;
-      background:
-        radial-gradient(circle at 85% 15%, #184837 0%, transparent 45%),
-        linear-gradient(135deg, #061611 0%, #0d261e 100%);
+      position: relative;
+      display: flex;
+      min-height: min(720px, 88vh);
+      min-height: min(720px, 88svh);
+      align-items: center;
+      isolation: isolate;
+      padding: clamp(52px, 9vw, 104px) 24px;
+      background: linear-gradient(90deg, rgba(5, 16, 12, .94) 0%, rgba(5, 16, 12, .78) 41%, rgba(5, 16, 12, .2) 100%), linear-gradient(0deg, rgba(5, 16, 12, .48), transparent 48%), url("https://drive.google.com/thumbnail?id=1cRcOpcVIOa4xA6Kglhh7ylTzdy7am4R_&sz=w2000") center 46% / cover, linear-gradient(135deg, #061611 0%, #0d261e 100%);
       border-bottom: 1px solid var(--card-border);
     }
 
-    .wrap { max-width: 1120px; margin: auto; }
-    .brand { font: bold 22px Georgia, serif; color: var(--gold); }
-    .hero-copy { max-width: 720px; margin-top: 36px; }
+    .hero::after {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      border: 1px solid rgba(229, 184, 105, .12);
+      content: "";
+      pointer-events: none;
+    }
+
+    .wrap { width: 100%; max-width: 1120px; margin: auto; }
+    .brand { display: inline-block; font: bold 22px Georgia, serif; color: var(--gold); }
+    .hero-copy { max-width: 760px; margin-top: clamp(38px, 7vh, 78px); animation: arrive .8s both; }
+    .hero-copy .eyebrow { color: #e5c887; }
+    .hero-copy p { color: #e4ece5; }
+    .hero h1 { font-size: clamp(64px, 11vw, 132px); letter-spacing: -.065em; }
+    .hero-copy .hero-dates { display: block; margin-top: 22px; font-size: 13px; letter-spacing: .11em; text-transform: uppercase; }
+    @keyframes arrive { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
     .eyebrow {
       color: var(--gold);
@@ -56,9 +76,12 @@
     }
 
     h1, h2, h3 { font-family: Georgia, serif; line-height: 1.15; }
+    h1 em { display: block; margin-top: 12px; color: var(--gold); font-size: .57em; letter-spacing: -.035em; }
     h1 { margin: 8px 0 12px; font-size: clamp(40px, 8vw, 84px); color: #fff; }
     h2 { margin: 0 0 8px; font-size: clamp(24px, 3.5vw, 36px); color: #f0f7f3; }
     h3 { margin: 0; font-size: 18px; }
+    body > footer { padding: 26px 20px; line-height: 1.9; }
+    body > footer a { color: var(--gold); text-underline-offset: 4px; }
 
     .hero p {
       max-width: 600px;
@@ -66,13 +89,25 @@
       font-size: 18px;
     }
 
+    .story-strip { padding: 19px 20px; border-bottom: 1px solid var(--card-border); background: linear-gradient(100deg, #10241b, #132a20 50%, #102018); }
+    .story-strip-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; width: 100%; max-width: 1120px; margin: 0 auto; }
+    .story-strip strong { color: #f0e3c6; font: 21px Georgia, serif; }
+    .story-strip span { color: var(--text-muted); font-size: 13px; }
+
     main {
       max-width: 1120px;
       margin: auto;
       padding: 32px 20px 80px;
     }
 
+    #top, #archive, #journal, #afterword { scroll-margin-top: 24px; }
+    .archive-heading { padding-top: 4px; }
+    .archive-heading h2 { margin-top: 7px; }
+    .archive-count { margin-top: 5px; }
+
     .muted { color: var(--text-muted); font-size: 15px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    #readingProgress { position: fixed; inset: 0 auto auto 0; z-index: 60; width: 0; height: 3px; background: var(--gold); pointer-events: none; }
 
     /* Tabs */
     .tabs {
@@ -103,6 +138,8 @@
       color: #fff;
     }
 
+    .tab:hover:not([aria-selected="true"]) { border-color: rgba(229, 184, 105, .55); color: var(--text-main); }
+
     .tab-panel[hidden] { display: none; }
 
     /* Grid Layout */
@@ -119,17 +156,19 @@
       border-radius: 14px;
       background: var(--card-bg);
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-      transition: transform 0.2s, border-color 0.2s;
+      transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
     }
 
     .card:hover {
       transform: translateY(-3px);
       border-color: rgba(229, 184, 105, 0.4);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .32);
     }
 
     .card-trigger {
       display: block;
       width: 100%;
+      min-height: 44px;
       text-align: left;
       background: transparent;
       border: none;
@@ -139,7 +178,7 @@
     .thumbnail-box {
       position: relative;
       width: 100%;
-      height: 190px;
+      height: clamp(190px, 20vw, 250px);
       background: #08130e;
       overflow: hidden;
     }
@@ -210,6 +249,20 @@
     .card-body { padding: 16px; }
     .card-body p { margin: 6px 0 0; color: var(--text-muted); font-size: 14px; }
 
+    .archive-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 20px 0 6px; }
+    .archive-tools input, .archive-tools select { min-height: 46px; min-width: 0; border: 1px solid var(--card-border); border-radius: 7px; padding: 10px 13px; background: var(--panel-dark); color: var(--text-main); }
+    .archive-tools input { flex: 1 1 240px; }
+    .archive-tools select { flex: 0 1 205px; }
+    .archive-tools input::placeholder { color: var(--text-muted); }
+    .archive-tools .muted { flex-basis: 100%; }
+    .tab-count { display: inline-grid; min-width: 23px; height: 23px; margin-left: 5px; place-items: center; border-radius: 20px; background: rgba(0, 0, 0, .18); font-size: 11px; }
+    .slideshow-button, .journal-print { min-height: 46px; border: 1px solid rgba(229, 184, 105, .65); border-radius: 7px; padding: 9px 16px; background: rgba(229, 184, 105, .1); color: var(--gold); font-weight: 750; transition: background .2s ease, transform .2s ease; }
+    .slideshow-button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .slideshow-button:hover, .journal-print:hover { transform: translateY(-1px); background: rgba(229, 184, 105, .18); }
+    .slideshow-button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .result-message { min-height: 1.5em; margin: 5px 0; color: var(--text-muted); font-size: 13px; }
+    .empty { grid-column: 1 / -1; padding: 28px 18px; border: 1px dashed var(--card-border); border-radius: 12px; color: var(--text-muted); text-align: center; }
+
     .card-action {
       display: inline-block;
       margin-top: 14px;
@@ -247,6 +300,11 @@
       border-bottom: 1px solid var(--card-border);
       background: #0d1a15;
     }
+
+    .slideshow-controls { display: flex; align-items: center; gap: 5px; }
+    .slideshow-controls[hidden] { display: none; }
+    .slide-counter { min-width: 54px; color: var(--text-muted); font-size: 12px; text-align: center; }
+    .modal-content.slideshow-changing .modal-photo { opacity: .55; transition: opacity .18s ease; }
 
     .modal-header h3 {
       font-size: 18px;
@@ -355,6 +413,8 @@
       transition: transform 0.05s ease-out;
       cursor: default;
     }
+    #mediaDialog[open] .modal-photo { animation: photo-arrive .22s ease both; }
+    @keyframes photo-arrive { from { opacity: .45; } to { opacity: 1; } }
 
     .modal-panorama {
       width: 100%;
@@ -397,98 +457,590 @@
       font-size: 14px;
     }
 
+    /* An accessible, Ireland-themed version of the original print-first travel journal. */
+    .journal-intro { max-width: 810px; margin: 34px 0 54px; }
+    .journal-intro h2 { margin: 12px 0; font-size: clamp(34px, 5vw, 57px); }
+    .journal-intro p { margin-top: 10px; color: var(--text-muted); font-size: 15px; }
+    .journal-intro .journal-meta { margin-top: 16px; color: var(--gold); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .journal-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); align-items: start; gap: clamp(26px, 5vw, 68px); margin-top: 38px; }
+    .journal-sidebar { position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; padding: 21px 17px; border: 1px solid var(--card-border); border-radius: 12px; background: linear-gradient(145deg, #10211a, #0d1914); }
+    .journal-sidebar .eyebrow { color: var(--gold); }
+    .journal-sidebar h3 { margin: 8px 0 14px; color: #f0f7f3; font: 29px Georgia, serif; }
+    .journal-sidebar input, .journal-jump { width: 100%; min-height: 44px; margin-bottom: 10px; border: 1px solid var(--card-border); border-radius: 6px; padding: 10px; color: var(--text-main); background: var(--bg-dark); font: inherit; }
+    .journal-sidebar input::placeholder { color: var(--text-muted); }
+    .journal-search-results { min-height: 1.45em; margin: -5px 0 10px; color: var(--text-muted); font-size: 11px; }
+    .journal-route { display: grid; gap: 3px; }
+    .journal-route a { display: flex; gap: 9px; padding: 9px 7px; border-left: 2px solid transparent; color: var(--text-muted); font-size: 11px; line-height: 1.4; }
+    .journal-route a:hover, .journal-route a.active { border-color: var(--gold); color: var(--text-main); background: rgba(229, 184, 105, .06); }
+    .journal-route b { flex: 0 0 23px; color: var(--gold); font: italic 16px Georgia, serif; }
+    .journal-mobile-controls { display: none; }
+    .journal-content { min-width: 0; }
+    .journal-day { scroll-margin-top: 28px; padding: 0 0 54px; animation: arrive .42s both; }
+    .journal-day[hidden], .journal-entry[hidden] { display: none !important; }
+    .journal-day > h3 { margin: 9px 0 11px; color: #f2f5ef; font: 38px/1.15 Georgia, serif; }
+    .journal-day > .journal-lead { margin: 0 0 21px; color: var(--text-muted); font-size: 14px; }
+    .journal-field-note { margin: 0 0 18px; padding: 12px 16px; border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; background: rgba(16, 33, 26, .9); color: #c3d1c9; font-size: 13px; line-height: 1.6; }
+    .journal-field-note strong { display: block; margin-bottom: 3px; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .journal-entries { overflow: hidden; border: 1px solid var(--card-border); border-radius: 11px; background: linear-gradient(145deg, rgba(20, 42, 33, .85), rgba(12, 25, 19, .85)); }
+    .journal-entry { padding: 18px 21px; }
+    .journal-entry + .journal-entry { border-top: 1px solid rgba(40, 66, 52, .75); }
+    .journal-entry h4 { margin-bottom: 5px; color: #f1e4c7; font: 19px Georgia, serif; }
+    .journal-entry p { color: #c3d1c9; font-size: 14px; line-height: 1.75; }
+    .journal-tab-intro { max-width: 760px; margin: 0 0 25px; color: var(--text-muted); }
+    .journal-tab-intro strong { color: #f1e4c7; font-family: Georgia, serif; font-size: 19px; font-weight: 400; }
+    .journal-day { position: relative; padding-left: 21px; }
+    .journal-day::before { position: absolute; top: 3px; bottom: 60px; left: 0; width: 3px; border-radius: 4px; background: linear-gradient(var(--gold), rgba(229, 184, 105, .12)); content: ""; }
+    .journal-day-label { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 11px; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .journal-day-label time { color: var(--text-muted); font-weight: 600; letter-spacing: .08em; }
+    .journal-day > h3 { margin: 8px 0 9px; color: #f2f5ef; font: 38px/1.15 Georgia, serif; }
+    .journal-day > .journal-lead { margin: 0 0 17px; color: var(--text-muted); font-size: 14px; }
+    .journal-entries { overflow: hidden; border: 1px solid var(--card-border); border-radius: 11px; background: linear-gradient(145deg, rgba(20, 42, 33, .85), rgba(12, 25, 19, .85)); }
+    .journal-entry { position: relative; padding: 17px 21px 17px 48px; }
+    .journal-entry::before { position: absolute; top: 20px; left: 20px; color: var(--gold); content: "✳"; font-size: 15px; }
+    .journal-entry:nth-child(3n + 2)::before { content: "☘"; }
+    .journal-entry:nth-child(3n)::before { content: "✦"; }
+    .journal-entry h4 { margin-bottom: 5px; color: #f1e4c7; font: 19px Georgia, serif; }
+    .journal-entry p { color: #c3d1c9; font-size: 14px; }
+    #journalNoResults { margin: 25px 0; padding: 20px; border: 1px dashed var(--card-border); border-radius: 10px; color: var(--text-muted); text-align: center; }
+    .afterword { position: relative; overflow: hidden; margin-top: 24px; border: 1px solid var(--card-border); border-radius: 14px; background: radial-gradient(ellipse at 85% 45%, rgba(35, 79, 56, .4), transparent 45%), linear-gradient(135deg, #0b1912, #13251a); }
+    .afterword-inner { max-width: 910px; margin: 0 auto; padding: clamp(36px, 6vw, 68px) clamp(22px, 5vw, 48px); }
+    .afterword h2 { margin: 10px 0 20px; font-size: clamp(35px, 5.5vw, 61px); }
+    .afterword p { margin: 0 0 15px; color: #c4d1c7; font-size: 15px; line-height: 1.8; }
+    .afterword .signature { margin: 23px 0 0; color: var(--gold); font: italic 28px Georgia, serif; }
+    .journal-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 19px; }
+    .journal-view-archive { min-height: 44px; border: 1px solid var(--card-border); border-radius: 6px; padding: 9px 14px; color: var(--gold); background: var(--panel-dark); font-size: 13px; font-weight: 700; }
+    #backToTop { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); z-index: 30; display: none; width: 48px; height: 48px; border: 1px solid var(--gold); border-radius: 50%; background: rgba(9, 17, 14, .95); color: var(--gold); font-size: 20px; box-shadow: 0 5px 22px rgba(0,0,0,.35); }
+
+    dialog::backdrop { transition: background .22s ease; }
+    .tab-panel:not([hidden]) { animation: tab-arrive .22s ease both; }
+    @keyframes tab-arrive { from { opacity: .6; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+    #mediaDialog[open] { animation: modal-arrive .22s ease both; }
+    @keyframes modal-arrive { from { opacity: 0; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .fullscreen-button, .close-button, .ctrl-btn, #backToTop { min-height: 44px; }
+
+    @media (min-width: 1500px) {
+      .hero { min-height: min(820px, 90svh); }
+      main { max-width: 1320px; }
+    }
+
+    @media (max-width: 800px) {
+      .journal-layout { grid-template-columns: minmax(0, 1fr); gap: 19px; }
+      .journal-sidebar { position: static; max-height: none; padding: 17px; }
+      .journal-sidebar h3 { font-size: 26px; }
+      .journal-route { display: none; }
+      .journal-mobile-controls { display: block; }
+    }
+
     @media (max-width: 650px) {
-      .hero-copy { margin-top: 24px; }
+      .hero { min-height: min(690px, 84vh); min-height: min(690px, 84svh); padding-right: 20px; padding-left: 20px; background-position: center, center, 60% center, center; }
+      .hero-copy { margin-top: 26px; }
+      .hero h1 { font-size: clamp(57px, 14vw, 87px); }
+      main { padding: 27px 16px 57px; }
+      .story-strip { padding-right: 16px; padding-left: 16px; }
+      .story-strip strong { font-size: 18px; }
+      .tabs { gap: 8px; margin: 20px -2px; }
+      .tab { min-height: 46px; padding: 9px 15px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+      .thumbnail-box { height: auto; aspect-ratio: 1.18; }
+      .card { border-radius: 10px; }
+      .card-body { padding: 11px; }
+      .card-body h3 { font-size: 15px; }
+      .card-body p { font-size: 12px; }
+      .card-action { margin-top: 9px; font-size: 12px; }
+      .badge { top: 6px; right: 6px; font-size: 9px; }
+      .archive-tools { gap: 9px; }
+      .archive-tools select { flex: 1 1 145px; }
+      .slideshow-button { flex: 1 1 auto; }
+      .journal-intro { margin-bottom: 34px; }
+      .journal-sidebar { border-radius: 9px; }
+      .journal-day { padding-bottom: 39px; }
+      .journal-day > h3 { font-size: 31px; }
+      .journal-entry { padding: 15px; }
+      dialog { max-height: 94vh; max-height: 94dvh; border-radius: 12px; }
       .modal-panorama { height: 60vh; }
       dialog {
         width: 96vw;
         max-width: 96vw;
         max-height: 94vh;
       }
-      .modal-header {
-        padding: 10px 14px;
-      }
+      .modal-header { align-items: flex-start; gap: 8px; padding: 10px; }
+      .modal-header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
       .modal-header h3 {
         font-size: 15px;
       }
       .fullscreen-button,
       .close-button {
-        padding: 5px 10px;
-        font-size: 12px;
+        min-height: 44px;
+        padding: 7px 10px;
+        font-size: 11px;
       }
+    }
+
+    @media (max-width: 390px) {
+      .thumbnail-box { aspect-ratio: 1.45; }
+      .hero-actions { align-items: stretch; flex-direction: column; }
+    }
+    @media (max-width: 350px) { .grid { grid-template-columns: 1fr; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+
+    @media print {
+      body { color: #15271e; background: #fff; }
+      .hero { min-height: 0; padding: 24px; background: #123b2b !important; print-color-adjust: exact; }
+      .story-strip, .archive-heading, .tabs, #panel-panoramas, #panel-photos, #panel-videos, .journal-sidebar, #backToTop, dialog, footer, .journal-print, .journal-view-archive { display: none !important; }
+      #panel-journal { display: block !important; }
+      .journal-layout { display: block; margin-top: 0; }
+      .journal-day > h3, .journal-entry h4, .journal-intro h2, .afterword h2 { color: #172a20 !important; }
+      .journal-intro, .journal-day { margin-bottom: 16px; padding-bottom: 14px; }
+      .journal-intro p, .journal-entry p, .journal-day > p, .afterword p, .journal-field-note { color: #283a30 !important; }
+      .journal-entries, .journal-entry, .journal-field-note { border-color: #d5dbd2; background: #fff; }
+      .afterword { border: 0; background: #fff; }
+      .afterword .signature { color: #385443; }
+      main { max-width: none; padding: 20px 0; }
+      .journal-day[hidden], .journal-entry[hidden] { display: block !important; }
+      .journal-entry, .card { break-inside: avoid; }
+      .journal-entry p, .journal-day > .journal-lead { color: #283a30; }
+      .afterword p { color: #283a30; }
     }
   </style>
 </head>
 
-<body>
+<body id="top">
+  <div id="readingProgress" role="progressbar" aria-label="Page reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
   <header class="hero">
     <div class="wrap">
-      <div class="brand">☘ Our Ireland</div>
+      <a class="brand" href="#top" aria-label="Our Ireland, back to the beginning">☘ Our Ireland</a>
       <div class="hero-copy">
-        <div class="eyebrow">Vacation Archive · Éire</div>
-        <h1>Our Ireland</h1>
-        <p>Photographs, high-definition 360° views, and travel films from the road.</p>
+        <div class="eyebrow">A personal travel journal · September 2026</div>
+        <h1>Ireland <em>in the margins.</em></h1>
+        <p>Castles and coastlines, a few wrong turns, good meals, old stones, family time, and all the little things worth remembering along the way.</p>
+        <span class="hero-dates">Brent Bertram · 10–22 September 2026</span>
       </div>
     </div>
   </header>
 
+  <div class="story-strip" aria-label="About the journey">
+    <div class="story-strip-inner wrap"><strong>Not a guidebook. A trip worth keeping.</strong><span>13 dated chapters · 47 journal moments · 132 memories · one very good road trip</span></div>
+  </div>
+
   <main>
-    <div class="eyebrow">Archive</div>
-    <h2>Memories from the journey</h2>
-    <p class="muted">Select a media category below to explore.</p>
+    <section id="archive" aria-labelledby="archiveTitle">
+      <div class="archive-heading"><div class="eyebrow">The photographs, places &amp; films</div><h2 id="archiveTitle">Memories from the journey</h2><p class="muted archive-count">Explore <span id="archiveCounts">89 photographs · 29 immersive 360° views · 14 travel films</span>.</p></div>
 
-    <div class="tabs" role="tablist" aria-label="Media types">
-      <button class="tab" id="tab-panoramas" type="button" role="tab" aria-controls="panel-panoramas" aria-selected="true" data-tab="panoramas">
-        ◎ 360° Panoramas
-      </button>
-      <button class="tab" id="tab-photos" type="button" role="tab" aria-controls="panel-photos" aria-selected="false" data-tab="photos">
-        📷 Photos
-      </button>
-      <button class="tab" id="tab-videos" type="button" role="tab" aria-controls="panel-videos" aria-selected="false" data-tab="videos">
-        ▶ Videos
-      </button>
-    </div>
+      <div class="tabs" role="tablist" aria-label="Media types" aria-orientation="horizontal">
+        <button class="tab" id="tab-panoramas" type="button" role="tab" aria-controls="panel-panoramas" aria-selected="false" tabindex="-1" data-tab="panoramas">◎ 360° Panoramas <span class="tab-count" aria-hidden="true">29</span></button>
+        <button class="tab" id="tab-photos" type="button" role="tab" aria-controls="panel-photos" aria-selected="true" tabindex="0" data-tab="photos">📷 Photos <span class="tab-count" aria-hidden="true">89</span></button>
+        <button class="tab" id="tab-videos" type="button" role="tab" aria-controls="panel-videos" aria-selected="false" tabindex="-1" data-tab="videos">▶ Videos <span class="tab-count" aria-hidden="true">14</span></button>
+        <button class="tab" id="tab-journal" type="button" role="tab" aria-controls="panel-journal" aria-selected="false" tabindex="-1" data-tab="journal">✎ Journal <span class="tab-count" aria-hidden="true">13</span></button>
+      </div>
 
-    <!-- 360 PANORAMAS -->
-    <section class="tab-panel" id="panel-panoramas" role="tabpanel" aria-labelledby="tab-panoramas">
-      <h2>360° Spherical Views</h2>
-      <p class="muted">Drag to look around. On mobile, tap Gyroscope to look around using your device motion.</p>
-      <div class="grid" id="panoramaGrid"></div>
-    </section>
+      <!-- 360 PANORAMAS -->
+      <section class="tab-panel" id="panel-panoramas" role="tabpanel" aria-labelledby="tab-panoramas" tabindex="0" hidden>
+        <h2>360° Spherical Views</h2>
+        <p class="muted">Drag to look around. On mobile, tap Gyroscope to look around using your device motion.</p>
+        <div class="archive-tools" data-tools-for="panorama"><label class="sr-only" for="search-panoramas">Search panoramas</label><input id="search-panoramas" type="search" placeholder="Search panoramas or places…" autocomplete="off"><label class="sr-only" for="location-panoramas">Filter panoramas by place</label><select id="location-panoramas"><option value="">Every place</option></select><span class="muted" aria-live="polite" data-results-for="panorama"></span></div>
+        <div class="grid" id="panoramaGrid"></div>
+      </section>
 
-    <!-- PHOTOS -->
-    <section class="tab-panel" id="panel-photos" role="tabpanel" aria-labelledby="tab-photos" hidden>
-      <h2>Photo Gallery</h2>
-      <p class="muted">Click any photo to expand full resolution view.</p>
-      <div class="grid" id="photoGrid"></div>
-    </section>
+      <!-- PHOTOS -->
+      <section class="tab-panel" id="panel-photos" role="tabpanel" aria-labelledby="tab-photos" tabindex="0">
+        <h2>Photo Gallery</h2>
+        <p class="muted">Find a place, browse the collection, or settle in with a slideshow. Tap any image to open the full-resolution viewer.</p>
+        <div class="archive-tools"><label class="sr-only" for="search-photos">Search photos and places</label><input id="search-photos" type="search" placeholder="Search photos, captions or places…" autocomplete="off"><label class="sr-only" for="location-photos">Filter photos by place</label><select id="location-photos"><option value="">Every place</option></select><button class="slideshow-button" id="playSlideshow" type="button" aria-label="Start photo slideshow">▶ <span>Play slideshow</span></button><span class="muted" aria-live="polite" data-results-for="photo"></span></div>
+        <div class="grid" id="photoGrid"></div>
+      </section>
 
-    <!-- VIDEOS -->
-    <section class="tab-panel" id="panel-videos" role="tabpanel" aria-labelledby="tab-videos" hidden>
-      <h2>Travel Films</h2>
-      <p class="muted">Launches directly into YouTube app on mobile or new tab on desktop.</p>
-      <div class="grid" id="videoGrid"></div>
+      <!-- VIDEOS -->
+      <section class="tab-panel" id="panel-videos" role="tabpanel" aria-labelledby="tab-videos" tabindex="0" hidden>
+        <h2>Travel Films</h2>
+        <p class="muted">Launches directly into YouTube app on mobile or new tab on desktop.</p>
+        <div class="archive-tools"><label class="sr-only" for="search-videos">Search travel films</label><input id="search-videos" type="search" placeholder="Search the daily travel films…" autocomplete="off"><span class="muted" aria-live="polite" data-results-for="video"></span></div>
+        <div class="grid" id="videoGrid"></div>
+      </section>
+
+      <!-- JOURNAL -->
+      <section class="tab-panel" id="panel-journal" role="tabpanel" aria-labelledby="tab-journal" tabindex="0" hidden>
+        <div class="journal-intro" id="journal">
+          <div class="eyebrow">A note before we go</div>
+          <h2>It began as a voice note at Starbucks.</h2>
+          <p>I recorded this trip as it happened, speaking into my phone in the quiet pockets of time between flights, castle courtyards, narrow coastal roads, and pub suppers. These pages smooth out the rough edges of those quick voice memos and fill in the historical and geographical texture of the places we passed through—while keeping the exact point of view that made the notes mine.</p>
+          <p>My parents joined me for the Ireland journey, with Halifax serving as the anchor at both ends of our Atlantic crossing. What follows is not a checklist of everything a tourist ought to see, but the trip as we actually lived it: the ancient stones, the unexpected detours, the meals we rated at the table, and the occasional hotel lift that had other plans.</p>
+          <div class="journal-meta">13 Dated Chapters · 47 Journal Entries · Expanded Literary Edition</div>
+          <div class="journal-actions">
+            <button class="journal-print" id="printJournal" type="button">🖨 Print / Save Journal PDF</button>
+          </div>
+        </div>
+
+        <div class="journal-layout">
+          <aside class="journal-sidebar" aria-label="Journal navigation and search">
+            <div class="eyebrow">The Route</div>
+            <h3>Follow along.</h3>
+            <label class="sr-only" for="search-journal">Search the journal</label>
+            <input id="search-journal" type="search" placeholder="Search castles, pubs, places…" autocomplete="off">
+            <div class="journal-search-results" id="journalSearchCount" aria-live="polite"></div>
+            <div class="journal-mobile-controls">
+              <label class="sr-only" for="journalJump">Jump to a day</label>
+              <select class="journal-jump" id="journalJump">
+                <option value="">Jump to a chapter…</option>
+              </select>
+            </div>
+            <nav class="journal-route" id="journalRoute" aria-label="Journal chapters"></nav>
+          </aside>
+
+          <div class="journal-content">
+            <div id="journalDays" aria-live="polite"></div>
+            <p id="journalNoResults" hidden>No matching journal entries found. Try searching for a castle, town, meal, or date.</p>
+          </div>
+        </div>
+
+        <section class="afterword" id="afterword" aria-labelledby="afterwordTitle">
+          <div class="afterword-inner">
+            <div class="eyebrow">Afterword · the way home</div>
+            <h2 id="afterwordTitle">The places between the places.</h2>
+            <p>I went looking for castles, and I found plenty—from polished Anglo-Norman earldoms to vine-choked towers crumbling beside tidal inlets. Yet the memories that keep returning are rarely the famous postcard angles. They are Mom and me walking five kilometres through Dublin after dark, Dad’s running commentary on the evening meal, Rosie the horse pulling our trap steadily up through the Gap of Dunloe, and the sudden decision to pull the car over because a cliff or an empty beach demanded a closer look.</p>
+            <p>I loved the sprawling grounds and woodland water features at Blarney more than I ever expected. I loved the quiet glide of an open boat across Killarney’s three lakes. I loved the way a twelve-hour day that already felt full to the brim could still surprise us with one more medieval ruin at dusk. Even the less glamorous details—a missing wallet at the gate, a temperamental hotel lift, a tiny room above a wedding reception, or sorting laundry at an Airbnb—belong in the record. That is what travelling together actually felt like.</p>
+            <p>By the time I was flying back west over northern Ontario toward Winnipeg, I had a phone full of voice notes and a head full of history. More importantly, I had shared the open road with Mom and Dad. I would do that part again in a heartbeat.</p>
+            <div class="signature">Brent</div>
+          </div>
+        </section>
+      </section>
     </section>
   </main>
 
-  <footer>☘ Our Ireland · Captured & Preserved</footer>
+  <footer>☘ Our Ireland · Captured &amp; Preserved · September 2026</footer>
+  <button id="backToTop" type="button" aria-label="Back to the beginning">↑</button>
 
-<!-- Modal Dialog -->
+  <!-- Modal Dialog -->
   <dialog id="mediaDialog" aria-labelledby="dialogTitle">
     <div class="modal-header">
       <h3 id="dialogTitle"></h3>
       <div class="modal-header-actions">
+        <div class="slideshow-controls" id="slideshowControls" hidden aria-label="Slideshow controls"><button class="fullscreen-button" id="previousSlide" type="button" aria-label="Previous slide">←</button><span class="slide-counter" id="slideCounter" aria-live="polite"></span><button class="fullscreen-button" id="nextSlide" type="button" aria-label="Next slide">→</button><button class="fullscreen-button" id="pauseSlideshow" type="button" aria-label="Pause slideshow">Ⅱ</button></div>
         <button class="fullscreen-button" id="fullscreenDialog" type="button" aria-label="Toggle Fullscreen">⛶ Fullscreen</button>
-        <button class="close-button" id="closeDialog" type="button" aria-label="Close">Close ✕</button>
+        <button class="close-button" id="closeDialog" type="button" aria-label="Close viewer (Escape)">Close ✕</button>
       </div>
     </div>
     <div class="modal-content" id="modalContent"></div>
   </dialog>
 
+<script id="journalData" type="application/json">
+[
+  {
+    "date": "2026-09-10",
+    "place": "Manitoba to Halifax",
+    "title": "The journey begins",
+    "lead": "Before Ireland came the first departure: leaving the Manitoba prairies behind, an afternoon wait at Winnipeg Richardson, and an evening flight east to meet Mom and Dad in Nova Scotia.",
+    "fieldNote": "Stage One · Approx. 2,800 km east across two time zones, trading the Trans-Canada highway between Brandon and Winnipeg for the Atlantic coast of Halifax.",
+    "entries": [
+      [
+        "Leaving Brandon for Ireland",
+        "It started at Starbucks at 9:02 in the morning before rolling out of Brandon onto the Trans-Canada Highway toward Winnipeg. Even before the bags were checked, I was already thinking about how to capture the rhythm of the trip: speak quick observations into a journal while the details were still fresh, and eventually shape the whole thing into a proper website. First, though, practical priorities—a warm ham-and-Swiss baguette and a very large refresher for the two-hour drive east across the prairie. Every grand adventure needs a grounded starting point."
+      ],
+      [
+        "Winnipeg Airport",
+        "I hadn’t walked through Winnipeg Richardson International Airport in quite a while, so arriving with time to spare gave me a chance to wander the terminal and settle into travel mode. The departures board showed our flight on schedule, and browsing the terminal shops planted a crucial side-mission in my head for the week ahead: would I manage to track down a regional 'Been There' Starbucks mug once we landed in Ireland?"
+      ],
+      [
+        "On the plane!",
+        "Atlantic weather in Halifax had other ideas about our schedule, pushing our departure back by about an hour. Once we finally boarded and pushed back from the gate, I settled into my row for the three-and-a-half-hour haul east, queued up an audiobook, and watched the flat geometry of Manitoba fields give way to the Canadian Shield."
+      ],
+      [
+        "You know when",
+        "Halfway to the Maritimes, a quick trip down the aisle offered a small piece of aviation archaeology: you know an airliner has logged some serious decades in the sky when there is still a built-in chrome ashtray mounted on the lavatory door—decades after smoking was banned in the cabin. That gave me a good laugh."
+      ],
+      [
+        "Arrived in Halifax",
+        "Mom was waiting for me at Halifax Stanfield when I came through arrivals. The flight itself had been smooth, the late-summer Maritime air was still warm, and I had caught a few great views out the window during our descent over Nova Scotia’s lakes and coastline. We loaded up the car and drove toward my parents’ place with a home-cooked meal and an evening of catching up ahead of us. Ireland was still an ocean away, but the journey was officially underway."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-11",
+    "place": "Halifax & the overnight flight",
+    "title": "Family time, then across the Atlantic",
+    "lead": "A relaxed Maritime day with family in Halifax—complete with retro gaming lore, a feisty dog, and a pre-flight wallet scare—before climbing into the night sky toward Europe.",
+    "fieldNote": "Stage Two · Halifax Stanfield (YHZ) to Dublin (DUB) across the North Atlantic Great Circle route—approx. 4,150 km overnight with the jet stream at our tail.",
+    "entries": [
+      [
+        "Day 2",
+        "Waking up after a quiet, comfortable night at my parents’ house, the morning had no rush to it. I spent some time reading my Sierra On-Line history book—immersing myself in classic 1980s and ’90s adventure game design—while Mom put together a proper breakfast. My sister Ashley was planning to drop by later in the morning, leaving the afternoon wide open."
+      ],
+      [
+        "Visit with Ashley",
+        "Ashley came over and we fell right into an easy, wide-ranging conversation that covered everything from family news to travel plans. Before she left, we made plans to head over to her place for supper before our late-night departure for the airport."
+      ],
+      [
+        "Found this dog",
+        "At Ashley’s place, Poppy the dog and I got properly acquainted. She tested my reflexes by trying to nip me a few times, then locked into an intense, unblinking staring contest from across the room. Between the feisty greetings and the mutual suspicion, I think we actually reached an understanding."
+      ],
+      [
+        "John Romero",
+        "A tangent during my conversation with Ashley wandered into classic PC games and the audiobook I had been listening to—John Romero’s memoir, 'Doom Guy: Life in First Person.' Given that Romero famously relocated to Galway to run Romero Games, Ireland felt strangely connected to id Software history. On a whim, I jumped into the official Romero Games Discord server and posted a question. Maybe something would come of it, maybe not, but it felt like a fitting side quest before flying to the island."
+      ],
+      [
+        "Halifax airport",
+        "Back at Halifax Stanfield for our overnight crossing, the pre-flight calm evaporated when Dad patted his pockets and realized his wallet was missing. That is the exact sort of high-stakes complication nobody wants right before an international boarding call. We retraced steps, sorted out what we could at the terminal, and kept moving forward as our boarding zone was called."
+      ],
+      [
+        "Take off!",
+        "We made it aboard and settled in for the red-eye. This wide-body jet was noticeably larger and better appointed than the domestic flight out of Winnipeg, and as the engines spooled up and lifted us off the Nova Scotia runway into the dark, it was finally time to cross the Atlantic."
+      ],
+      [
+        "Air Force one race",
+        "A brief, surreal note jotted down right at the edge of sleep as we taxied and climbed—one of those late-night travel observations that made complete sense in the moment, preserved here verbatim in the sequence of the crossing."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-12",
+    "place": "Dublin",
+    "title": "First steps on Irish soil",
+    "lead": "An Atlantic sunrise through a cabin window, a WWII amphibious tour through the heart of the capital, a stuck hotel elevator, and five kilometres of Dublin streets after dark.",
+    "fieldNote": "Dublin (Baile Átha Cliath) · Founded as a 9th-century Viking longphort where the River Poddle met the Liffey, layered with medieval churches, Georgian squares, and lively corner pubs.",
+    "entries": [
+      [
+        "New day, same flight",
+        "Somewhere high over the mid-Atlantic, the clock rolled past midnight into Saturday. Sleep was scarce in a warm, cramped economy seat, so I drifted in and out of a tiny nap while my audiobook did the heavy lifting of passing the hours until dawn."
+      ],
+      [
+        "Sunrise approaches!",
+        "Because we were flying east against the clock, the night compressed into just a few hours. Ahead of the wing, the ink-black horizon began to band with deep amber and pale gold—our first glimpse of European daylight thirty thousand feet above the water."
+      ],
+      [
+        "Landing time!",
+        "As the cabin crew prepared the plane for descent over the Irish Sea, my mind was already working on the architecture of Bertram.ca. I could picture how these raw, timestamped notes could be woven into a permanent digital archive of the trip."
+      ],
+      [
+        "Landed",
+        "Touchdown in Dublin. While we stood in the aisle waiting for the rows ahead of us to disembark, the captain announced a mild 17°C outside with even warmer skies forecast for the afternoon. A few steps down the jet bridge would mark our first actual footing on Irish soil."
+      ],
+      [
+        "Airport and taxi ride",
+        "We walked right across the tarmac into a Dublin Airport terminal that was far more sprawling and modern than I had pictured. Outside, we caught a taxi into the city center with a friendly driver who gave us an impromptu orientation tour along the way. He told us he had emigrated from Romania twenty-three years ago and had called Dublin home ever since."
+      ],
+      [
+        "Walking around",
+        "Too early to check into our rooms at the Harcourt Hotel—a row of historic Georgian townhouses near the southwest corner of St. Stephen’s Green, where George Bernard Shaw once lived—we set out on foot. We stumbled across a choir singing in the street, soaked in the bustle of the capital, and grabbed a quick utilitarian lunch at McDonald’s to tide us over before our 1:00 PM tour."
+      ],
+      [
+        "Viking Splash tour",
+        "Boarding the Viking Splash tour was an absolute blast. Operating out of refurbished World War II amphibious DUKW ('Duck') vehicles, the tour rumbles past Georgian squares and medieval cathedrals before plunging straight into the waters of the Grand Canal Basin. Our driver and guide brought relentless comedic energy and mentioned he had worked as a screen extra on both 'Vikings' and 'Game of Thrones'—two massive productions filmed extensively around Wicklow and Northern Ireland. By the time we climbed out of the Viking helmets, our mental list of museums, churches, and shops had doubled."
+      ],
+      [
+        "Hotel room",
+        "When we finally checked into the Harcourt Hotel, the room turned out to be compact, though we really only needed a place to crash. Downstairs, a lively Irish wedding reception was in full swing with loud, genuinely good music drifting up through the building. Our first trip in the hotel lift, however, came to an abrupt halt when the doors jammed with the three of us inside. Thankfully, a staff member was right outside and pried the doors open—a memorable initiation to Dublin hospitality."
+      ],
+      [
+        "Supper",
+        "For our first proper Irish supper, we settled into Porters. I ordered a rich traditional stew that hit the spot after twenty-four hours of travel. Dad was pleasantly surprised by how good his smash burger was, while Mom’s fish and chips were merely passable—though I happily volunteered to help her finish the second piece of battered fish. Afterward, Dad called it a night and headed back to rest while Mom and I stayed out."
+      ],
+      [
+        "Night time walking",
+        "Mom and I logged roughly five kilometres through the heart of Dublin after dark, admiring the illuminated stonework of old churches, historic facades, and an astonishing density of packed, glowing pubs on every block. I watched the sleek electric Luas trams gliding quietly along their tracks through the city streets. Back at the hotel, our room was still warm, so switching on the portable fan was the final victory of a very long first day."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-13",
+    "place": "Dublin",
+    "title": "A city with layers",
+    "lead": "Tracing Dublin from its Norse foundations and 18th-century church crypts to Iron Age bog bodies and the solemn limestone cells of Kilmainham Gaol.",
+    "fieldNote": "Historical Context · From the 1798 and 1803 rebellions (Robert Emmet was executed outside St. Catherine’s Church) to the 1916 Easter Rising leaders held at Kilmainham Gaol.",
+    "entries": [
+      [
+        "Viking and church tour",
+        "Our morning guided walk peeled back Dublin’s street grid to reveal its 9th- and 10th-century Norse roots around Wood Quay and Christ Church. From there, we stepped inside St. Catherine’s Church on Thomas Street—an imposing 1760s neoclassical building famous as the site where Irish patriot Robert Emmet was executed in 1803—and descended into its stone crypt. Between the architecture and the history, I couldn’t stop pausing to take it all in."
+      ],
+      [
+        "Museum of Archaeology and History",
+        "Next came the National Museum of Ireland – Archaeology on Kildare Street. Housed in a grand 1890 Victorian Palladian building, its halls hold everything from intricate Bronze Age gold collars and the Ardagh Chalice to remarkably preserved Iron Age bog bodies pulled from Irish peatlands. There was far more in those cases than anyone could absorb in a single visit, and with my feet starting to ache from the pavement, we hailed a cab west across the city."
+      ],
+      [
+        "Kilmainham Gaol",
+        "Walking into Kilmainham Gaol changes the temperature of a trip. Opened in 1796, this stark limestone prison held generations of Irish nationalists—from Charles Stewart Parnell to the leaders of the 1916 Easter Rising, fourteen of whom were executed by firing squad in the prison’s Stonebreakers’ Yard. Standing inside the vast, skylit panopticon wing and peering into the cold cells with a knowledgeable guide drove home that the places on our map were more than picturesque stops; they were where modern Ireland was forged."
+      ],
+      [
+        "Supper",
+        "Just down the road in Kilmainham, The Patriots Inn—a classic neighbourhood pub named in honour of the leaders once held at the nearby Gaol—was a welcome refuge for tired feet. Premier League soccer was playing on the televisions while we ordered a round of comfort food: a smash burger for me, a crispy chicken burger for Mom, and fish and chips for Dad. Every plate was solid, and we left properly recharged."
+      ],
+      [
+        "Dublin evening walk",
+        "As twilight settled over the Liffey, Mom, Dad, and I strolled back through the bustling streets to soak in the city lights and weekend energy. On our way back toward Camden Street, we ducked into The Bleeding Horse—a cavernous, timber-galleried pub dating back to the 17th century that was even mentioned in James Joyce’s 'Ulysses.' Warm from the long walk, all I wanted was a cold drink packed with crushed ice while we listened to the live musician onstage, before winding down at the hotel with a bit of television and reading."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-14",
+    "place": "Wicklow to Kilkenny",
+    "title": "The road opens up",
+    "lead": "Trading Dublin pavement for left-hand driving through the Wicklow Mountains, exploring a 6th-century monastic valley, and waiting out a downpour with live music in Ireland’s medieval capital.",
+    "fieldNote": "Wicklow & Kilkenny · Glendalough ('Valley of the Two Lakes') was founded by St. Kevin in the 6th century; Kilkenny’s 'Medieval Mile' links 13th-century Anglo-Norman castles with witch-trial lore.",
+    "entries": [
+      [
+        "Departing Dublin",
+        "After one last breakfast in Dublin, we packed up our bags, checked out of the Harcourt Hotel, and headed back toward the airport perimeter to collect our rental car. As much as I enjoyed the capital, the open countryside was what I had been anticipating most."
+      ],
+      [
+        "Car rental",
+        "The cab ride out to the rental depot went smoothly, though the queue at the counter tested our patience. Automatic transmissions are always at a premium in Ireland, and sorting out the paperwork took a while. Eventually we were handed the keys, adjusted the mirrors for left-hand traffic, and pulled out onto the road."
+      ],
+      [
+        "New driving experience",
+        "Our route south into the Wicklow Mountains National Park was an immediate baptism by fire: narrow, winding lanes bordered by stone walls where oncoming cars, cyclists, and wandering mountain sheep all share the same tight ribbon of asphalt. We pulled over for sweeping views across heather-covered peaks and a tumbling waterfall before descending into Glendalough. While we skipped the longer Upper Lake hike, we wandered through St. Kevin’s 6th-century monastic settlement—standing beneath the 30-metre mica-slate Round Tower built to shelter monks and manuscripts from Viking raids, exploring the roofless stone churches, and reading the weathered headstones. Along the way, I kept an eye out for authentic craft souvenirs."
+      ],
+      [
+        "Kilkenny",
+        "From Wicklow’s valleys, we navigated a twisting series of backroads southwest into County Kilkenny. Checking into our hotel there felt like an instant upgrade in breathing room compared to our snug quarters in Dublin, and it was a relief to drop the luggage and stretch out."
+      ],
+      [
+        "Supper time",
+        "We sat down to a unanimous table order: traditional bangers and mash paired with cold pints of beer. Outside the windows, the skies darkened and a heavy Irish rain began drumming against the pavement, casting doubt on our plans for an evening walk."
+      ],
+      [
+        "Kyteler’s Inn",
+        "Refusing to let the weather win, we headed out into the damp evening anyway, catching sight of Kilkenny Castle dramatically floodlit above the River Nore before the downpour drove us indoors. We took shelter inside Kyteler’s Inn—one of the oldest inns in Ireland, established in 1324 by Dame Alice Kyteler, a wealthy noblewoman accused of witchcraft by the Bishop of Ossory before she fled the country. Under the ancient stone arches and timber beams, a live band was playing to a packed, attentive room. It was the quintessential old-pub atmosphere to wait out a storm before calling home to Manitoba and turning in."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-15",
+    "place": "Kilkenny, Tipperary & Cork",
+    "title": "Four stops, four different stories",
+    "lead": "A masterclass in Irish fortifications across three counties: an opulent Butler dynasty residence, the royal limestone acropolis of Munster, a rugged river fortress, and the enchanted woodland gardens of Blarney.",
+    "fieldNote": "The Castle Corridor · Tracing 800 years of power across the Golden Vale, from the Anglo-Norman Butlers of Ormonde and the Kings of Munster to the MacCarthy stronghold at Blarney (1446).",
+    "entries": [
+      [
+        "Kilkenny Castle",
+        "A hearty hotel breakfast helped make up for an unforgiving mattress the night before. Our first stop was right in town at Kilkenny Castle, built in 1195 by Strongbow’s son-in-law William Marshal and held for nearly six centuries by the powerful Butler family. Walking through its restored Victorian wings and the soaring, hammer-beam Picture Gallery felt more like touring an aristocratic palace museum than a grim medieval keep—an opulent first chapter for a four-castle day."
+      ],
+      [
+        "Rock of Cashel",
+        "Driving southwest into County Tipperary, the Rock of Cashel rose abruptly out of the flat green pastures of the Golden Vale like a matte painting from a fantasy epic. Historically the seat of the High Kings of Munster before being granted to the Church in 1101, this limestone outcrop clusters together a 12th-century round tower, Cormac’s Romanesque Chapel, and a vast 13th-century Gothic cathedral. Climbing the windy slope and walking among the roofless arches and high crosses was unforgettable."
+      ],
+      [
+        "Cahir Castle",
+        "Just twenty minutes south on a rocky island in the River Suir sat Cahir Castle, and the contrast with Kilkenny couldn’t have been sharper. Built by the Butler family in the 13th century, Cahir is pure military engineering—thick curtain walls, a working portcullis, a cannonball from the Earl of Essex’s 1599 siege still embedded in the stonework, and steep spiral stairs we could climb directly to the battlements. It looked and felt exactly like the fortress you picture when someone says the word 'castle.'"
+      ],
+      [
+        "Blarney Castle",
+        "Continuing into County Cork brought us to Blarney Castle, the 1446 tower house of the MacCarthy clan. It was bustling and unapologetically touristy, with a thirty-minute queue snaking up the narrow stone steps to the parapet. Up top, kissing the famous Blarney Stone requires lying on your back, gripping iron rails, and leaning backward over a sheer drop—a moment that makes the height of the keep feel very real. Yet the true revelation of Blarney wasn’t the stone; it was the sixty acres of surrounding gardens. Wandering the shaded woodland paths, bridges, Poison Garden, waterfalls, and lake, I kept thinking how much Kristen, Brodie, and Oliver would love exploring the grounds—even if the claustrophobic spiral staircase inside the tower might be a tougher sell."
+      ],
+      [
+        "Holiday village",
+        "After grabbing supper near Blarney, we pushed west into County Kerry along narrow, hedgerow-lined roads that demanded total focus behind the wheel. Arriving at our holiday-village Airbnb in Killarney felt like coming home: plenty of space to spread out and, best of all, an in-unit washer and dryer. I ran a load of laundry and rested up for the next morning’s excursion into the national park."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-16",
+    "place": "Killarney",
+    "title": "Across the lakes with Rosie",
+    "lead": "Skimming across Killarney’s three glacial lakes by open boat from Ross Castle, climbing the Gap of Dunloe behind a hardworking mare named Rosie, and finishing with shepherd’s pie and sticky toffee pudding.",
+    "fieldNote": "Killarney National Park · 10,000+ hectares encompassing the Lakes of Killarney (Lough Leane, Muckross Lake, Upper Lake) and the Gap of Dunloe between MacGillycuddy’s Reeks and Purple Mountain.",
+    "entries": [
+      [
+        "Ross Castle",
+        "We checked in for our morning excursion in town, fortified ourselves with coffee and a fresh pastry, and caught the shuttle out to Ross Castle—a 15th-century O’Donoghue tower house perched on the edge of Lough Leane. From the castle pier, we boarded a traditional covered boat and glided out across all three of Killarney’s interconnected lakes, threading narrow river channels and shooting beneath the low stone arches of the Old Weir Bridge while eagles and red deer territory rose on the slopes around us. After pausing at Lord Brandon’s Cottage for lunch, we climbed into a traditional jaunting car (trap) for the journey through the Gap of Dunloe. Our local jarvey kept up a steady stream of Kerry folklore and dry wit while his horse, Rosie, hauled us steadily up the winding glacial pass between the towering ridges of MacGillycuddy’s Reeks and Purple Mountain. From water to mountain pass, I loved every minute of it."
+      ],
+      [
+        "Cronin’s Restaurant",
+        "Back in downtown Killarney that evening, we ducked into Cronin’s Restaurant on College Street—a family-run spot that has been serving locals and travellers since 1957. My shepherd’s pie arrived at the table piping hot under a golden crust and tasted phenomenal, and I finally tried traditional mushy peas on the side and genuinely liked them. Mom thoroughly enjoyed her pasta dish, though Dad had a stroke of bad luck with his fish and chips; to the restaurant’s credit, they promptly took his meal right off the bill. A warm sticky toffee pudding brought the meal to a triumphant finish, followed by a browse through a nearby gift shop as I continued my search for the right present for Kristen."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-17",
+    "place": "Kerry to Dingle",
+    "title": "The long way to Dingle",
+    "lead": "A marathon twelve-hour odyssey around the Ring of Kerry: calf-burning waterfall stairs, Iron Age dry-stone forts, a solitary offshore dolphin, gale-force cliffs, and an ivy-draped castle ruin at dusk.",
+    "fieldNote": "The Iveragh Peninsula · Home to the 179-km Ring of Kerry, 2,500-year-old dry-stone ringforts (Staigue and Cahergal), the 300-metre Kerry Cliffs facing the Skellig Islands, and Inch Strand.",
+    "entries": [
+      [
+        "12 hour tour…",
+        "We rolled out of Killarney early for what turned into an epic twelve-hour circuit of the Iveragh Peninsula. Our first stop was Torc Waterfall, where a mossy stone staircase climbs steeply beside the roaring cascade; Mom and I started up, and I decided to jog the first flight before quickly discovering the trail kept climbing far higher up the mountain than I had bargained for. Further along the ring, Ladies View—named after Queen Victoria’s admiring ladies-in-waiting during their 1861 visit—offered a sweeping panorama back over the lakes, and a stop in the colourful village of Sneem yielded gifts for Kristen and the boys. Turning onto a single-track lane barely wider than our mirrors brought us to Staigue Stone Fort, an extraordinary late Iron Age amphitheatre-like ringfort built entirely without mortar around 300–400 AD. Down by the coast, we paused at a quiet cove and watched a lone dolphin surfacing lazily just offshore before bracing ourselves against ferocious Atlantic gusts atop the 1,000-foot Kerry Cliffs. After lunch in the fishing village of Portmagee and a stop at the Skellig Experience on Valentia Island—which tells the story of the 6th-century monks who built beehive cells on the jagged pinnacle of Skellig Michael twelve kilometres out to sea—we rode the short car ferry back to the mainland near Cahersiveen. We explored a second impressive stone ringfort at Cahergal, and by late afternoon I figured I was officially 'castled out.' Then we spotted Ballycarbery Castle across the fields: a dramatic 16th-century ruin cloaked in thick green ivy facing the tidal water. It completely won me over. We caught the sunset washing over the three-mile sand spit of Inch Beach before finally pulling into Dingle for supper and a well-earned sleep."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-18",
+    "place": "Dingle Peninsula",
+    "title": "The coast keeps unfolding",
+    "lead": "Sampling traditional Irish breakfast puddings, tracing Slea Head’s prehistoric stone huts and wave-lashed headlands, turning around on a muddy farm track, and exploring a 1,200-year-old boat-shaped oratory.",
+    "fieldNote": "Corca Dhuibhne (Dingle Peninsula) · A Gaeltacht (Irish-speaking) stronghold dotted with over 2,000 archaeological monuments, from Fahan’s prehistoric clocháns to the early Christian Gallarus Oratory.",
+    "entries": [
+      [
+        "Coastline tour",
+        "Morning in Dingle began with a culinary experiment at breakfast: traditional Irish black and white pudding. While a flaky black-pudding sausage roll the day before had been delicious, the pan-fried slice of blood pudding on my breakfast plate wasn’t my favourite—though the savoury oat-and-spice white pudding was a winner. Heading west along the Slea Head Drive, the landscape grew wilder with every bend. At the Fahan beehive huts (clocháns), I was fascinated by how early inhabitants stacked unmortared corbelled stone into weatherproof domes that have stood against Atlantic gales for centuries, sharing the steep hillside with their livestock. Out at Dunmore Head—the westernmost point of mainland Ireland, overlooking the Blasket Islands and used as a filming location for 'Star Wars: The Last Jedi'—we walked the sheltered cove of Coumeenoole Beach before climbing the headland path as jagged sea stacks opened up below. Chasing a view of the Three Sisters peaks, we followed a rutted, muddy boreen until a locked farm gate forced a careful multi-point turnaround—half the fun of driving rural Ireland. Although the 15th-century FitzGerald tower at Gallarus Castle was closed, we visited the nearby Gallarus Oratory, an astonishingly intact early Christian chapel shaped like an upturned boat whose dry-stone roof still sheds the rain after more than a millennium. One final stop at Kilmalkedar’s 12th-century Romanesque church, ogham stone, and ancient graveyard was cut short by a sudden squall, sending us back into Dingle town for a cozy pub supper and laundry prep."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-19",
+    "place": "Dingle to Kinvara",
+    "title": "One more road, one more castle",
+    "lead": "Climbing Ireland’s highest mountain pass, discovering riverside castle ruins in Limerick, stepping into 19th-century village life at Bunratty, and racing the sunset from the Cliffs of Moher to Galway Bay.",
+    "fieldNote": "Northward Bound · Crossing Conor Pass (456m) and the Shannon Estuary into County Clare—from O’Connor and Desmond strongholds to the 214-metre Namurian shale walls of the Cliffs of Moher.",
+    "entries": [
+      [
+        "Conor Pass to Cliffs of Moher",
+        "After topping up the fuel tank in Dingle, we pointed the car up Conor Pass, one of Ireland’s highest mountain roads. By reputation I had braced myself for a white-knuckle climb, and while the southern ascent was shorter and more manageable than expected, the northern descent narrows into a single-lane shelf carved directly into the cliffside, complete with a cascading mountain waterfall where we pulled over. Continuing along the Shannon Estuary into County Limerick led us to an unplanned gem: Carrigafoyle Castle, a 1490 O’Connor stronghold standing right at the water’s edge, its defensive walls still bearing the scars of a 1580 Tudor cannon bombardment. Further east at Askeaton, the Desmond castle on the River Deel was scaffolded for conservation work, so we detoured to the remarkable 14th-century Franciscan Friary nearby, walking undisturbed through its intact gothic cloister arches. Crossing into County Clare, we spent the afternoon at Bunratty Castle and Folk Park—touring the furnished 1425 MacNamara and O’Brien fortress surrounded by a living village of reconstructed thatched cottages, country shops, and farmsteads. By late afternoon we reached the world-famous Cliffs of Moher. It was blustery and packed with tour buses, and while the sheer 700-foot drop into the Atlantic was undeniable, we agreed that the raw, uncrowded majesty of the Kerry Cliffs two days earlier had impressed us even more. We stopped in the traditional music village of Doolin for hot fish and chips, paused to admire Doonagore Castle’s round tower silhouetted against the sunset, and wound around the limestone karst of the Burren into the harbour village of Kinvara for the night."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-20",
+    "place": "Kinvara to Dublin",
+    "title": "The last full day",
+    "lead": "A final cross-country castle hunt—from Dunguaire’s tidal walls and an ancient wishing oak in Offaly to the massive Norman curtain walls of Trim—culminating at the 5,200-year-old passage tomb of Newgrange.",
+    "fieldNote": "The Boyne Valley (Brú na Bóinne) · Travelling from Galway Bay across the Midlands to County Meath, home to Trim Castle (Ireland’s largest Anglo-Norman fortress) and Neolithic Newgrange (c. 3200 BC).",
+    "entries": [
+      [
+        "Final day",
+        "Our final day on the road began at the edge of Galway Bay outside Dunguaire Castle, a picturesque 1520 O’Hynes tower house reflected in the morning tide. Though the interior was closed, the morning light made for a great farewell to the west coast. Turning inland into County Offaly, we tracked down Charleville Castle—a dramatic 18th-century Gothic Revival mansion—and while the house itself wasn’t open, we wandered the ancient oak woods around it to find the legendary King Oak, an enormous, gnarled pedunculate oak estimated to be between 400 and 800 years old. Pushing east into County Meath brought us to Trim Castle on the River Boyne, the sprawling 12th-century stronghold of Hugh de Lacy (and famous to moviegoers as the filming backdrop for 'Braveheart'). Pressed for time before our afternoon booking, we walked the perimeter of its massive twenty-sided keep and curtain walls before heading to our final landmark of the trip: Newgrange. Built around 3200 BC—making it older than both Stonehenge and the Great Pyramids of Giza—this vast quartz-faced mound covers an engineered stone passage and cruciform chamber aligned so precisely that a roof-box above the entrance channels a beam of sunlight down the corridor on the winter solstice. Standing inside a monument built five millennia before the medieval castles we had spent all week chasing felt like the ultimate full-circle ending. From the Boyne Valley, we drove the final stretch back to Dublin, shared a last supper in Ireland, and checked into our airport hotel."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-21",
+    "place": "Dublin to Halifax",
+    "title": "Across the Atlantic again",
+    "lead": "An early continental breakfast, the bustle of Dublin Airport’s departure halls, a tarmac delay, and a quiet seven-and-a-half-hour flight west to let twelve days of memories settle.",
+    "fieldNote": "Return Crossing · Dublin (DUB) to Halifax (YHZ) flying west against the prevailing upper-level winds, stretching the transatlantic flight time to 7.5 hours.",
+    "entries": [
+      [
+        "Departing Ireland",
+        "Our alarms went off early for a final continental breakfast at the hotel before boarding the shuttle bus to Dublin Airport. The international departures terminal was vast and humming with morning travellers. Once we scanned our boarding passes and settled into our seats on the aircraft, the captain came on the intercom to announce a ground delay of at least half an hour before pushback. Not the fastest start, but I had a good book in my carry-on to pass the wait."
+      ],
+      [
+        "7.5 hour plane ride",
+        "Flying westbound against the headwinds stretched the crossing to seven and a half hours, which turned out to be a gift in disguise. Between queuing up a podcast, reading chapters of my book, and eating the cabin meals, I finally had uninterrupted stillness. After ten straight days of navigating roundabouts, climbing spiral stone stairs, and moving from town to town, there was time at thirty-five thousand feet to simply sit with the realization that we had actually pulled this trip off."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-22",
+    "place": "Halifax to Winnipeg",
+    "title": "Almost home",
+    "lead": "One last restful stopover with Mom and Dad in Nova Scotia before boarding the final flight west over northern Ontario toward the Manitoba prairies.",
+    "fieldNote": "Final Leg · Halifax Stanfield to Winnipeg Richardson over Quebec and Northern Ontario (passing high above Timmins), followed by the two-hour drive west on the Trans-Canada back to Brandon.",
+    "entries": [
+      [
+        "Almost home",
+        "After a relaxing final evening and morning decompressing with my parents in Halifax, I headed back to the airport for the domestic leg home to Manitoba. Check-in and security went without a hitch. Halfway through the flight west, as we cruised over the boreal forests and lakes of northern Ontario, our flight path took us right past Timmins—giving me the chance to look down from the window and think of Teena. Soon the trees gave way to the familiar grid of prairie farmland around Winnipeg. After thirteen chapters and thousands of miles, home was right ahead."
+      ]
+    ]
+  }
+]
+</script>
+
   <script>
     /* =========================================================================
      * 📍 IRELAND MEDIA REPOSITORY (PANORAMAS, VIDEOS & PHOTOS)
      * ========================================================================= */
+
     const MEDIA = [
       // -----------------------------------------------------------------------
       // 360° PANORAMAS
@@ -1433,6 +1985,8 @@
     (() => {
       "use strict";
 
+      const JOURNAL = JSON.parse(document.getElementById("journalData").textContent);
+
       const dialog = document.getElementById("mediaDialog");
       const content = document.getElementById("modalContent");
       const title = document.getElementById("dialogTitle");
@@ -1444,6 +1998,150 @@
       };
 
       let pannellumViewer = null;
+      let returnFocusElement = null;
+      let slideshowPhotos = [];
+      let slideshowIndex = -1;
+      let slideshowTimer = null;
+      let gridItems = { photo: [], panorama: [], video: [] };
+      let switchTab;
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const motionSafeBehavior = prefersReducedMotion.matches ? "instant" : "smooth";
+
+      function normalizeText(value) {
+        return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      }
+
+      function photoPlace(item) {
+        const details = normalizeText(`${item.title || ""} ${item.caption || ""}`);
+        const placeRules = [
+          ["Kerry", /kerry|dingle|killarney|slea head|cahergal|cahersiveen|ballycarbery|coumeenoole|valentia|staigue|blasket|skellig|torc waterfall|ladies view|conor pass|cronins|cronin|rosbeigh|muckross|ross castle/],
+          ["Cork", /cork|blarney/], ["Tipperary", /tipperary|cashel|cahir/], ["Kilkenny", /kilkenny/],
+          ["Limerick", /limerick|askeaton|franciscan friary|carrigafoyle/],
+          ["Clare", /bunratty|moher|doolin|doonagore|clare/], ["Galway", /galway|kinvara|dunguaire/],
+          ["Wicklow", /wicklow|glendalough/], ["Meath", /meath|trim castle|newgrange|boyne|knowth/],
+          ["Offaly", /offaly|charleville|king oak/], ["Dublin", /dublin|kilmainham|st catherine|st michael/]
+        ];
+        const match = placeRules.find(([, pattern]) => pattern.test(details));
+        if (match) return match[0];
+        if (item.theme === "Transit") return "Transit";
+        return item.theme && item.theme !== "Camera" ? item.theme : "Ireland";
+      }
+
+      function installSearch(inputId, grid, type, locationId) {
+        const input = document.getElementById(inputId);
+        const locationSelect = locationId ? document.getElementById(locationId) : null;
+        const results = document.querySelector(`[data-results-for="${type}"]`);
+        const cards = [...grid.querySelectorAll(".card")];
+
+        if (locationSelect) {
+          const locations = [...new Set(MEDIA.filter(item => item.type === type).map(photoPlace))].sort((a, b) => a.localeCompare(b));
+          for (const location of locations) {
+            const option = make("option", "", location);
+            option.value = location;
+            locationSelect.append(option);
+          }
+        }
+
+        function filter() {
+          const query = normalizeText(input.value.trim());
+          const location = locationSelect?.value || "";
+          let visibleCount = 0;
+
+          for (const card of cards) {
+            const searchable = normalizeText(card.dataset.search);
+            const matches = (!query || searchable.includes(query)) && (!location || card.dataset.place === location);
+            card.hidden = !matches;
+            if (matches) visibleCount++;
+          }
+
+          let emptyState = grid.querySelector(".empty");
+          if (visibleCount === 0) {
+            if (!emptyState) {
+              emptyState = make("p", "empty", "No matches yet. Try another search or place.");
+              emptyState.setAttribute("role", "status");
+              grid.append(emptyState);
+            }
+          } else {
+            emptyState?.remove();
+          }
+
+          if (results) results.textContent = `${visibleCount} ${type === "photo" ? visibleCount === 1 ? "photo" : "photos" : type === "video" ? visibleCount === 1 ? "film" : "films" : visibleCount === 1 ? "panorama" : "panoramas"}`;
+          return visibleCount;
+        }
+
+        input.addEventListener("input", filter);
+        locationSelect?.addEventListener("change", filter);
+        filter();
+      }
+      function syncSlideshowControls() {
+        const playing = Boolean(slideshowTimer);
+        const button = document.getElementById("pauseSlideshow");
+        if (!button) return;
+        button.textContent = playing ? "Ⅱ" : "▶";
+        button.setAttribute("aria-label", playing ? "Pause slideshow" : "Resume slideshow");
+      }
+
+      function stopSlideshow() {
+        if (slideshowTimer !== null) window.clearInterval(slideshowTimer);
+        slideshowTimer = null;
+        slideshowPhotos = [];
+        slideshowIndex = -1;
+        document.getElementById("slideshowControls").hidden = true;
+        document.getElementById("slideCounter").textContent = "";
+        syncSlideshowControls();
+      }
+
+      function showSlideshowPhoto(index) {
+        if (slideshowPhotos.length === 0) return;
+        const activeDialog = dialog.open;
+        const previousIndex = slideshowIndex;
+        slideshowIndex = (index + slideshowPhotos.length) % slideshowPhotos.length;
+        const item = slideshowPhotos[slideshowIndex];
+        if (!activeDialog) returnFocusElement = document.activeElement;
+        if (activeDialog) {
+          if (prefersReducedMotion.matches) content.classList.remove("slideshow-changing");
+          else {
+            content.classList.add("slideshow-changing");
+            window.setTimeout(() => content.classList.remove("slideshow-changing"), 230);
+          }
+          content.replaceChildren();
+        }
+        title.textContent = item.title || "Ireland Memory";
+        const image = make("img", "modal-photo");
+        image.alt = `${item.title || "Ireland memory"}. ${item.caption || ""}`;
+        image.loading = "eager";
+        image.decoding = "async";
+        image.onerror = () => {
+          const driveId = extractDriveId(item.src);
+          if (driveId) {
+            image.onerror = null;
+            image.src = `https://drive.google.com/thumbnail?id=${driveId}&sz=w2048`;
+          }
+        };
+        image.addEventListener("load", () => {
+          if (slideshowIndex === index) document.getElementById("slideCounter").textContent = `${slideshowIndex + 1} / ${slideshowPhotos.length}`;
+        }, { once: true });
+        image.src = resolveHighResMedia(item.src);
+        content.append(image);
+        if (!activeDialog && previousIndex !== slideshowIndex) {
+          try { document.getElementById("closeDialog").focus({ preventScroll: true }); } catch (error) {}
+        }
+        if (!dialog.open) dialog.showModal();
+        setupPhotoPanZoom(image, content);
+        const counter = document.getElementById("slideCounter");
+        counter.textContent = `${slideshowIndex + 1} / ${slideshowPhotos.length}`;
+        document.getElementById("slideshowControls").hidden = false;
+      }
+
+      function startSlideshow(photos) {
+        if (!photos.length) return;
+        stopSlideshow();
+        slideshowPhotos = [...photos];
+        slideshowIndex = -1;
+        showSlideshowPhoto(0);
+        slideshowTimer = window.setInterval(() => showSlideshowPhoto(slideshowIndex + 1), 6000);
+        syncSlideshowControls();
+      }
 
       function extractDriveId(url) {
         if (!url) return null;
@@ -1457,15 +2155,19 @@
         return match ? match[1] : null;
       }
 
-      // HIGH RES DIRECT CDN RESOLUTION
+      // Keep original full-resolution delivery for standard photographs.
       function resolveHighResMedia(raw) {
         if (!raw) return "";
         const id = extractDriveId(raw);
-        if (id) {
-          // =s0 forces Google to output the full original resolution without downsampling
-          return `https://lh3.googleusercontent.com/d/${id}=s0`;
-        }
-        return raw;
+        if (!id) return raw;
+
+        return `https://lh3.googleusercontent.com/d/${id}=s0`;
+      }
+
+      function resolvePanoramaMedia(raw) {
+        if (!raw) return "";
+        const id = extractDriveId(raw);
+        return id ? `https://lh3.googleusercontent.com/d/${id}=w4000-h2000` : raw;
       }
 
       // THUMBNAILS FOR CARDS
@@ -1613,12 +2315,18 @@
         // On-screen Zoom Toolbar
         const zoomBar = make("div", "photo-ctrl-overlay");
         const inBtn = make("button", "ctrl-btn", "➕");
+        inBtn.type = "button";
+        inBtn.setAttribute("aria-label", "Zoom in");
         inBtn.title = "Zoom In";
         inBtn.onclick = (e) => { e.stopPropagation(); zoom(1.3); };
         const outBtn = make("button", "ctrl-btn", "➖");
+        outBtn.type = "button";
+        outBtn.setAttribute("aria-label", "Zoom out");
         outBtn.title = "Zoom Out";
         outBtn.onclick = (e) => { e.stopPropagation(); zoom(0.75); };
         const resetBtn = make("button", "ctrl-btn", "↺");
+        resetBtn.type = "button";
+        resetBtn.setAttribute("aria-label", "Reset photo zoom");
         resetBtn.title = "Reset Zoom";
         resetBtn.onclick = (e) => { e.stopPropagation(); reset(); };
 
@@ -1716,154 +2424,365 @@
        * 🖼 MEDIA DISPLAY (PHOTOS & PANORAMAS)
        * ======================================================================= */
       function openMedia(item) {
+        stopSlideshow();
+        returnFocusElement = document.activeElement;
         title.textContent = item.title || "Ireland Memory";
         content.replaceChildren();
 
-        // 1. PHOTO
         if (item.type === "photo") {
-          const img = make("img", "modal-photo");
+          const image = make("img", "modal-photo");
           const driveId = extractDriveId(item.src);
-          img.src = resolveHighResMedia(item.src);
-          img.alt = item.title || "";
-
-          // Fallback if raw CDN fails on cellular mobile data
+          image.alt = item.title || "";
           if (driveId) {
-            img.onerror = () => {
-              img.onerror = null;
-              img.src = `https://drive.google.com/thumbnail?id=${driveId}&sz=w2048`;
+            image.onerror = () => {
+              image.onerror = null;
+              image.src = `https://drive.google.com/thumbnail?id=${driveId}&sz=w2048`;
             };
           }
-
-          content.append(img);
+          content.append(image);
+          image.src = resolveHighResMedia(item.src);
           dialog.showModal();
-          setupPhotoPanZoom(img, content);
-        }
-
-        // 2. 360 PANORAMA (Full Resolution)
-        if (item.type === "panorama") {
+          setupPhotoPanZoom(image, content);
+        } else if (item.type === "panorama") {
           const panoBox = make("div", "modal-panorama");
           panoBox.id = "activePannellum";
           content.append(panoBox);
 
-          const ctrlBox = make("div", "pano-ctrl-overlay");
-          const fsBtn = make("button", "ctrl-btn", "⛶ Fullscreen");
-          fsBtn.onclick = toggleFullscreen;
-          ctrlBox.append(fsBtn);
+          const status = make("p", "panorama-status", "Loading the high-resolution 360° view…");
+          status.setAttribute("role", "status");
+          status.setAttribute("aria-live", "polite");
+          content.append(status);
 
-          const gyroBtn = make("button", "ctrl-btn", "📱 Gyroscope");
-          gyroBtn.onclick = () => {
-            if (pannellumViewer) {
-              try {
-                pannellumViewer.startOrientation();
-              } catch (e) {
-                alert("Motion sensors not supported or require permissions.");
-              }
+          const controls = make("div", "pano-ctrl-overlay");
+          const fullscreen = make("button", "ctrl-btn", "⛶ Fullscreen");
+          fullscreen.type = "button";
+          fullscreen.setAttribute("aria-label", "View panorama fullscreen");
+          fullscreen.addEventListener("click", toggleFullscreen);
+          const gyro = make("button", "ctrl-btn", "📱 Gyroscope");
+          gyro.type = "button";
+          gyro.setAttribute("aria-label", "Look around using the device gyroscope");
+          gyro.addEventListener("click", () => {
+            try {
+              if (pannellumViewer) pannellumViewer.startOrientation();
+            } catch (error) {
+              alert("Motion sensors not supported or require permissions.");
             }
-          };
-          ctrlBox.append(gyroBtn);
-          content.append(ctrlBox);
-
+          });
+          controls.append(fullscreen, gyro);
+          content.append(controls);
           dialog.showModal();
 
           try {
             pannellumViewer = pannellum.viewer("activePannellum", {
               type: "equirectangular",
-              panorama: resolveHighResMedia(item.panoramaSrc),
+              panorama: resolvePanoramaMedia(item.panoramaSrc),
               autoLoad: true,
               autoRotate: -1.2,
+              crossOrigin: "anonymous",
               showControls: true,
               showFullscreenCtrl: false,
               mouseZoom: true
             });
-          } catch (e) {
-            content.replaceChildren(make("div", "empty", "Could not load 360 panorama."));
+
+            pannellumViewer.on("load", () => {
+              status.hidden = true;
+            });
+            pannellumViewer.on("error", message => {
+              status.hidden = false;
+              status.textContent = `This 360° panorama could not be loaded. ${String(message || "Check your connection and Google Drive sharing permissions.")}`;
+            });
+            // A cached panorama can finish loading before its event listener attaches.
+            if (pannellumViewer.isLoaded()) status.hidden = true;
+          } catch (error) {
+            status.hidden = false;
+            status.textContent = `Could not open this 360° panorama. ${error?.message || "The panorama viewer could not start."}`;
           }
         }
       }
 
       function buildCard(item) {
         const card = make("div", "card");
+        card.dataset.search = normalizeText(`${item.title || ""} ${item.caption || ""} ${item.theme || ""} ${item.youtubeUrl || ""}`);
+        card.dataset.place = photoPlace(item);
+        gridItems[item.type].push(card);
 
-        // Videos act as direct link triggers to YouTube App / Site
         if (item.type === "video") {
           const link = make("a", "card-trigger");
           link.href = item.youtubeUrl;
           link.target = "_blank";
           link.rel = "noopener noreferrer";
-
           const thumbBox = make("div", "thumbnail-box");
           const thumbUrl = resolveThumb(item);
           if (thumbUrl) {
-            const img = make("img", "thumbnail");
-            img.src = thumbUrl;
-            img.loading = "lazy";
-            thumbBox.append(img);
+            const image = make("img", "thumbnail");
+            image.src = thumbUrl;
+            image.loading = "lazy";
+            image.alt = `Video thumbnail: ${item.title || "Ireland travel film"}`;
+            image.addEventListener("error", () => image.remove(), { once: true });
+            thumbBox.append(image);
           }
-
-          const playBadge = make("div", "play-badge");
-          playBadge.innerHTML = `<div class="play-icon">▶</div>`;
-          thumbBox.append(playBadge);
-
-          if (item.theme) thumbBox.append(make("span", "badge", item.theme));
-          link.append(thumbBox);
-
+          const badge = make("div", "play-badge");
+          badge.innerHTML = '<span class="play-icon" aria-hidden="true">▶</span>';
+          thumbBox.append(badge);
+          const day = item.title?.match(/Day\s+(\d+)/i)?.[1];
+          if (day) thumbBox.append(make("span", "badge", `Trip Day ${day}`));
           const body = make("div", "card-body");
           body.append(make("h3", "", item.title || "Untitled"));
           if (item.caption) body.append(make("p", "", item.caption));
-          body.append(make("span", "card-action", "Open in YouTube ↗"));
-
-          link.append(body);
+          body.append(make("span", "card-action", "Play travel film on YouTube ↗"));
+          link.append(thumbBox, body);
+          link.setAttribute("aria-label", `${item.title || "Ireland travel film"}; opens YouTube in a new tab`);
           card.append(link);
           return card;
         }
 
-        // Photos & Panoramas open in the in-page modal
-        const btn = make("button", "card-trigger");
-        const thumbBox = make("div", "thumbnail-box");
-        const thumbUrl = resolveThumb(item);
-
-        if (thumbUrl) {
-          const img = make("img", "thumbnail");
-          img.src = thumbUrl;
-          img.loading = "lazy";
-          img.alt = item.title || "";
-          thumbBox.append(img);
+        const button = make("button", "card-trigger");
+        button.type = "button";
+        button.setAttribute("aria-label", `${item.type === "panorama" ? "Explore 360 degree panorama" : "Open full-resolution photograph"}: ${item.title || "Ireland memory"}`);
+        const thumbnailBox = make("div", "thumbnail-box");
+        const thumbnailUrl = resolveThumb(item);
+        if (thumbnailUrl) {
+          const image = make("img", "thumbnail");
+          image.src = thumbnailUrl;
+          image.loading = "lazy";
+          image.alt = item.title || "";
+          image.addEventListener("error", () => {
+            image.replaceWith(make("span", "placeholder", item.type === "panorama" ? "◎" : "☘"));
+          }, { once: true });
+          thumbnailBox.append(image);
         } else {
-          thumbBox.append(make("span", "placeholder", item.type === "panorama" ? "◎" : "☘"));
+          thumbnailBox.append(make("span", "placeholder", item.type === "panorama" ? "◎" : "☘"));
         }
-
-        if (item.theme) thumbBox.append(make("span", "badge", item.theme));
-        btn.append(thumbBox);
-
+        if (item.theme || item.type === "panorama") thumbnailBox.append(make("span", "badge", photoPlace(item)));
         const body = make("div", "card-body");
         body.append(make("h3", "", item.title || "Untitled"));
         if (item.caption) body.append(make("p", "", item.caption));
         body.append(make("span", "card-action", item.type === "panorama" ? "Explore 360° ↗" : "View Photo ↗"));
-
-        btn.append(body);
-        btn.onclick = () => openMedia(item);
-        card.append(btn);
-
+        button.append(thumbnailBox, body);
+        button.addEventListener("click", () => openMedia(item));
+        card.append(button);
         return card;
       }
 
+      let photoItems = [];
       for (const item of MEDIA) {
-        if (grids[item.type]) {
-          grids[item.type].append(buildCard(item));
-        }
+        if (item.type === "photo") photoItems.push(item);
+        if (grids[item.type]) grids[item.type].append(buildCard(item));
       }
 
-      // Tabs Logic
-      document.querySelectorAll(".tab").forEach(tab => {
-        tab.addEventListener("click", () => {
-          const target = tab.dataset.tab;
-          document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.tab === target)));
-          document.querySelectorAll(".tab-panel").forEach(p => p.hidden = p.id !== `panel-${target}`);
+      /* =======================================================================
+       * ✎ JOURNAL RENDERER, ROUTE SIDEBAR & LIVE SEARCH
+       * ======================================================================= */
+      const journalContainer = document.getElementById("journalDays");
+      const journalRoute = document.getElementById("journalRoute");
+      const journalJump = document.getElementById("journalJump");
+      const journalSearchInput = document.getElementById("search-journal");
+      const journalSearchCount = document.getElementById("journalSearchCount");
+      const journalNoResults = document.getElementById("journalNoResults");
+      const journalDateFormatter = new Intl.DateTimeFormat("en", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+
+      JOURNAL.forEach((day, index) => {
+        const chapterNum = String(index + 1).padStart(2, "0");
+        const section = make("section", "journal-day");
+        section.id = `journal-day-${day.date}`;
+        section.dataset.date = day.date;
+        section.setAttribute("aria-labelledby", `journal-title-${day.date}`);
+
+        const label = make("div", "journal-day-label");
+        label.append(make("span", "", `Day ${chapterNum} · ${day.place}`));
+        const time = make("time", "", journalDateFormatter.format(new Date(`${day.date}T12:00:00Z`)));
+        time.dateTime = day.date;
+        label.append(time);
+
+        const heading = make("h3", "", day.title);
+        heading.id = `journal-title-${day.date}`;
+        const lead = make("p", "journal-lead", day.lead);
+
+        section.append(label, heading, lead);
+
+        if (day.fieldNote) {
+          const note = make("aside", "journal-field-note");
+          note.append(make("strong", "", "Field Notes & Regional Context"), document.createTextNode(day.fieldNote));
+          section.append(note);
+        }
+
+        const entries = make("div", "journal-entries");
+        day.entries.forEach(([entryTitle, text]) => {
+          const entry = make("article", "journal-entry");
+          entry.dataset.search = normalizeText(`${entryTitle} ${text} ${day.place} ${day.title} ${day.date} ${day.fieldNote || ""}`);
+          entry.append(make("h4", "", entryTitle), make("p", "", text));
+          entries.append(entry);
         });
+        section.append(entries);
+        journalContainer.append(section);
+
+        if (journalRoute) {
+          const routeLink = make("a", "");
+          routeLink.href = `#journal-day-${day.date}`;
+          routeLink.dataset.day = day.date;
+          routeLink.append(make("b", "", chapterNum), make("span", "", `${day.date.slice(-2)} Sep · ${day.place}`));
+          journalRoute.append(routeLink);
+        }
+
+        if (journalJump) {
+          const option = make("option", "", `Day ${chapterNum} (${day.date.slice(-2)} Sep) · ${day.place}`);
+          option.value = `journal-day-${day.date}`;
+          journalJump.append(option);
+        }
       });
+
+      if (journalJump) {
+        journalJump.addEventListener("change", event => {
+          const target = document.getElementById(event.target.value);
+          if (target) target.scrollIntoView({ behavior: motionSafeBehavior });
+        });
+      }
+
+      if (journalSearchInput) {
+        const filterJournal = () => {
+          const query = normalizeText(journalSearchInput.value.trim());
+          let visibleEntries = 0;
+
+          for (const daySection of journalContainer.querySelectorAll(".journal-day")) {
+            let dayMatches = 0;
+            for (const entry of daySection.querySelectorAll(".journal-entry")) {
+              const matches = !query || entry.dataset.search.includes(query);
+              entry.hidden = !matches;
+              if (matches) dayMatches++;
+            }
+            daySection.hidden = dayMatches === 0;
+            visibleEntries += dayMatches;
+          }
+
+          if (journalSearchCount) {
+            journalSearchCount.textContent = query
+              ? `${visibleEntries} matching ${visibleEntries === 1 ? "entry" : "entries"}`
+              : "47 journal moments across 13 chapters";
+          }
+          if (journalNoResults) journalNoResults.hidden = visibleEntries !== 0;
+        };
+
+        journalSearchInput.addEventListener("input", filterJournal);
+        filterJournal();
+      }
+
+      const printJournalBtn = document.getElementById("printJournal");
+      if (printJournalBtn) {
+        printJournalBtn.addEventListener("click", () => window.print());
+      }
+
+      installSearch("search-photos", grids.photo, "photo", "location-photos");
+      installSearch("search-panoramas", grids.panorama, "panorama", "location-panoramas");
+      installSearch("search-videos", grids.video, "video");
+
+      document.getElementById("playSlideshow").addEventListener("click", () => {
+        const photos = gridItems.photo.flatMap((card, index) => card.hidden ? [] : [photoItems[index]]);
+        if (photos.length) startSlideshow(photos);
+      });
+      document.getElementById("previousSlide").addEventListener("click", () => showSlideshowPhoto(slideshowIndex - 1));
+      document.getElementById("nextSlide").addEventListener("click", () => showSlideshowPhoto(slideshowIndex + 1));
+      document.getElementById("pauseSlideshow").addEventListener("click", () => {
+        if (slideshowTimer !== null) {
+          window.clearInterval(slideshowTimer);
+          slideshowTimer = null;
+        } else if (slideshowPhotos.length) {
+          slideshowTimer = window.setInterval(() => showSlideshowPhoto(slideshowIndex + 1), 6000);
+        }
+        syncSlideshowControls();
+      });
+
+      let touchStart = null;
+      content.addEventListener("touchstart", event => {
+        if (slideshowPhotos.length && event.touches.length === 1) {
+          touchStart = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+        }
+      }, { passive: true });
+      content.addEventListener("touchend", event => {
+        if (!slideshowPhotos.length || touchStart === null) return;
+        const deltaX = event.changedTouches[0].clientX - touchStart.x;
+        const deltaY = event.changedTouches[0].clientY - touchStart.y;
+        touchStart = null;
+        if (Math.abs(deltaX) > 55 && Math.abs(deltaX) > Math.abs(deltaY) * 1.3) showSlideshowPhoto(slideshowIndex + (deltaX < 0 ? 1 : -1));
+      }, { passive: true });
+
+      const slideshowButton = document.getElementById("playSlideshow");
+      const updateSlideshowAvailability = () => { slideshowButton.disabled = gridItems.photo.every(card => card.hidden); };
+      updateSlideshowAvailability();
+      document.getElementById("search-photos").addEventListener("input", updateSlideshowAvailability);
+      document.getElementById("location-photos").addEventListener("change", updateSlideshowAvailability);
+
+      switchTab = (target, moveFocus = false) => {
+        for (const tab of document.querySelectorAll(".tab")) {
+          const selected = tab.dataset.tab === target;
+          tab.setAttribute("aria-selected", String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+          if (selected && moveFocus) tab.focus();
+        }
+        for (const panel of document.querySelectorAll(".tab-panel")) panel.hidden = panel.id !== `panel-${target}`;
+      };
+      for (const tab of document.querySelectorAll(".tab")) {
+        tab.addEventListener("click", () => switchTab(tab.dataset.tab));
+        tab.addEventListener("keydown", event => {
+          const tabs = [...document.querySelectorAll(".tab")];
+          const index = tabs.indexOf(tab);
+          const next = event.key === "ArrowRight" ? (index + 1) % tabs.length
+            : event.key === "ArrowLeft" ? (index - 1 + tabs.length) % tabs.length
+              : event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : -1;
+          if (next >= 0) {
+            event.preventDefault();
+            switchTab(tabs[next].dataset.tab, true);
+          }
+        });
+      }
+
+      document.querySelectorAll(".brand").forEach(link => link.addEventListener("click", event => {
+        const target = link.getAttribute("href")?.slice(1);
+        if (target === "top") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, behavior: motionSafeBehavior });
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+        }
+      }));
+
+      const backToTopBtn = document.getElementById("backToTop");
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: motionSafeBehavior });
+        });
+      }
+
+      const progressBar = document.getElementById("readingProgress");
+      const daySections = [...journalContainer.querySelectorAll(".journal-day")];
+      let scrollPending = false;
+      window.addEventListener("scroll", () => {
+        if (scrollPending) return;
+        scrollPending = true;
+        window.requestAnimationFrame(() => {
+          const root = document.documentElement;
+          const progress = Math.min(100, Math.round(root.scrollTop / Math.max(1, root.scrollHeight - root.clientHeight) * 100));
+          progressBar.style.width = `${progress}%`;
+          progressBar.setAttribute("aria-valuenow", String(progress));
+          if (backToTopBtn) backToTopBtn.style.display = root.scrollTop > 500 ? "grid" : "none";
+
+          if (!document.getElementById("panel-journal").hidden && journalRoute) {
+            let activeDay = daySections[0];
+            for (const section of daySections) {
+              if (section.hidden) continue;
+              if (section.getBoundingClientRect().top <= 180) activeDay = section;
+            }
+            if (activeDay) {
+              for (const link of journalRoute.querySelectorAll("a")) {
+                link.classList.toggle("active", link.dataset.day === activeDay.dataset.date);
+              }
+            }
+          }
+          scrollPending = false;
+        });
+      }, { passive: true });
 
       // Dialog Close & Fullscreen Teardown
       async function closeMediaDialog() {
+        stopSlideshow();
         if (document.fullscreenElement || document.webkitFullscreenElement) {
           try {
             if (document.exitFullscreen) await document.exitFullscreen();
@@ -1875,6 +2794,10 @@
       }
 
       document.getElementById("closeDialog").onclick = () => closeMediaDialog();
+      dialog.addEventListener("cancel", event => {
+        event.preventDefault();
+        closeMediaDialog();
+      });
       dialog.addEventListener("click", e => {
         if (e.target === dialog) closeMediaDialog();
       });
@@ -1891,6 +2814,9 @@
         }
         content.replaceChildren();
         updateFullscreenUI();
+        const restoreFocusTo = returnFocusElement;
+        returnFocusElement = null;
+        if (restoreFocusTo?.isConnected) restoreFocusTo.focus({ preventScroll: true });
       });
     })();
   </script>
