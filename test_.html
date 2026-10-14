@@ -1,0 +1,2668 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09110e">
+  <meta name="description" content="A family travel journal, photographs, 360° views, and travel films from our September 2026 journey through Ireland.">
+  <title>Ireland, in the Margins | Our Ireland</title>
+
+  <!-- Pannellum 360° Library -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css" />
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #09110e;
+      --panel-dark: #10211a;
+      --card-bg: #142a21;
+      --card-border: #1e3d30;
+      --forest-accent: #2d664f;
+      --gold: #e5b869;
+      --text-main: #e6f1ec;
+      --text-muted: #8ea89d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button, a { font: inherit; cursor: pointer; text-decoration: none; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+    /* Header */
+    .hero {
+      position: relative;
+      display: flex;
+      min-height: min(720px, 88vh);
+      min-height: min(720px, 88svh);
+      align-items: center;
+      isolation: isolate;
+      padding: clamp(52px, 9vw, 104px) 24px;
+      background: linear-gradient(90deg, rgba(5, 16, 12, .94) 0%, rgba(5, 16, 12, .78) 41%, rgba(5, 16, 12, .2) 100%), linear-gradient(0deg, rgba(5, 16, 12, .48), transparent 48%), url("https://drive.google.com/thumbnail?id=1cRcOpcVIOa4xA6Kglhh7ylTzdy7am4R_&sz=w2000") center 46% / cover, linear-gradient(135deg, #061611 0%, #0d261e 100%);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .hero::after {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      border: 1px solid rgba(229, 184, 105, .12);
+      content: "";
+      pointer-events: none;
+    }
+
+    .wrap { width: 100%; max-width: 1120px; margin: auto; }
+    .brand { display: inline-block; font: bold 22px Georgia, serif; color: var(--gold); }
+    .hero-copy { max-width: 760px; margin-top: clamp(38px, 7vh, 78px); animation: arrive .8s both; }
+    .hero-copy .eyebrow { color: #e5c887; }
+    .hero-copy p { color: #e4ece5; }
+    .hero h1 { font-size: clamp(64px, 11vw, 132px); letter-spacing: -.065em; }
+    .hero-copy .hero-dates { display: block; margin-top: 22px; font-size: 13px; letter-spacing: .11em; text-transform: uppercase; }
+    @keyframes arrive { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 { font-family: Georgia, serif; line-height: 1.15; }
+    h1 em { display: block; margin-top: 12px; color: var(--gold); font-size: .57em; letter-spacing: -.035em; }
+    h1 { margin: 8px 0 12px; font-size: clamp(40px, 8vw, 84px); color: #fff; }
+    h2 { margin: 0 0 8px; font-size: clamp(24px, 3.5vw, 36px); color: #f0f7f3; }
+    h3 { margin: 0; font-size: 18px; }
+    body > footer { padding: 26px 20px; line-height: 1.9; }
+    body > footer a { color: var(--gold); text-underline-offset: 4px; }
+
+    .hero p {
+      max-width: 600px;
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+
+    .story-strip { padding: 19px 20px; border-bottom: 1px solid var(--card-border); background: linear-gradient(100deg, #10241b, #132a20 50%, #102018); }
+    .story-strip-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; width: 100%; max-width: 1120px; margin: 0 auto; }
+    .story-strip strong { color: #f0e3c6; font: 21px Georgia, serif; }
+    .story-strip span { color: var(--text-muted); font-size: 13px; }
+
+    main {
+      max-width: 1120px;
+      margin: auto;
+      padding: 32px 20px 80px;
+    }
+
+    #top, #archive, #journal, #afterword { scroll-margin-top: 24px; }
+    .archive-heading { padding-top: 4px; }
+    .archive-heading h2 { margin-top: 7px; }
+    .archive-count { margin-top: 5px; }
+
+    .muted { color: var(--text-muted); font-size: 15px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    #readingProgress { position: fixed; inset: 0 auto auto 0; z-index: 60; width: 0; height: 3px; background: var(--gold); pointer-events: none; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin: 26px 0;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      padding: 10px 22px;
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      background: var(--panel-dark);
+      color: var(--text-muted);
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab[aria-selected="true"] {
+      border-color: var(--gold);
+      background: var(--forest-accent);
+      color: #fff;
+    }
+
+    .tab:hover:not([aria-selected="true"]) { border-color: rgba(229, 184, 105, .55); color: var(--text-main); }
+
+    .tab-panel[hidden] { display: none; }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      background: var(--card-bg);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(229, 184, 105, 0.4);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .32);
+    }
+
+    .card-trigger {
+      display: block;
+      width: 100%;
+      min-height: 44px;
+      text-align: left;
+      background: transparent;
+      border: none;
+      color: inherit;
+    }
+
+    .thumbnail-box {
+      position: relative;
+      width: 100%;
+      height: clamp(190px, 20vw, 250px);
+      background: #08130e;
+      overflow: hidden;
+    }
+
+    .thumbnail {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .thumbnail {
+      transform: scale(1.03);
+    }
+
+    .play-badge {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
+      transition: background 0.2s;
+    }
+
+    .card:hover .play-badge {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .play-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(16, 33, 26, 0.85);
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-size: 22px;
+      padding-left: 3px;
+    }
+
+    .badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(9, 17, 14, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .placeholder {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      place-items: center;
+      background: linear-gradient(135deg, #10261e, #1c4535);
+      color: var(--gold);
+      font-size: 48px;
+    }
+
+    .card-body { padding: 16px; }
+    .card-body p { margin: 6px 0 0; color: var(--text-muted); font-size: 14px; }
+
+    .archive-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 20px 0 6px; }
+    .archive-tools input, .archive-tools select { min-height: 46px; min-width: 0; border: 1px solid var(--card-border); border-radius: 7px; padding: 10px 13px; background: var(--panel-dark); color: var(--text-main); }
+    .archive-tools input { flex: 1 1 240px; }
+    .archive-tools select { flex: 0 1 205px; }
+    .archive-tools input::placeholder { color: var(--text-muted); }
+    .archive-tools .muted { flex-basis: 100%; }
+    .tab-count { display: inline-grid; min-width: 23px; height: 23px; margin-left: 5px; place-items: center; border-radius: 20px; background: rgba(0, 0, 0, .18); font-size: 11px; }
+    .slideshow-button, .journal-print { min-height: 46px; border: 1px solid rgba(229, 184, 105, .65); border-radius: 7px; padding: 9px 16px; background: rgba(229, 184, 105, .1); color: var(--gold); font-weight: 750; transition: background .2s ease, transform .2s ease; }
+    .slideshow-button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .slideshow-button:hover, .journal-print:hover { transform: translateY(-1px); background: rgba(229, 184, 105, .18); }
+    .slideshow-button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .result-message { min-height: 1.5em; margin: 5px 0; color: var(--text-muted); font-size: 13px; }
+    .empty { grid-column: 1 / -1; padding: 28px 18px; border: 1px dashed var(--card-border); border-radius: 12px; color: var(--text-muted); text-align: center; }
+
+    .card-action {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Modal / Dialog */
+    dialog {
+      width: min(94vw, 1050px);
+      max-width: 94vw;
+      max-height: 94vh;
+      margin: auto;
+      padding: 0;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      background: var(--panel-dark);
+      color: var(--text-main);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.85);
+      overflow: hidden;
+    }
+
+    dialog::backdrop {
+      background: rgba(4, 10, 8, 0.85);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--card-border);
+      background: #0d1a15;
+    }
+
+    .slideshow-controls { display: flex; align-items: center; gap: 5px; }
+    .slideshow-controls[hidden] { display: none; }
+    .slide-counter { min-width: 54px; color: var(--text-muted); font-size: 12px; text-align: center; }
+    .modal-content.slideshow-changing .modal-photo { opacity: .55; transition: opacity .18s ease; }
+
+    .modal-header h3 {
+      font-size: 18px;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .modal-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .fullscreen-button,
+    .close-button {
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: #172d23;
+      color: var(--gold);
+      font-weight: bold;
+      font-size: 13px;
+      border: 1px solid var(--card-border);
+      transition: background 0.2s, border-color 0.2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .fullscreen-button:hover,
+    .close-button:hover {
+      background: #224334;
+      border-color: var(--gold);
+    }
+
+    /* Edge-to-Edge Fullscreen Layout */
+    dialog.is-fullscreen {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      height: 100vh !important;
+      max-height: 100vh !important;
+      border: none !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #000 !important;
+      inset: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    dialog.is-fullscreen .modal-header {
+      background: rgba(13, 26, 21, 0.95);
+      border-bottom: 1px solid var(--card-border);
+      flex: 0 0 auto;
+    }
+
+    dialog.is-fullscreen .modal-content {
+      flex: 1 1 auto;
+      height: calc(100vh - 54px);
+      max-height: calc(100vh - 54px);
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    dialog.is-fullscreen .modal-photo {
+      max-height: calc(100vh - 58px);
+      max-width: 100vw;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    dialog.is-fullscreen .modal-panorama {
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
+    }
+
+    .modal-content {
+      position: relative;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+      width: 100%;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .modal-photo {
+      display: block;
+      max-width: 100%;
+      max-height: calc(88vh - 70px);
+      object-fit: contain;
+      margin: auto;
+      user-select: none;
+      -webkit-user-drag: none;
+      transform-origin: center center;
+      transition: transform 0.05s ease-out;
+      cursor: default;
+    }
+    #mediaDialog[open] .modal-photo { animation: photo-arrive .22s ease both; }
+    @keyframes photo-arrive { from { opacity: .45; } to { opacity: 1; } }
+
+    .modal-panorama {
+      width: 100%;
+      height: min(75vh, 640px);
+    }
+
+    .pano-ctrl-overlay,
+    .photo-ctrl-overlay {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 100;
+      display: flex;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      background: rgba(13, 26, 21, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      cursor: pointer;
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(23, 45, 35, 0.95);
+      border-color: var(--gold);
+    }
+
+    footer {
+      padding: 32px 20px;
+      border-top: 1px solid var(--card-border);
+      background: #060c0a;
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* An accessible, Ireland-themed version of the original print-first travel journal. */
+    .journal-intro { max-width: 810px; margin: 34px 0 54px; }
+    .journal-intro h2 { margin: 12px 0; font-size: clamp(34px, 5vw, 57px); }
+    .journal-intro p { margin-top: 10px; color: var(--text-muted); font-size: 15px; }
+    .journal-intro .journal-meta { margin-top: 16px; color: var(--gold); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .journal-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); align-items: start; gap: clamp(26px, 5vw, 68px); margin-top: 38px; }
+    .journal-sidebar { position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; padding: 21px 17px; border: 1px solid var(--card-border); border-radius: 12px; background: linear-gradient(145deg, #10211a, #0d1914); }
+    .journal-sidebar .eyebrow { color: var(--gold); }
+    .journal-sidebar h3 { margin: 8px 0 14px; color: #f0f7f3; font: 29px Georgia, serif; }
+    .journal-sidebar input, .journal-jump { width: 100%; min-height: 44px; margin-bottom: 10px; border: 1px solid var(--card-border); border-radius: 6px; padding: 10px; color: var(--text-main); background: var(--bg-dark); font: inherit; }
+    .journal-sidebar input::placeholder { color: var(--text-muted); }
+    .journal-search-results { min-height: 1.45em; margin: -5px 0 10px; color: var(--text-muted); font-size: 11px; }
+    .journal-route { display: grid; gap: 3px; }
+    .journal-route a { display: flex; gap: 9px; padding: 9px 7px; border-left: 2px solid transparent; color: var(--text-muted); font-size: 11px; line-height: 1.4; }
+    .journal-route a:hover, .journal-route a.active { border-color: var(--gold); color: var(--text-main); background: rgba(229, 184, 105, .06); }
+    .journal-route b { flex: 0 0 23px; color: var(--gold); font: italic 16px Georgia, serif; }
+    .journal-mobile-controls { display: none; }
+    .journal-content { min-width: 0; }
+    .journal-day { scroll-margin-top: 28px; padding: 0 0 54px; animation: arrive .42s both; }
+    .journal-day[hidden], .journal-entry[hidden] { display: none !important; }
+    .journal-day > h3 { margin: 9px 0 11px; color: #f2f5ef; font: 38px/1.15 Georgia, serif; }
+    .journal-day > .journal-lead { margin: 0 0 21px; color: var(--text-muted); font-size: 14px; }
+    .journal-entries { overflow: hidden; border: 1px solid var(--card-border); border-radius: 11px; background: linear-gradient(145deg, rgba(20, 42, 33, .85), rgba(12, 25, 19, .85)); }
+    .journal-entry { padding: 18px 21px; }
+    .journal-entry + .journal-entry { border-top: 1px solid rgba(40, 66, 52, .75); }
+    .journal-entry h4 { margin-bottom: 5px; color: #f1e4c7; font: 19px Georgia, serif; }
+    .journal-entry p { color: #c3d1c9; font-size: 14px; }
+    .journal-tab-intro { max-width: 760px; margin: 0 0 25px; color: var(--text-muted); }
+    .journal-tab-intro strong { color: #f1e4c7; font-family: Georgia, serif; font-size: 19px; font-weight: 400; }
+    .journal-day { position: relative; padding-left: 21px; }
+    .journal-day::before { position: absolute; top: 3px; bottom: 60px; left: 0; width: 3px; border-radius: 4px; background: linear-gradient(var(--gold), rgba(229, 184, 105, .12)); content: ""; }
+    .journal-day-label { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 11px; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .journal-day-label time { color: var(--text-muted); font-weight: 600; letter-spacing: .08em; }
+    .journal-day > h3 { margin: 8px 0 9px; color: #f2f5ef; font: 38px/1.15 Georgia, serif; }
+    .journal-day > .journal-lead { margin: 0 0 17px; color: var(--text-muted); font-size: 14px; }
+    .journal-entries { overflow: hidden; border: 1px solid var(--card-border); border-radius: 11px; background: linear-gradient(145deg, rgba(20, 42, 33, .85), rgba(12, 25, 19, .85)); }
+    .journal-entry { position: relative; padding: 17px 21px 17px 48px; }
+    .journal-entry::before { position: absolute; top: 20px; left: 20px; color: var(--gold); content: "✳"; font-size: 15px; }
+    .journal-entry:nth-child(3n + 2)::before { content: "☘"; }
+    .journal-entry:nth-child(3n)::before { content: "✦"; }
+    .journal-entry h4 { margin-bottom: 5px; color: #f1e4c7; font: 19px Georgia, serif; }
+    .journal-entry p { color: #c3d1c9; font-size: 14px; }
+    #journalNoResults { margin: 25px 0; padding: 20px; border: 1px dashed var(--card-border); border-radius: 10px; color: var(--text-muted); text-align: center; }
+    .afterword { position: relative; overflow: hidden; border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); background: radial-gradient(ellipse at 85% 45%, rgba(35, 79, 56, .4), transparent 45%), linear-gradient(135deg, #0b1912, #13251a); }
+    .afterword-inner { max-width: 910px; margin: 0 auto; padding: clamp(48px, 8vw, 94px) 22px; }
+    .afterword h2 { margin: 10px 0 20px; font-size: clamp(35px, 5.5vw, 61px); }
+    .afterword p { margin: 0 0 15px; color: #c4d1c7; font-size: 15px; }
+    .afterword .signature { margin: 23px 0 0; color: var(--gold); font: italic 28px Georgia, serif; }
+    .journal-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 19px; }
+    .journal-view-archive { min-height: 44px; border: 1px solid var(--card-border); border-radius: 6px; padding: 9px 14px; color: var(--gold); background: var(--panel-dark); font-size: 13px; font-weight: 700; }
+    #backToTop { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); z-index: 30; display: none; width: 48px; height: 48px; border: 1px solid var(--gold); border-radius: 50%; background: rgba(9, 17, 14, .95); color: var(--gold); font-size: 20px; box-shadow: 0 5px 22px rgba(0,0,0,.35); }
+
+    dialog::backdrop { transition: background .22s ease; }
+    .tab-panel:not([hidden]) { animation: tab-arrive .22s ease both; }
+    @keyframes tab-arrive { from { opacity: .6; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+    #mediaDialog[open] { animation: modal-arrive .22s ease both; }
+    @keyframes modal-arrive { from { opacity: 0; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .fullscreen-button, .close-button, .ctrl-btn, #backToTop { min-height: 44px; }
+
+    @media (min-width: 1500px) {
+      .hero { min-height: min(820px, 90svh); }
+      main { max-width: 1320px; }
+    }
+
+    @media (max-width: 800px) {
+      .journal-layout { grid-template-columns: minmax(0, 1fr); gap: 19px; }
+      .journal-sidebar { position: static; max-height: none; padding: 17px; }
+      .journal-sidebar h3 { font-size: 26px; }
+      .journal-route { display: none; }
+      .journal-mobile-controls { display: block; }
+    }
+
+    @media (max-width: 650px) {
+      .hero { min-height: min(690px, 84vh); min-height: min(690px, 84svh); padding-right: 20px; padding-left: 20px; background-position: center, center, 60% center, center; }
+      .hero-copy { margin-top: 26px; }
+      .hero h1 { font-size: clamp(57px, 14vw, 87px); }
+      main { padding: 27px 16px 57px; }
+      .story-strip { padding-right: 16px; padding-left: 16px; }
+      .story-strip strong { font-size: 18px; }
+      .tabs { gap: 8px; margin: 20px -2px; }
+      .tab { min-height: 46px; padding: 9px 15px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+      .thumbnail-box { height: auto; aspect-ratio: 1.18; }
+      .card { border-radius: 10px; }
+      .card-body { padding: 11px; }
+      .card-body h3 { font-size: 15px; }
+      .card-body p { font-size: 12px; }
+      .card-action { margin-top: 9px; font-size: 12px; }
+      .badge { top: 6px; right: 6px; font-size: 9px; }
+      .archive-tools { gap: 9px; }
+      .archive-tools select { flex: 1 1 145px; }
+      .slideshow-button { flex: 1 1 auto; }
+      .journal-intro { margin-bottom: 34px; }
+      .journal-sidebar { border-radius: 9px; }
+      .journal-day { padding-bottom: 39px; }
+      .journal-day > h3 { font-size: 31px; }
+      .journal-entry { padding: 15px; }
+      dialog { max-height: 94vh; max-height: 94dvh; border-radius: 12px; }
+      .modal-panorama { height: 60vh; }
+      dialog {
+        width: 96vw;
+        max-width: 96vw;
+        max-height: 94vh;
+      }
+      .modal-header { align-items: flex-start; gap: 8px; padding: 10px; }
+      .modal-header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+      .modal-header h3 {
+        font-size: 15px;
+      }
+      .fullscreen-button,
+      .close-button {
+        min-height: 44px;
+        padding: 7px 10px;
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .thumbnail-box { aspect-ratio: 1.45; }
+      .hero-actions { align-items: stretch; flex-direction: column; }
+    }
+    @media (max-width: 350px) { .grid { grid-template-columns: 1fr; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+
+    @media print {
+      body { color: #15271e; background: #fff; }
+      .hero { min-height: 0; padding: 24px; background: #123b2b !important; print-color-adjust: exact; }
+      .story-strip, #archive, .journal-sidebar, #backToTop, dialog, footer, .journal-print { display: none !important; }
+      .journal-layout { display: block; margin-top: 0; }
+      .journal-day > h3, .journal-entry h4, .journal-intro h2, .afterword h2 { color: #172a20 !important; }
+      .journal-intro, .journal-day { margin-bottom: 16px; padding-bottom: 14px; }
+      .journal-intro p, .journal-entry p, .journal-day > p, .afterword p { color: #283a30 !important; }
+      .journal-entries, .journal-entry { border-color: #d5dbd2; background: #fff; }
+      .afterword { border: 0; background: #fff; }
+      .afterword .signature { color: #385443; }
+      main { max-width: none; padding: 20px 0; }
+      .tab-panel[hidden] { display: none !important; }
+      .journal-day[hidden], .journal-entry[hidden] { display: block !important; }
+      .journal-entry, .card { break-inside: avoid; }
+      .journal-entry p, .journal-day > .journal-lead { color: #283a30; }
+      .afterword p { color: #283a30; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="readingProgress" role="progressbar" aria-label="Page reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+  <header class="hero">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="Our Ireland, back to the beginning">☘ Our Ireland</a>
+      <div class="hero-copy">
+        <div class="eyebrow">A personal travel journal · September 2026</div>
+        <h1>Ireland <em>in the margins.</em></h1>
+        <p>Castles and coastlines, a few wrong turns, good meals, old stones, family time, and all the little things worth remembering along the way.</p>
+        <span class="hero-dates">Brent Bertram · 10–22 September 2026</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="story-strip" aria-label="About the journey">
+    <div class="story-strip-inner wrap"><strong>Not a guidebook. A trip worth keeping.</strong><span>13 dated chapters · 47 journal moments · 132 memories · one very good road trip</span></div>
+  </div>
+
+  <main>
+    <section id="archive" aria-labelledby="archiveTitle">
+      <div class="archive-heading"><div class="eyebrow">The photographs, places &amp; films</div><h2 id="archiveTitle">Memories from the journey</h2><p class="muted archive-count">Explore <span id="archiveCounts">89 photographs · 29 immersive 360° views · 14 travel films</span>.</p></div>
+
+      <div class="tabs" role="tablist" aria-label="Media types" aria-orientation="horizontal">
+        <button class="tab" id="tab-panoramas" type="button" role="tab" aria-controls="panel-panoramas" aria-selected="false" tabindex="-1" data-tab="panoramas">◎ 360° Panoramas <span class="tab-count" aria-hidden="true">29</span></button>
+        <button class="tab" id="tab-photos" type="button" role="tab" aria-controls="panel-photos" aria-selected="true" tabindex="0" data-tab="photos">📷 Photos <span class="tab-count" aria-hidden="true">89</span></button>
+        <button class="tab" id="tab-videos" type="button" role="tab" aria-controls="panel-videos" aria-selected="false" tabindex="-1" data-tab="videos">▶ Videos <span class="tab-count" aria-hidden="true">14</span></button>
+        <button class="tab" id="tab-journal" type="button" role="tab" aria-controls="panel-journal" aria-selected="false" tabindex="-1" data-tab="journal">✎ Journal <span class="tab-count" aria-hidden="true">13</span></button>
+      </div>
+
+    <!-- 360 PANORAMAS -->
+      <section class="tab-panel" id="panel-panoramas" role="tabpanel" aria-labelledby="tab-panoramas" tabindex="0" hidden>
+      <h2>360° Spherical Views</h2>
+      <p class="muted">Drag to look around. On mobile, tap Gyroscope to look around using your device motion.</p>
+        <div class="archive-tools" data-tools-for="panorama"><label class="sr-only" for="search-panoramas">Search panoramas</label><input id="search-panoramas" type="search" placeholder="Search panoramas or places…" autocomplete="off"><label class="sr-only" for="location-panoramas">Filter panoramas by place</label><select id="location-panoramas"><option value="">Every place</option></select><span class="muted" aria-live="polite" data-results-for="panorama"></span></div>
+      <div class="grid" id="panoramaGrid"></div>
+    </section>
+
+    <!-- PHOTOS -->
+      <section class="tab-panel" id="panel-photos" role="tabpanel" aria-labelledby="tab-photos" tabindex="0">
+      <h2>Photo Gallery</h2>
+        <p class="muted">Find a place, browse the collection, or settle in with a slideshow. Tap any image to open the full-resolution viewer.</p>
+        <div class="archive-tools"><label class="sr-only" for="search-photos">Search photos and places</label><input id="search-photos" type="search" placeholder="Search photos, captions or places…" autocomplete="off"><label class="sr-only" for="location-photos">Filter photos by place</label><select id="location-photos"><option value="">Every place</option></select><button class="slideshow-button" id="playSlideshow" type="button" aria-label="Start photo slideshow">▶ <span>Play slideshow</span></button><span class="muted" aria-live="polite" data-results-for="photo"></span></div>
+      <div class="grid" id="photoGrid"></div>
+    </section>
+
+    <!-- VIDEOS -->
+      <section class="tab-panel" id="panel-videos" role="tabpanel" aria-labelledby="tab-videos" tabindex="0" hidden>
+      <h2>Travel Films</h2>
+      <p class="muted">Launches directly into YouTube app on mobile or new tab on desktop.</p>
+        <div class="archive-tools"><label class="sr-only" for="search-videos">Search travel films</label><input id="search-videos" type="search" placeholder="Search the daily travel films…" autocomplete="off"><span class="muted" aria-live="polite" data-results-for="video"></span></div>
+      <div class="grid" id="videoGrid"></div>
+    </section>
+      <section class="tab-panel" id="panel-journal" role="tabpanel" aria-labelledby="tab-journal" tabindex="0" hidden>
+        <h2>Thirteen days, kept in words</h2>
+        <p class="journal-tab-intro"><strong>The little details are the big story.</strong> Follow the trip one day at a time, from the first airport coffee to the flight home. No photo links—just the original journal entries, with a little extra sparkle around the edges.</p>
+        <div id="journalDays" aria-live="polite"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer>☘ Our Ireland · Captured &amp; Preserved · September 2026</footer>
+  <button id="backToTop" type="button" aria-label="Back to the beginning">↑</button>
+
+<!-- Modal Dialog -->
+  <dialog id="mediaDialog" aria-labelledby="dialogTitle">
+    <div class="modal-header">
+      <h3 id="dialogTitle"></h3>
+      <div class="modal-header-actions">
+        <div class="slideshow-controls" id="slideshowControls" hidden aria-label="Slideshow controls"><button class="fullscreen-button" id="previousSlide" type="button" aria-label="Previous slide">←</button><span class="slide-counter" id="slideCounter" aria-live="polite"></span><button class="fullscreen-button" id="nextSlide" type="button" aria-label="Next slide">→</button><button class="fullscreen-button" id="pauseSlideshow" type="button" aria-label="Pause slideshow">Ⅱ</button></div>
+        <button class="fullscreen-button" id="fullscreenDialog" type="button" aria-label="Toggle Fullscreen">⛶ Fullscreen</button>
+        <button class="close-button" id="closeDialog" type="button" aria-label="Close viewer (Escape)">Close ✕</button>
+      </div>
+    </div>
+    <div class="modal-content" id="modalContent"></div>
+  </dialog>
+
+<script id="journalData" type="application/json">
+[
+  {
+    "date": "2026-09-10",
+    "place": "Manitoba to Halifax",
+    "title": "The journey begins",
+    "lead": "Before Ireland came the first departure: a goodbye, a Winnipeg airport wait, and a flight east to see Mom and Dad in Halifax.",
+    "entries": [
+      [
+        "Leaving Brennan for Ireland",
+        "It started at Starbucks at 9:02 in the morning. I was already thinking about how to record the trip: speak into a journal, collect the pictures, and eventually turn the whole thing into a website. First, though, a ham-and-Swiss baguette and a very large refresher. Every adventure needs a starting point."
+      ],
+      [
+        "Winnipeg Airport",
+        "I hadn’t been through the Winnipeg airport in a while, so I had time to look around before boarding. The flight was on time. I also had an important question for later: would I find a Starbucks mug in Ireland?"
+      ],
+      [
+        "On the plane!",
+        "The Halifax flight was delayed about an hour because of weather there. Once aboard, I settled in for roughly three hours and put on an audiobook."
+      ],
+      [
+        "You know when",
+        "You know the plane has some history when there is still an ashtray on the bathroom door. That gave me a laugh."
+      ],
+      [
+        "Arrived in Halifax",
+        "Mom met me at the airport. The flight had gone well, the weather was warm, and I had a few good pictures out the window. We headed toward my parents’ place, with food and a visit ahead of us. Ireland was still another flight away, but the trip had begun."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-11",
+    "place": "Halifax & the overnight flight",
+    "title": "Family time, then across the Atlantic",
+    "lead": "A day with family in Halifax turned into an overnight journey. The little moments made the travel day feel like its own chapter.",
+    "entries": [
+      [
+        "Day 2",
+        "A comfortable night at my parents’ place, a bit of my Sierra book, and breakfast from Mom made for a good start. Ashley was coming by later, and we would see where the day took us."
+      ],
+      [
+        "Visit with Ashley",
+        "Ashley came over and we had an easy, wide-ranging chat. We made plans to go to her place for supper that evening."
+      ],
+      [
+        "Found this dog",
+        "Poppy and I got acquainted. She tried to nip me a few times and seemed particularly fond of a staring contest. I think we got along."
+      ],
+      [
+        "John Romero",
+        "A conversation with my sister wandered into games and an audiobook I had been listening to. I joined the Romero Games Discord and asked a question. Maybe something would come of it, maybe not. Either way, it was a fun side quest."
+      ],
+      [
+        "Halifax airport",
+        "At the airport, Dad realized his wallet was missing. Not the sort of complication anyone wants before a flight. We waited to board and kept moving forward."
+      ],
+      [
+        "Take off!",
+        "We made it aboard. This plane was bigger and nicer than the one from Winnipeg, and it was finally time to settle in for the Atlantic crossing."
+      ],
+      [
+        "Air Force one race",
+        "This short original entry carries a memorable title. I’ve kept it in the sequence without inventing details that are not clear from the note."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-12",
+    "place": "Dublin",
+    "title": "First steps on Irish soil",
+    "lead": "A little sleep, an approaching sunrise, and then the moment I had been waiting for: Ireland at last.",
+    "entries": [
+      [
+        "New day, same flight",
+        "Somewhere over the Atlantic the date changed. I managed a tiny nap in an uncomfortable, warm seat; the audiobook did most of the work of keeping me occupied."
+      ],
+      [
+        "Sunrise approaches!",
+        "The original entry is a title and a photograph. I’ve left the moment open for the image to tell its own story when the Resources folder is restored."
+      ],
+      [
+        "Landing time!",
+        "Even before landing, I was thinking about how to bring these entries to Bertram.ca. The idea of turning quick travel notes into a proper journal was already taking shape."
+      ],
+      [
+        "Landed",
+        "We were waiting for the people ahead of us to get off the plane. It was 17°C, with a warmer day expected. The next step would be our first actual step in Ireland."
+      ],
+      [
+        "Airport and taxi ride",
+        "We walked across the tarmac into a much larger airport than I expected. Our taxi driver was friendly and showed us a little of the city on the way in. He told us he was originally from Romania and had lived here for 23 years."
+      ],
+      [
+        "Walking around",
+        "We started exploring Dublin on foot, came across a choir singing, and grabbed a quick McDonald’s meal that did the job but not much more. We had a Viking tour booked for one o’clock and the Harcourt Hotel check-in later in the afternoon."
+      ],
+      [
+        "Viking Splash tour",
+        "The Viking Splash tour was a blast. Our guide brought great energy and told us he had appeared as an extra in Vikings and Game of Thrones. Dublin suddenly felt full of places we wanted to see: museums, churches, shops and whatever else we could fit into two nights."
+      ],
+      [
+        "Hotel room",
+        "The room was small, but we only needed somewhere to sleep. A wedding was going on, and the music was loud but decent. The lift briefly got stuck with us inside; fortunately, an employee was there and managed to open the doors. A memorable first check-in."
+      ],
+      [
+        "Supper",
+        "At Porters I had a stew that hit the spot. Dad was pleasantly surprised by his smash burger, while Mom’s fish and chips were only okay. I helped finish the second piece of fish. Dad headed back to the hotel and Mom and I kept exploring."
+      ],
+      [
+        "Night time walking",
+        "Mom and I walked about five kilometres, looking at churches, older buildings and an impressive number of pubs. I noticed the electric tram carrying people across Dublin. Back at the hotel, the room was warm, but thankfully there was a fan."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-13",
+    "place": "Dublin",
+    "title": "A city with layers",
+    "lead": "Viking stories, a church, museum collections and the stark rooms of Kilmainham Gaol made this the day Dublin’s history came into focus.",
+    "entries": [
+      [
+        "Viking and church tour",
+        "A guided tour connected Dublin to its Viking past. Afterwards we visited St. Catherine’s Church and saw its crypt. I took plenty of pictures and kept finding another reason to stop and look."
+      ],
+      [
+        "Museum of Archaeology and History",
+        "The museum had more to see than we could comfortably absorb. My feet were starting to complain, so we took a cab to the next stop."
+      ],
+      [
+        "Kilmainham Gaol",
+        "The restored prison was one of those places where a guided tour changes how you see the building. The old cells, accounts of executions and the stories tied to Irish history stayed with me. It was a strong reminder that the places on our itinerary were more than scenery."
+      ],
+      [
+        "Supper",
+        "The Patriots Inn was a welcome stop after a long day. Soccer was on the television. I had a smash burger, Mom had a chicken burger, and Dad had fish and chips. The food was good, and we left properly full."
+      ],
+      [
+        "Dublin evening walk",
+        "Mom, Dad and I walked through Dublin after dark, taking in the crowds and the lights. Later we stopped at The Bleeding Horse for a drink and live entertainment. I was hot from the walk and wanted something cold with crushed ice. Back at the hotel, a little television and reading finished the night."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-14",
+    "place": "Wicklow to Kilkenny",
+    "title": "The road opens up",
+    "lead": "We traded Dublin streets for a rental car, narrow roads, a mountain lake and the first night in Kilkenny.",
+    "entries": [
+      [
+        "Departing Dublin",
+        "After a final breakfast in Dublin, we checked out and headed for the rental car. I was ready to see the countryside. That was where I expected the best part of the trip to begin."
+      ],
+      [
+        "Car rental",
+        "The taxi ride to the rental location near the airport was good; picking up the car was not nearly as quick. Automatic cars seemed to be in high demand. Eventually, we had wheels and a new kind of adventure ahead."
+      ],
+      [
+        "New driving experience",
+        "We drove toward Glendalough on roads that introduced us to close encounters with other vehicles, bikes and sheep. We stopped for mountain views and a waterfall, then found a lake tucked into the valley. We skipped the full trail but explored the monastic ruins, the church, round tower and old graves. I was already looking for souvenirs that felt a little less touristy."
+      ],
+      [
+        "Kilkenny",
+        "The drive into Kilkenny was full of bends. At the hotel, the room gave us much more space than we had in Dublin. It felt good to arrive and put the bags down."
+      ],
+      [
+        "Super time",
+        "We all had bangers and mash with beer. Rain started coming down hard enough to make the evening walk a question mark."
+      ],
+      [
+        "Kyteler’s Inn",
+        "We went out anyway, found Kilkenny Castle lit up at night and walked near the river before the rain sent us back. Kyteler’s Inn was the right place to wait it out: live music, a room listening along, and a lively old-pub atmosphere. Later I called home and got ready for bed."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-15",
+    "place": "Kilkenny, Tipperary & Cork",
+    "title": "Four stops, four different stories",
+    "lead": "A castle day that showed how different Irish historic sites can feel: restored rooms, defensive stonework, a hilltop complex and gardens that stole the show.",
+    "entries": [
+      [
+        "Kilkenny Castle",
+        "Breakfast was good, even if the hotel bed had not been. Kilkenny Castle felt more like a grand museum than a fortress: restored rooms, art and decoration everywhere. It was a beautiful first stop, and we still had a lot of ground to cover."
+      ],
+      [
+        "Rock of Cashel",
+        "The Rock of Cashel appeared ahead of us on its hill like a scene from a film. We parked, climbed the slope and explored a site that still shows its age and character. The grounds and the photographs were as much a part of the visit as the tour."
+      ],
+      [
+        "Cahir Castle",
+        "Cahir felt closer to the working idea of a castle: substantial stone floors, towers we could climb and a structure that had not been turned into a polished house museum. I liked seeing that contrast."
+      ],
+      [
+        "Blarney Castle",
+        "Blarney was busy and unapologetically touristy. We waited about half an hour to reach the stone at the top, where kissing it means leaning backwards in a way that makes the height feel very real. The castle was interesting, but the gardens were my favourite part: paths, bridges, water, big trees and plenty of places to keep exploring. I kept thinking how much Kristen and the boys would enjoy the grounds. The narrow climb inside the tower might be another matter."
+      ],
+      [
+        "Holiday village",
+        "After supper near Blarney, we drove on to Killarney by roads that were narrow enough to demand attention. Our holiday-village Airbnb had room to spread out and, even better, a washer and dryer. I did laundry and looked forward to the next day’s boat and horse-carriage outing."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-16",
+    "place": "Killarney",
+    "title": "Across the lakes with Rosie",
+    "lead": "A boat through the lakes and rivers, a carriage over a mountain pass, and a meal back in town made this one of the most enjoyable days of the trip.",
+    "entries": [
+      [
+        "Ross Castle",
+        "We checked in for the tour, grabbed coffee and a pastry, and rode the bus to Lough Leane. Ross Castle was the starting point for a boat trip through lakes, rivers and under bridges. After a lunch stop came the horse-and-carriage ride over a mountain pass. Our local driver had stories to tell, and the horse, Rosie, worked hard. I loved the whole outing."
+      ],
+      [
+        "Cronin’s Restaurant",
+        "Back in Killarney we went to Cronin’s for supper. My shepherd’s pie arrived piping hot and tasted great; I finally tried mashed peas and liked them. Mom enjoyed her pasta. Dad’s fish and chips missed the mark, and the restaurant took his meal off the bill. Sticky toffee pudding was a much better ending. We looked in a gift shop afterward because I was still hunting for something special for Kristen."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-17",
+    "place": "Kerry to Dingle",
+    "title": "The long way to Dingle",
+    "lead": "A twelve-hour day of waterfalls, viewpoints, forts, beaches, a ferry and a castle that completely changed my mind about being castled out.",
+    "entries": [
+      [
+        "12 hour tour…",
+        "We left Killarney and kept finding reasons to stop. At the Torc waterfall, Mom and I started up a long stone staircase; I ran the first stretch and quickly learned there was a lot more climbing than I had bargained for. Ladies View gave us a look across the lakes, and in Sneem I found gifts for Kristen and the boys. Staigue Stone Fort meant a very narrow approach road and a chance to stand among its walls. At a beach, we saw a dolphin lingering offshore. Then came the Kerry Cliffs and wind that made the visit unforgettable. We ate in Portmagee, crossed to the Skellig Experience, took the ferry from Valentia Island, and explored Cahergal Stone Fort. I thought another castle might be one too many until we spotted Ballycarbery Castle, with vines growing over the ruin. We admired it and its setting. Inch Beach at sunset was a fine last stop before Dingle, supper and sleep."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-18",
+    "place": "Dingle Peninsula",
+    "title": "The coast keeps unfolding",
+    "lead": "Stone huts, beaches, headlands, tiny roads and old church sites filled a day that was as much about the detours as the destinations.",
+    "entries": [
+      [
+        "Coastline tour",
+        "Breakfast was a chance to try black and white pudding. The black pudding pastry from the previous day had been excellent; the slice on my plate this morning was not my favourite, but the white pudding was. Then we headed out along the coast. At the Fahan beehive huts I was fascinated by the dry-stone structures and the idea of people and livestock sharing that landscape. Dunmore Head gave us both a beach and a climb above it, with more ocean and rock appearing as we went. We followed an especially muddy, rocky little road toward the Three Sisters and eventually had to turn around at a gate. That was part of the fun. Gallarus Castle was closed, but we visited the nearby oratory and then Kilmalkedar’s old church and graveyard before rain shortened the stop. We returned to Dingle for a pub supper and got the laundry ready for another early departure."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-19",
+    "place": "Dingle to Kinvara",
+    "title": "One more road, one more castle",
+    "lead": "Conor Pass, unexpected ruins, Bunratty and the Cliffs of Moher made for another packed day on the way north.",
+    "entries": [
+      [
+        "Connor pass to cliffs of mohre",
+        "We fuelled up in Dingle and crossed Conor Pass. I had expected a terrifying mountain road, but the climb itself was shorter than I imagined. The northern descent narrowed considerably, and we found a waterfall along the way. Carrigafoyle Castle was an excellent unplanned stop by the water. Near Askeaton, the castle was closed for repairs, but the Franciscan friary nearby was another worthwhile find. Bunratty Castle and Folk Park offered old houses, shops, animals and a restored castle interior. By the time we reached the Cliffs of Moher, it was crowded and windy. The view was good, but we had already seen cliffs that impressed us more. We ate fish and chips in Doolin, found another tower-like castle in the sunset, and continued to Kinvara for the night."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-20",
+    "place": "Kinvara to Dublin",
+    "title": "The last full day",
+    "lead": "A final castle hunt and a visit to Newgrange brought us back toward Dublin and the end of the road trip.",
+    "entries": [
+      [
+        "Final day",
+        "We left Kinvara after photographing the castle there, which was closed to visitors. Charleville Castle was also closed, but we got pictures and found the remarkable old King Oak nearby. At Trim Castle we were short on time, so we walked the grounds instead of taking a full tour. Newgrange was our last major stop, and it felt like the right way to end a journey full of old places: a tour of a monument far older than the castles we had spent the week seeking out. Then we drove to Dublin, ate supper, checked in and rested before the flight home."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-21",
+    "place": "Dublin to Halifax",
+    "title": "Across the Atlantic again",
+    "lead": "Breakfast, the airport shuttle, a delay on the plane, then a long flight with a book, a podcast and a camera.",
+    "entries": [
+      [
+        "Departing Ireland",
+        "We got up early, had a good continental breakfast and took the shuttle to Dublin Airport. The departure side felt huge and busy. Once aboard, we learned we would be sitting through a delay of at least half an hour. Not ideal, but there was reading to do."
+      ],
+      [
+        "7.5 hour plane ride",
+        "The flight gave me time for a podcast, some of my book, food and a few more photographs. After so many days of moving from place to place, there was finally time to sit with the fact that we had really done it."
+      ]
+    ]
+  },
+  {
+    "date": "2026-09-22",
+    "place": "Halifax to Winnipeg",
+    "title": "Almost home",
+    "lead": "One last flight west, with time in Halifax to visit Mom and Dad before heading back toward Manitoba.",
+    "entries": [
+      [
+        "Almost home",
+        "I boarded the plane from Halifax to Winnipeg after a good evening and morning with my parents. Check-in had gone smoothly. On the return flight I passed over Timmins and took a picture for Teena. Home was getting close."
+      ]
+    ]
+  }
+]
+  </script>
+
+  <script>
+    /* =========================================================================
+     * 📍 IRELAND MEDIA REPOSITORY (PANORAMAS, VIDEOS & PHOTOS)
+     * ========================================================================= */
+
+    const MEDIA = [
+      // -----------------------------------------------------------------------
+      // 360° PANORAMAS
+      // -----------------------------------------------------------------------
+      {
+        type: "panorama",
+        title: "Askeaton Franciscan Friary (View 1)",
+        caption: "County Limerick · 14th-century cloister arcade & historic ruin along the River Deel",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1XXV0oxInO-MSrXSudiBd6qAyzUqPXpdP/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Askeaton Franciscan Friary (View 2)",
+        caption: "County Limerick · Inner nave and arched stonework of the medieval friary",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1gwPqfaeYvP88Ym_g9IvjZ1R4FtJnCML5/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Ballycarbery Castle (View 1)",
+        caption: "County Kerry · Ivy-draped 16th-century MacCarthy stronghold near Cahersiveen",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1Ufvyzc-ZSYaMs3jBrFuItt_d6-XkQ8Ws/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Ballycarbery Castle (View 2)",
+        caption: "County Kerry · Interior ground chamber ruins facing the coastal inlet",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1D5-NygcN0pcFHN1lpGXGkt3bW5-qApkU/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Ballycarbery Castle (View 3)",
+        caption: "County Kerry · High stone vantage looking toward Valentia Harbour",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1r1i5PlY5HwIUNAqz3ZSTGhFG7jH0lgqL/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Bunratty Castle",
+        caption: "County Clare · Renowned 15th-century tower house on the Ratty River",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1yt3SMfMGt0L2Vdo3fnyUQEsgHNn_SBGF/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Cahergal Stone Fort (View 1)",
+        caption: "Ring of Kerry · Impressive drystone ringfort dating from roughly 600 AD",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1kBVNkFFIepzv2y_t8E0CIbWqkFHTZ0sr/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Cahergal Stone Fort (View 2)",
+        caption: "Ring of Kerry · Terraced ramparts and circular inner stone roundhouse",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/18xrT8LFeB2W5_TXe90dlWO22OxFnqpdO/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Carrigafoyle Castle",
+        caption: "Shannon Estuary · 'Guardian of the Shannon' 15th-century fortified tower",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1qGT4D-4jUf71fSSx4A7Cr8ZqOxH1uK3a/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Cashel Murphy",
+        caption: "Dingle Peninsula · Ancient corbelled stone clochán (beehive hut) settlement",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1x0rfe6-onhbdRCj8f2NOuDVtn4UYYqlZ/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Conor Pass Waterfall",
+        caption: "Dingle Peninsula · Cascading mountain stream beside Ireland's highest mountain pass",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/15jDVigE2SHt57gBQnuqMVe96U66U7Wim/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Conor Pass Summit",
+        caption: "Dingle Peninsula · Panoramic overlook across the glaciated valleys and corrie lakes",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/16a6z_cCh4hz8-7iqlj10PiJIrc3NUTfC/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Coumeenoole Beach (View 1)",
+        caption: "Slea Head Drive · Rugged cove with crashing Atlantic surf at the peninsula's tip",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1qkyeMe_wuhf8ur-EO4G6Q1bhsBtk1yVT/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Coumeenoole Beach (View 2)",
+        caption: "Slea Head Drive · Golden sands tucked against jagged sea cliffs",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1nvry6s5AKOXdXIfDJoljtvg5aH_2fe9F/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Dunmore Head (View 1)",
+        caption: "County Kerry · Ireland’s westernmost continental point looking toward the Blasket Islands",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/108nwvm8sabIq_LWjxhh_B_vODMTS-GDe/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Dunmore Head (View 2)",
+        caption: "County Kerry · Windblown headland path above wild Atlantic swells",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1L5zCvIPjgaJokjXrK5iFNwEMITyAQqs3/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "The King Oak",
+        caption: "Charleville Forest, Offaly · Massive ancient oak tree estimated to be over 400 years old",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/18apGR-7uNIJrmU0E6RfbiWejB-oN6AJz/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Knowth Timber Circle",
+        caption: "Brú na Bóinne, Meath · Reconstruction of the Neolithic post circle beside the great passage mound",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1yUZtGm3BPWzrnXOSvQi6Do7o9tAvlz-n/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Ladies View",
+        caption: "Killarney National Park · Famous panoramic vantage overlooking the Upper Lake and Purple Mountain",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1NWdxlUO5ZGWX4nJer5dBN43fbbF-vZrC/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Newgrange Passage Tomb",
+        caption: "Boyne Valley, Meath · World Heritage 5,200-year-old megalithic mound and quartz wall",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/11jfKelxUvAS6WrMHcPxak8EYtItKluks/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Riasc Monastic Settlement",
+        caption: "Dingle Peninsula · 6th-century early Christian ruins and carved Pillar Stone",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1HbiVOoQr6mWwjKkk54M5M5HFdXmW4GCf/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Ring Of Kerry Coast",
+        caption: "Iveragh Peninsula · Sweeping Atlantic shoreline view along the iconic coastal drive",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1Nxc0f3EFmBOjFIL4Rcr8vT_TE1QlIJjj/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Slea Head Overlook",
+        caption: "Wild Atlantic Way · Dramatically perched coastal curve framed by Great Blasket Island",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1ZotGbodAxeYaUFBtBhEHRESYQrrU2cr7/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Staigue Fort (View 1)",
+        caption: "Ring of Kerry · Elaborate drystone hill ringfort built during the late Iron Age",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/12MtWNoG_IEzjWGfjhvKWLQVLA690y1g7/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Staigue Fort (View 2)",
+        caption: "Ring of Kerry · Internal X-shaped stone staircases and massive four-meter walls",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1gMWTzCxnzUpqTVto3NH91J2l6JQluZa7/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Torc Waterfall",
+        caption: "Killarney National Park · 20-meter cascade cascading through lush mossy woodland",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/19rluiY6rNFq-qZU_6LgXqmWT1rpggtdd/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Trim Castle (View 1)",
+        caption: "County Meath · Largest Anglo-Norman stone fortress in Ireland, set on the River Boyne",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1ZueUGR1VnVvP8gDA79GLN2v1lho-LtAC/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Trim Castle (View 2)",
+        caption: "County Meath · Massive 20-sided cruciform keep walls and green outer bawn",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/1rrNrwsuqiZfBEHNgSrizc4QK19RQ3pcA/view?usp=sharing"
+      },
+      {
+        type: "panorama",
+        title: "Trim Castle (View 3)",
+        caption: "County Meath · River Boyne boundary walls looking back toward the fortified gates",
+        theme: "Camera",
+        panoramaSrc: "https://drive.google.com/file/d/19qGOSooL7LtYXBuSA2cfr45Hx3FzQfB9/view?usp=sharing"
+      },
+
+      // -----------------------------------------------------------------------
+      // TRAVEL VIDEOS
+      // -----------------------------------------------------------------------
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 1: Manitoba to Halifax",
+        caption: "The start of the journey heading east toward the Atlantic",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=xrQCTwT7hEg"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 2: Halifax to Dublin",
+        caption: "Transatlantic flight and touch-down on the Emerald Isle",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=gZQ90ztDed4"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 3: Touring around Dublin",
+        caption: "Walking the lively streets, bridges, and city center of Dublin",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=VoGunw3ubcc"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 4: Museum tours!",
+        caption: "Exploring Dublin's rich history, artifacts, and heritage exhibits",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=F65dApIQomg"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 5: From Kilkenny to Killarney!",
+        caption: "Traveling southwest through medieval towns into the heart of Kerry",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=YYbJz9FHhks"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 6: Castle Day!",
+        caption: "First round of historic castle exploration across the Irish countryside",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=QHBO1yw3A-k"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 6: MORE Castles! :)",
+        caption: "Continuing the stronghold trail with more stone keeps and towers",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=s9vHMspevQ4"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 7: Killarney Lake Tour & Horse Carriage Ride!",
+        caption: "Scenic jaunting car ride and cruising the tranquil Lakes of Killarney",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=dVsIBZ9z3nk"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 8: The Long Way to Dingle",
+        caption: "Scenic backroads, steep mountain passes, and arrival on the Dingle Peninsula",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=QazmD_K5BPg"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 9: The Coast Keeps Unfolding",
+        caption: "Atlantic coastal views, steep headlands, and sweeping shorelines",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=GATnyswmHJI"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 10: Cross-Country Castles & Coastal Cliffs",
+        caption: "Tower houses, jagged ocean cliffs, and traveling across countryside landscapes",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=5FXumvv7jMg"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 11: Castle hunt & Ancient Sites!",
+        caption: "Megalithic passage mounds and ancient stone strongholds",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=wm0QNu0XGOE"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 12: Across the Atlantic, heading home!",
+        caption: "Wrapping up the Irish adventure and beginning the long flight back",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=wsqfTHDg74Q"
+      },
+      {
+        type: "video",
+        title: "Trip to Ireland - Day 13: Homeward bound!",
+        caption: "Final leg of the journey returning home with memories of Éire",
+        theme: "Camera",
+        youtubeUrl: "https://www.youtube.com/watch?v=m7Co1n_DKZI"
+      },
+
+      // -----------------------------------------------------------------------
+      // PHOTOS (89 HIGH-RES DRIVE IMAGES)
+      // -----------------------------------------------------------------------
+      {
+        type: "photo",
+        title: "Monasterevin Sword Replica Museum Display",
+        caption: "A high-quality replica of the 16th-century Monasterevin sword is displayed in a museum glass case, detailing its significance as a transitional claymore-style weapon.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1n3vA1b8dKRBRlaGpKCaigz2A70YNjDgr/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Temple Church London Gothic Interior",
+        caption: "Interior view capturing dramatic Gothic ribbed vaulting, soaring stone pillars, and light-filled stained-glass windows.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1qnVxcFQpCPYNeH4b8eXoSuRiI5vMC9rH/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Christ Church Cathedral Dublin Interior Nave",
+        caption: "A symmetric interior view of the nave of Christ Church Cathedral in Dublin, showcasing Gothic revival stone architecture, ribbed vaulted ceilings, and hanging lanterns.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/17wYTwtnBbAdI53pe2YiACxz1RQSO6FQR/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Killarney National Park Rocky Overlook Sunbeams",
+        caption: "A panoramic landscape view from a weathered, rocky outcrop overlooking a forested valley with sunbeams piercing through broken clouds.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1d-nVczjvgpIJ3eSuVLlpaiUm7_4jj6Fr/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Stone Arch Bridge Willow Tree Garden Path",
+        caption: "A tranquil garden scene featuring a stone arch bridge partially framed by weeping willow branches and a gravel path leading to stone steps.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1KvQKx2IaxciuRrqjouwZL2RFUJ2qQ7J9/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Rock of Cashel Stone Cathedral Ruins Ireland",
+        caption: "A low-angle view of the iconic Rock of Cashel ruins in County Tipperary, featuring a towering round tower and ancient Gothic architecture silhouetted against a bright sky.",
+        theme: "Tipperary",
+        src: "https://drive.google.com/file/d/1h6GYSZPbXbU4FeyCGmep6n19GsKrnq8q/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilkenny Castle Tapestry Room",
+        caption: "Historic tapestry room within Kilkenny Castle, featuring large, elaborate classical wall tapestries on rich walls with antique furnishings.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1aMBl3chszbkhaN8hc6CqZFX8lMff_iXR/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Christ Church Cathedral Interior Stained Glass Rose Window",
+        caption: "A detailed rose window featuring a central stained-glass depiction of Christ as the Good Shepherd surrounded by lambs and circular medallions of biblical virtues.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1E8wIn_VnL_6nlL_1RU_sl69R8ZqtMUBO/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Welcome to Dublin sign Saint Audoens Church",
+        caption: "Posing beside the 'Welcome to Dublin' sign placed in front of the historic stone facade of St. Audoen's Church on a paved city square.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1Mve4EjqU40-FsIjOvsGDoq6Nf3hm1mA6/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kerry Cliffs Skellig Islands Atlantic Ocean",
+        caption: "A dramatic view of the jagged Kerry Cliffs in Ireland, with steep grassy rocky slopes descending into the churning Atlantic Ocean toward the distant Skellig Islands.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1jkD0A3AOn4CXg6TcHYCGPHSZxeCT9Yle/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ladies View Killarney National Park Ireland",
+        caption: "A panoramic vista of a lush, wooded valley set against rolling, cloud-draped hills and dramatic light filtering across the Killarney landscape.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1n3kkJj-sQ1rpt9k_1zNbXaYv5UF3zEzG/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ballycarberry Castle Ruins 2",
+        caption: "Low-angle perspective capturing the dramatic ivy-draped facade, vaulted archways, and jagged stone ramparts of Ballycarbery Castle near Cahersiveen.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1xQPv_oJqAzd7vxvLRki-dTnH_7j8tAfv/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Glendalough St Kevins Kitchen Round Tower",
+        caption: "St. Kevin's Kitchen and iconic early Christian monastic ruins situated at Glendalough under a bright blue sky with scattered clouds.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/10FwtnwSZE3SKh1_ZiHoQdcIWbOqEHnbY/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Torc Waterfall Killarney National Park Ireland",
+        caption: "The multi-tiered Torc Waterfall cascading down a lush, forest-covered hillside over mossy rocks and fern-lined banks in Killarney National Park.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1vpMg4mtHeKZekdSaH91UMaXxkCiR2GOU/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "R566 Portmagee coastal cliffs crashing waves",
+        caption: "High-angle view overlooking rugged, dark rocky cliffs along the Kerry coastline where Atlantic waves crash against the shoreline.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1iNSA7dqQkaVk0YDrzih0w6OOApsiVncC/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kerry Cliffs Coastal Scenery Portmagee",
+        caption: "Striking perspective of dramatic, stratified rock cliffs along the coast near Portmagee, meeting the deep blue swells of the Atlantic Ocean.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1dtjDdUVfEG2TfwVO3Av4xGJ9cQ-34bDL/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Gap of Dunloe Jaunting Car Ride County Kerry",
+        caption: "Riding a traditional horse-drawn jaunting car crossing an ancient stone arch bridge nestled in the rugged mountain pass of Dunloe.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1nrjsv0FB744jT7bmn_P02nfoxenWz4z9/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Gap of Dunloe horse carriage view Kerry Ireland",
+        caption: "Rugged highland views across the Gap of Dunloe from a horse-drawn carriage, framed by steep grassy slopes and winding mountain roadways.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/11gYhE7fj5L41aUSzVZMGAbM4yaYkuclO/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Gap of Dunloe Stone Bridge Kerry",
+        caption: "A historic stone arch bridge spans still peat-stained waters against the backdrop of mossy, boulder-strewn slopes in the Gap of Dunloe.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1e_TU_JX1x0XGOYPMV-w5HE7pI9zF19jL/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "horse drawn carriage ride Dunloe Gap Kerry",
+        caption: "First-person perspective traveling behind a horse carriage along the rural single-lane road cutting through the wild Kerry peaks.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1vupgfabks-MyIR7kYVt8ChLWIVkMp_VU/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Gap of Dunloe horse carriage ride Kerry Ireland",
+        caption: "Navigating the scenic valley floor surrounded by dramatic green mountainsides, flowering roadside gorse, and passing carriage tours.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1UyvXI5N3DTQ1plMdSFMFFRmxxAOiGKPu/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Old Weir Bridge Killarney National Park",
+        caption: "The double-arched stone Old Weir Bridge spanning the tranquil meeting of the waters in Killarney National Park amidst mature oak trees.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1tg1YCXayoClXplnpUQBa2ldiDYzsYlcy/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ross Castle Boat Tour Killarney Lake",
+        caption: "Tour boat excursion cruising across Lough Leane with the fortified stone tower of 15th-century Ross Castle standing on the shoreline.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1xtB0alsaqDru1w-YtH5FHkvPDGGzUxqJ/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Old Weir Bridge Area Killarney Landscape",
+        caption: "Rugged countryside trail near the Old Weir Bridge featuring ancient twisted trees, rocky hillsides, and pristine parkland scenery.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1vpKr7gzyE8foA939LxBFOAGwRKgma44d/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ross Castle Killarney National Park Ireland",
+        caption: "Full view of Ross Castle rising above emerald parkland lawns and rocky shoreline borders along Lough Leane.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1TNvsz80djuKoT8k0kkE6JmU-89Eh8o9_/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ross Castle Killarney Lakeside View",
+        caption: "Sun rays breaking through dramatic clouds over Lough Leane, illuminating the ancient stone masonry of Ross Castle.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1HT586iu_arrJTGsL6lZXAjOuio4WEwwZ/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilkenny Castle Picture Gallery",
+        caption: "Interior view of the Picture Gallery at Kilkenny Castle, displaying historic portraiture against deep red walls under a high timber roof with skylights.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1o4bA8D1sc8cDW3rcAMoFUgAOIbDTX-zt/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilkenny Castle Long Gallery Interior",
+        caption: "Looking down the grand expanse of the Long Gallery inside Kilkenny Castle, showcasing ornate wooden beams and polished floors.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1kILznVx8fRC35i_16XDz31a2dzwYZ9Nc/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Witchs Yew Tree Wishing Steps Blarney Cork",
+        caption: "The mystical Wishing Steps and historic yew woodland at Blarney, featuring winding stone staircases bordered by dense canopy trees.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1sdYLSeRfPLhW3jzmAEiNYvByDreDS2FD/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Temple Bar Essex Street East Dublin Night",
+        caption: "Twilight evening scene along the cobblestone corners of Temple Bar in Dublin, featuring warm pub lights, string bulbs, and classic Victorian facades.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1b9_R7RRJKrfS2T0AP2FJSwh8iTfGO8Pc/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilmainham Jail Museum Prison Corridor Dublin",
+        caption: "Arched stone ceiling corridors and heavy iron cell doors inside the historic Kilmainham Gaol in Dublin.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1Pd6kZkJJpgF7aRRSmU-r4MqHn8ooVxEn/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dun Chaoin coastal rock formations Ireland",
+        caption: "Craggy dark volcanic sea stacks rising out of the foam and surf along the sandy cove of Dún Chaoin on the Dingle Peninsula.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1Vq29g3Fg_pxRC9XgDYEtxMe-p119iTq9/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dingle Peninsula rugged cliffs R559 Ireland",
+        caption: "Sheer coastal drops along the R559 Slea Head Drive looking out over crashing Atlantic breakers and jagged headlands.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1NAnpfF0egqtcjK2qTt0EIF8Q31ryGT5e/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dun Chaoin coastal cliffs sea stacks",
+        caption: "Wild Atlantic coastline framing dramatic sea stacks and foam-crested turquoise waves at the western edge of Dingle.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1jDZEyaJKfPxxedHg531RHexoHfFYiyOf/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Inch Beach Sunset Kerry Ireland",
+        caption: "Golden hour sunset reflections across the broad sands of Inch Beach in County Kerry, overlooking Dingle Bay.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/14jDgg5x__QKajP-jHGjnce1LawCemeVY/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "aerial view river landscape clouds",
+        caption: "Airplane window perspective over winding river waterways, green agricultural mosaics, and scattered cloud formations.",
+        theme: "Camera",
+        src: "https://drive.google.com/file/d/1KWAtOseopr8Ce0_rjC9Vq4p4gh0WstTt/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "aerial view clouds landscape",
+        caption: "Cruising altitude flight view showing layered cumulus clouds drifting over distant coastlines and terrain.",
+        theme: "Camera",
+        src: "https://drive.google.com/file/d/11dQJRX2LCA7ieHliviuGn8bXzEVt7jNh/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Walton Woods Road Hants County IMG E3407",
+        caption: "Rural scenic route en route through Walton Woods Road, Hants County, Nova Scotia during the journey.",
+        theme: "Transit",
+        src: "https://drive.google.com/file/d/1l8TbHC57j3ss_rD3gKYkH0ct9B21MYaF/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Rural Countryside Sunset Field View",
+        caption: "Evening twilight over rolling agricultural pastures, silhouettes of woodland treelines, and sunset colors.",
+        theme: "Camera",
+        src: "https://drive.google.com/file/d/1ppMRPmLl782wMYrxXsFsRTDCeN4wLDWY/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Newgrange Folly Selfie",
+        caption: "Standing in green pastures before the 19th-century Newgrange Folly tower built on the hills overlooking the Boyne Valley.",
+        theme: "Meath",
+        src: "https://drive.google.com/file/d/1ub97BDd5dYvcpptNqdy3WZOTF2VMFSul/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Knowth Neolithic Mound Meath Ireland",
+        caption: "The great prehistoric passage mound at Knowth rising from the lush green Boyne Valley under bright open skies.",
+        theme: "Meath",
+        src: "https://drive.google.com/file/d/11LGI2Zp0FfgXJe_Anf7WvQwpoSdN0f27/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Mellifont Knowth Passage Tombs Meath Ireland",
+        caption: "Wide-angle panoramic perspective of the Neolithic passage tombs at Knowth, surrounded by carved kerbstones and satellite mounds.",
+        theme: "Meath",
+        src: "https://drive.google.com/file/d/1g3GTtHtJ72c_TkAj6wlJjxG1Kp0XJGw9/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Trim Castle Medieval Keep Ireland",
+        caption: "The imposing stone keep of Trim Castle in County Meath, Ireland's largest Anglo-Norman fortress, set against bright lawns.",
+        theme: "Meath",
+        src: "https://drive.google.com/file/d/1h7_42elsXGxgElWfZmEaCYRLMNfLo1LY/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "King Oak",
+        caption: "The legendary King Oak on the Charleville Castle estate near Tullamore in County Offaly, with massive sprawling boughs estimated to be centuries old.",
+        theme: "Offaly",
+        src: "https://drive.google.com/file/d/1RulD48ArXdqGWhBaZkSTD1tGrAFt9J8t/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Charleville Castle Entrance Offaly",
+        caption: "Dramatic Gothic entrance and battlement towers of Charleville Castle framed through ancient woodland foliage in County Offaly.",
+        theme: "Offaly",
+        src: "https://drive.google.com/file/d/1Aoc3gBhq1CmZdtyDko-SrKSzj9oKT78e/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Parkes Castle Lough Gill Leitrim Ireland",
+        caption: "Historic stone bawn and restored plantation castle situated on the shores of Lough Gill in County Leitrim.",
+        theme: "Meath",
+        src: "https://drive.google.com/file/d/188s4UrzQWssemhK0veci_d4mDRtG-Mpk/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dunguaire Castle Kinvara Galway Ireland",
+        caption: "16th-century tower house of Dunguaire Castle perched atop a rocky promontory overlooking Kinvara Bay in County Galway.",
+        theme: "Galway",
+        src: "https://drive.google.com/file/d/1N6Pn7MzJFczlI_r7qLLlpXfYtiGjs89y/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Doonagore Castle Doolin Ireland Coastal Landscape",
+        caption: "Doonagore Castle round tower house overlooking the green hills of Doolin, the Atlantic Ocean, and the Aran Islands horizon.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/1UP7Yk_EE3In8yd3CGzLQ3l_SKCgq8roo/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Doonagore Castle County Clare Sunset",
+        caption: "Golden hour sunset casting warm evening light over Doonagore Castle and the rolling coastal hills of County Clare.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/1kutTEa0ITDuJE2oWb4my4hpEOJ5wnCCC/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Doonagore Castle County Clare Ireland",
+        caption: "Close-up vantage of the round tower house and surrounding walled bawn of Doonagore Castle set against blue skies.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/1z5dtnSz8y2LUePFrWfchbu5jsZfSw6dE/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Cliffs of Moher Ireland Coastal View",
+        caption: "Sweeping view of the world-famous Cliffs of Moher dropping sheer into the crashing waves of the Atlantic Ocean.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/1icuclQiqaWNhzRW_ndT2bgABVzqc7maU/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Bunratty Castle Library and Ceilings",
+        caption: "Interior view showcasing an intricately carved and painted vaulted ceiling, period furnishings, and stone fireplace within Bunratty Castle.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/1zSsReZr3YuWaK9OmkEvPDMsPZTrpQcWq/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Bunratty Castle Great Hall Tapestry",
+        caption: "A large historical Renaissance tapestry depicting biblical and chivalric scenes mounted on the stone walls inside the Great Hall of Bunratty Castle.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/110J75VX72dKYNimQmZfscLnhrhW9PMgz/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Bunratty Castle Stone Keep Ireland",
+        caption: "Exterior view of Bunratty Castle's massive fortified rectangular keep and defensive parapets in County Clare.",
+        theme: "Clare",
+        src: "https://drive.google.com/file/d/17ip-xazZMVJO82HxiXcgN0WGMw6sjVzm/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Askeaton Franciscan Friary",
+        caption: "The preserved 15th-century cloister arcade at Askeaton Friary, featuring elegant pointed Gothic arches and stone vaulted walkways.",
+        theme: "Limerick",
+        src: "https://drive.google.com/file/d/1zBQFaqsr0-8JwaZci1Ah4H4iguXtlbce/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Askeaton Franciscan Friary 2",
+        caption: "Gravel ambulatory path lined with twin columns, ancient carved grave slabs, and moss-dusted masonry at Askeaton Friary.",
+        theme: "Limerick",
+        src: "https://drive.google.com/file/d/1Y2MM_4CD03QII_KXy1AHnaiQVMnQ-jwW/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Carrigafoyle Castle Ruins Ireland",
+        caption: "Five-story tower fortress of Carrigafoyle Castle standing directly on the shores of the Shannon Estuary.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1Y68AVOk3uWZyyW0RWuZPRgRYtg6FVGIj/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Gap of Dunloe Mountain Stream Kerry",
+        caption: "Rushing mountain stream tumbling over mossy boulders through the wild peat valley of the Gap of Dunloe.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1xg620iC-9byTeetIoKH6G4btVZFznpTi/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Slea Head Coastline Dingle Peninsula Ireland",
+        caption: "Dramatic coastal cliffs, jagged offshore rock stacks, and wild Atlantic surf sweeping the tip of the Dingle Peninsula.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/175_oUU16nqLmHVVxqVPojK9fkPrTKCV4/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dunmore Head Promontory Fort Coastal View",
+        caption: "Rolling green headland pastures bordered by drystone walls at Dunmore Head, Ireland's westernmost mainland point.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/11AOFA3JcqNWsH_1reTpUCELEnBPmjzNH/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Ballycarberry Castle Ruins",
+        caption: "Ivy-covered ramparts of Ballycarbery Castle standing on a grassy rise overlooking the coastal inlet near Cahersiveen.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1BWlQMw7jMBntmMFuIbWpctrBUgHfpbcb/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kerry Cliffs Coastal Views Skellig Islands",
+        caption: "Looking south along the Kerry Cliffs dropping sheer into the ocean, with the distant silhouettes of Little Skellig and Skellig Michael.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1cRcOpcVIOa4xA6Kglhh7ylTzdy7am4R_/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dad at Kerry Cliffs Coastal View",
+        caption: "Standing at the safety railing along the high headland of the Kerry Cliffs, with dramatic coastal drops and open sea behind.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1KC9Ue-fzWGndXcFxqUoWh0ZzhF-6WZ4v/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "N71 Killarney National Park Dramatic Sky",
+        caption: "Sweeping highland view along the N71 roadway looking over the Killarney lakes and mountains under sunbeams breaking through cloud cover.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1vr56x8M52eGAaFqcr0bzqlb5Ks4G67z7/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Torc Waterfall Muckross Road Killarney",
+        caption: "Vertical view of the roaring multi-tier cascade of Torc Waterfall framed by ancient dripping moss and dense ferns.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1DfFXzaJumRgQwB9paaS7fhSSmzZAZS9x/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Muckross Road Killarney Rocky Stream Waterfall",
+        caption: "Tranquil rocky mountain stream cascading through autumn woodland foliage near Muckross in Killarney National Park.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1Fx5Enjj5luUXUzbyCi4ULzigmTLLT-17/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Old Weir Bridge Stone Bridge",
+        caption: "Stone arches of Old Weir Bridge framed by mature Scots pines and reflection pools at the Meeting of the Waters.",
+        theme: "Kerry",
+        src: "https://drive.google.com/file/d/1UEcIdn9bPTEEKQJldo0OfQBY1z7xdNsu/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle Stone Keep Ireland",
+        caption: "Looking up toward the towering machicolations and battlements of Blarney Castle keep illuminated by bright sunshine.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1lz03CNdcRql1zN4QiYKby6Tqoir-wTaW/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle Gardens Stone Wall Tower",
+        caption: "Strolling through the lower floral gardens of Blarney Castle along stone perimeter walls with tower views above.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1CoSdIFYc4Kn6jmOFZvv9FhUnVHFQpK4h/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "blarney castle stone tower gardens ireland",
+        caption: "Woodland stream and footbridge crossing in the lush forested glen beneath the stone walls of Blarney Castle.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1qGXDKbMyS_vUW3G1uVJdeC_Ni_tEdObb/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle wooden stocks dad",
+        caption: "Posing inside the vintage wooden pillory stocks inscribed with 'Blarney Castle and Gardens' on the outdoor castle grounds.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1ZK1WGctBzRS6wFyGCq50HucavnjbeFYh/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle Stone Towers Gardens",
+        caption: "High vantage looking down from the top battlements of Blarney Castle over the estate grounds, gardens, and surrounding countryside.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1DnZGqJnVnBq_ju3ygsvJopPQuOh-jUA3/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle Stone Tower Ireland",
+        caption: "Low-angle viewpoint of the main Blarney Castle residential tower and watchtower rising from the hillside.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1Yv4BL7zLS0qVddrY_RzVlnfYlhGTzEHG/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Blarney Castle Stone Sculpture Garden",
+        caption: "Upright megalithic-style stone circle sculpture with circular carved aperture situated on the grounds of Blarney Castle.",
+        theme: "Cork",
+        src: "https://drive.google.com/file/d/1Uv2rOP-pLk7JKficT-aZEUSO8RqqRaXA/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Rock of Cashel Stone Round Tower and Statue",
+        caption: "The ancient limestone round tower and cathedral ruins of the Rock of Cashel silhouetted behind a weathered graveyard statue.",
+        theme: "Tipperary",
+        src: "https://drive.google.com/file/d/1NNNR5GK_ONHVFVPgcWLt9hrWL0qyDDuN/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Rock of Cashel historic ruins Ireland",
+        caption: "Massive cathedral walls, carved Celtic high crosses, and green graveyard lawns atop the ancient Rock of Cashel.",
+        theme: "Tipperary",
+        src: "https://drive.google.com/file/d/17K3IZUrL1WCycUuwjpwevi9DoRvdH-oA/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Rock of Cashel medieval ruins Tipperary Ireland",
+        caption: "Exterior view of the fortress and ecclesiastical complex crowning the limestone outcrop high above the Tipperary plains.",
+        theme: "Tipperary",
+        src: "https://drive.google.com/file/d/1wk11nugOUNwKGHfKKEslkBro0OAA9RUY/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilkenny Castle River Nore View",
+        caption: "Kilkenny Castle rising above the banks and stone weirs of the River Nore, with swans gliding along the water.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1a80LrsuZBJmDHgonIxCMoZqKPpGG_Hr2/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kilkenny Castle Stone Architecture Canal Walk",
+        caption: "Fortified limestone corner drum towers and crenellated parapets of Kilkenny Castle viewed from the Canal Walk path.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1TOM5ybKz49uB8fRBPky5n2x6PrUJKFwf/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Kytelers Inn Kilkenny Ireland Night",
+        caption: "Evening street scene outside Kyteler's Inn in Kilkenny, established in 1324, illuminated with warm lights and floral hanging baskets.",
+        theme: "Kilkenny",
+        src: "https://drive.google.com/file/d/1luqZjgQ6pgLorRMBbzqpmE-yySzlswpR/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Glendalough Monastic Site Round Tower",
+        caption: "The 30-meter high early medieval stone round tower of Glendalough standing among lichen-covered gravestones and mountain forests.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/1YjzWp5ae1v140Zwxv6aI2v5U4L5fOa9n/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Glendalough Upper Lake Wicklow Mountains",
+        caption: "Standing along the pebbled shoreline of Glendalough Upper Lake looking into the dramatic glacier-carved mountain valley.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/1Yz_bEKVcKtf3_AGY6biveQLkuVe3SZ_Y/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Wicklow Mountains Road View Ireland",
+        caption: "Winding highland road descending through the expansive heather, fern bogs, and scenic valley passes of County Wicklow.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/17AToNAO1RfNdAJzt7rf5vghMcc75mDbv/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Glendalough Valley View Military Road",
+        caption: "High panoramic overlook along the Military Road looking across conifer plantations and glacial rivers in the Wicklow Mountains.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/1wRkIAClb1rOO0DLxfxBIfS9Nd2fHqUXS/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Wicklow Mountains Military Road Stream",
+        caption: "Clear mountain brook winding across peat terrain with grazing sheep along the Military Road in the Wicklow highlands.",
+        theme: "Wicklow",
+        src: "https://drive.google.com/file/d/1Nk5DTXZjHQagP5XOg8fwE8It1md7aGAj/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Christ Church Cathedral Interior Dublin",
+        caption: "Grand Gothic vaulted nave, ribbed arches, and stained-glass chancel illumination inside Dublin's Christ Church Cathedral.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1T512oaluKnikwr83PB2cU_0J2YXN-h5K/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "St Michael le Pole Stained Glass Window Dublin",
+        caption: "Intricate stained-glass window panel set within historic stonework illustrating medieval trades and heritage motifs.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1ruCcA6i034x2G8thzSOrTo6Q745GbnGg/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Christ Church Cathedral Dublin Gothic Architecture",
+        caption: "Exterior perspective of Christ Church Cathedral's central tower, Gothic flying arches, and weathered grey stonework in Dublin.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1tCfjSwZskPzX59zgIYPpIV3PJOjaj07y/view?usp=drivesdk"
+      },
+      {
+        type: "photo",
+        title: "Dublin Welcome Sign Christ Church Cathedral",
+        caption: "Posing with the 'Welcome to Dublin' landmark sign on the plaza in front of Christ Church Cathedral.",
+        theme: "Dublin",
+        src: "https://drive.google.com/file/d/1hfDI602x2bSU6_9TSfRKhCr4WwRugOZq/view?usp=drivesdk"
+      }
+    ];
+
+    // =========================================================================
+    // SYSTEM CORE & HIGH-RES MEDIA LOADER
+    // =========================================================================
+    (() => {
+      "use strict";
+
+      const JOURNAL = JSON.parse(document.getElementById("journalData").textContent);
+
+      const dialog = document.getElementById("mediaDialog");
+      const content = document.getElementById("modalContent");
+      const title = document.getElementById("dialogTitle");
+
+      const grids = {
+        photo: document.getElementById("photoGrid"),
+        panorama: document.getElementById("panoramaGrid"),
+        video: document.getElementById("videoGrid")
+      };
+
+      let pannellumViewer = null;
+      let returnFocusElement = null;
+      let slideshowPhotos = [];
+      let slideshowIndex = -1;
+      let slideshowTimer = null;
+      let gridItems = { photo: [], panorama: [], video: [] };
+      let switchTab;
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const motionSafeBehavior = prefersReducedMotion.matches ? "instant" : "smooth";
+
+      function normalizeText(value) {
+        return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      }
+
+      function photoPlace(item) {
+        const details = normalizeText(`${item.title || ""} ${item.caption || ""}`);
+        const placeRules = [
+          ["Kerry", /kerry|dingle|killarney|slea head|cahergal|cahersiveen|ballycarbery|coumeenoole|valentia|staigue|blasket|skellig|torc waterfall|ladies view|conor pass|cronins|cronin|rosbeigh|muckross|ross castle/],
+          ["Cork", /cork|blarney/], ["Tipperary", /tipperary|cashel|cahir/], ["Kilkenny", /kilkenny/],
+          ["Limerick", /limerick|askeaton|franciscan friary|carrigafoyle/],
+          ["Clare", /bunratty|moher|doolin|doonagore|clare/], ["Galway", /galway|kinvara|dunguaire/],
+          ["Wicklow", /wicklow|glendalough/], ["Meath", /meath|trim castle|newgrange|boyne|knowth/],
+          ["Offaly", /offaly|charleville|king oak/], ["Dublin", /dublin|kilmainham|st catherine|st michael/]
+        ];
+        const match = placeRules.find(([, pattern]) => pattern.test(details));
+        if (match) return match[0];
+        if (item.theme === "Transit") return "Transit";
+        return item.theme && item.theme !== "Camera" ? item.theme : "Ireland";
+      }
+
+      function installSearch(inputId, grid, type, locationId) {
+        const input = document.getElementById(inputId);
+        const locationSelect = locationId ? document.getElementById(locationId) : null;
+        const results = document.querySelector(`[data-results-for="${type}"]`);
+        const cards = [...grid.querySelectorAll(".card")];
+
+        if (locationSelect) {
+          const locations = [...new Set(MEDIA.filter(item => item.type === type).map(photoPlace))].sort((a, b) => a.localeCompare(b));
+          for (const location of locations) {
+            const option = make("option", "", location);
+            option.value = location;
+            locationSelect.append(option);
+          }
+        }
+
+        function filter() {
+          const query = normalizeText(input.value.trim());
+          const location = locationSelect?.value || "";
+          let visibleCount = 0;
+
+          for (const card of cards) {
+            const searchable = normalizeText(card.dataset.search);
+            const matches = (!query || searchable.includes(query)) && (!location || card.dataset.place === location);
+            card.hidden = !matches;
+            if (matches) visibleCount++;
+          }
+
+          let emptyState = grid.querySelector(".empty");
+          if (visibleCount === 0) {
+            if (!emptyState) {
+              emptyState = make("p", "empty", "No matches yet. Try another search or place.");
+              emptyState.setAttribute("role", "status");
+              grid.append(emptyState);
+            }
+          } else {
+            emptyState?.remove();
+          }
+
+          if (results) results.textContent = `${visibleCount} ${type === "photo" ? visibleCount === 1 ? "photo" : "photos" : type === "video" ? visibleCount === 1 ? "film" : "films" : visibleCount === 1 ? "panorama" : "panoramas"}`;
+          return visibleCount;
+        }
+
+        input.addEventListener("input", filter);
+        locationSelect?.addEventListener("change", filter);
+        filter();
+      }
+      function syncSlideshowControls() {
+        const playing = Boolean(slideshowTimer);
+        const button = document.getElementById("pauseSlideshow");
+        if (!button) return;
+        button.textContent = playing ? "Ⅱ" : "▶";
+        button.setAttribute("aria-label", playing ? "Pause slideshow" : "Resume slideshow");
+      }
+
+      function stopSlideshow() {
+        if (slideshowTimer !== null) window.clearInterval(slideshowTimer);
+        slideshowTimer = null;
+        slideshowPhotos = [];
+        slideshowIndex = -1;
+        document.getElementById("slideshowControls").hidden = true;
+        document.getElementById("slideCounter").textContent = "";
+        syncSlideshowControls();
+      }
+
+      function showSlideshowPhoto(index) {
+        if (slideshowPhotos.length === 0) return;
+        const activeDialog = dialog.open;
+        const previousIndex = slideshowIndex;
+        slideshowIndex = (index + slideshowPhotos.length) % slideshowPhotos.length;
+        const item = slideshowPhotos[slideshowIndex];
+        if (!activeDialog) returnFocusElement = document.activeElement;
+        if (activeDialog) {
+          if (prefersReducedMotion.matches) content.classList.remove("slideshow-changing");
+          else {
+            content.classList.add("slideshow-changing");
+            window.setTimeout(() => content.classList.remove("slideshow-changing"), 230);
+          }
+          content.replaceChildren();
+        }
+        title.textContent = item.title || "Ireland Memory";
+        const image = make("img", "modal-photo");
+        image.alt = `${item.title || "Ireland memory"}. ${item.caption || ""}`;
+        image.loading = "eager";
+        image.decoding = "async";
+        image.onerror = () => {
+          const driveId = extractDriveId(item.src);
+          if (driveId) {
+            image.onerror = null;
+            image.src = `https://drive.google.com/thumbnail?id=${driveId}&sz=w2048`;
+          }
+        };
+        image.addEventListener("load", () => {
+          if (slideshowIndex === index) document.getElementById("slideCounter").textContent = `${slideshowIndex + 1} / ${slideshowPhotos.length}`;
+        }, { once: true });
+        image.src = resolveHighResMedia(item.src);
+        content.append(image);
+        if (!activeDialog && previousIndex !== slideshowIndex) {
+          try { document.getElementById("closeDialog").focus({ preventScroll: true }); } catch (error) {}
+        }
+        if (!dialog.open) dialog.showModal();
+        setupPhotoPanZoom(image, content);
+        const counter = document.getElementById("slideCounter");
+        counter.textContent = `${slideshowIndex + 1} / ${slideshowPhotos.length}`;
+        document.getElementById("slideshowControls").hidden = false;
+      }
+
+      function startSlideshow(photos) {
+        if (!photos.length) return;
+        stopSlideshow();
+        slideshowPhotos = [...photos];
+        slideshowIndex = -1;
+        showSlideshowPhoto(0);
+        slideshowTimer = window.setInterval(() => showSlideshowPhoto(slideshowIndex + 1), 6000);
+        syncSlideshowControls();
+      }
+
+      function extractDriveId(url) {
+        if (!url) return null;
+        const match = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)|id=)([a-zA-Z0-9_-]{25,})/);
+        return match ? match[1] : null;
+      }
+
+      function extractYouTubeId(url) {
+        if (!url) return null;
+        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+        return match ? match[1] : null;
+      }
+
+      // Keep original full-resolution delivery for standard photographs.
+      function resolveHighResMedia(raw) {
+        if (!raw) return "";
+        const id = extractDriveId(raw);
+        if (!id) return raw;
+
+        return `https://lh3.googleusercontent.com/d/${id}=s0`;
+      }
+
+      function resolvePanoramaMedia(raw) {
+        if (!raw) return "";
+        const id = extractDriveId(raw);
+        return id ? `https://lh3.googleusercontent.com/d/${id}=w4000-h2000` : raw;
+      }
+
+      // THUMBNAILS FOR CARDS
+      function resolveThumb(item) {
+        if (item.thumb) return resolveHighResMedia(item.thumb);
+        if (item.type === "photo") {
+          const id = extractDriveId(item.src);
+          return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w600` : item.src;
+        }
+        if (item.type === "panorama") {
+          const id = extractDriveId(item.panoramaSrc);
+          return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w600` : item.panoramaSrc;
+        }
+        if (item.type === "video") {
+          const ytId = extractYouTubeId(item.youtubeUrl);
+          return ytId ? `https://i.ytimg.com/vi/${ytId}/hqdefault.jpg` : "";
+        }
+        return "";
+      }
+
+      function make(tag, className, text) {
+        const el = document.createElement(tag);
+        if (className) el.className = className;
+        if (text !== undefined) el.textContent = text;
+        return el;
+      }
+
+      /* =======================================================================
+       * ⛶ FULLSCREEN CONTROLLER
+       * ======================================================================= */
+      const fullscreenBtn = document.getElementById("fullscreenDialog");
+
+      function isFullscreenActive() {
+        return Boolean(
+          document.fullscreenElement || 
+          document.webkitFullscreenElement ||
+          dialog.classList.contains("is-fullscreen")
+        );
+      }
+
+      function updateFullscreenUI() {
+        const active = isFullscreenActive();
+        dialog.classList.toggle("is-fullscreen", active);
+        if (fullscreenBtn) {
+          fullscreenBtn.textContent = active ? "🗗 Exit Fullscreen" : "⛶ Fullscreen";
+          fullscreenBtn.setAttribute("aria-label", active ? "Exit Fullscreen" : "Toggle Fullscreen");
+        }
+        if (pannellumViewer) {
+          setTimeout(() => {
+            try { pannellumViewer.resize(); } catch (e) {}
+          }, 120);
+        }
+      }
+
+      async function toggleFullscreen() {
+        const active = isFullscreenActive();
+
+        if (!active) {
+          dialog.classList.add("is-fullscreen");
+          updateFullscreenUI();
+          try {
+            if (document.documentElement.requestFullscreen) {
+              await document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+              await document.documentElement.webkitRequestFullscreen();
+            }
+          } catch (err) {
+            // CSS full-window mode covers mobile browsers seamlessly
+          }
+        } else {
+          dialog.classList.remove("is-fullscreen");
+          updateFullscreenUI();
+          try {
+            if (document.fullscreenElement || document.webkitFullscreenElement) {
+              if (document.exitFullscreen) await document.exitFullscreen();
+              else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+            }
+          } catch (err) {}
+        }
+      }
+
+      if (fullscreenBtn) {
+        fullscreenBtn.addEventListener("click", toggleFullscreen);
+      }
+
+      document.addEventListener("fullscreenchange", updateFullscreenUI);
+      document.addEventListener("webkitfullscreenchange", updateFullscreenUI);
+
+      /* =======================================================================
+       * 🔍 PHOTO ZOOM & PAN ENGINE
+       * ======================================================================= */
+      function setupPhotoPanZoom(img, container) {
+        let scale = 1;
+        let panX = 0;
+        let panY = 0;
+        const minScale = 1;
+        const maxScale = 5;
+
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        let initialDist = 0;
+        let initialScale = 1;
+
+        function applyTransform(animate = false) {
+          img.style.transition = animate ? "transform 0.15s ease-out" : "none";
+          if (scale <= 1) {
+            scale = 1;
+            panX = 0;
+            panY = 0;
+            img.style.cursor = "default";
+          } else {
+            img.style.cursor = isDragging ? "grabbing" : "grab";
+          }
+          img.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+        }
+
+        function zoom(factor, cx, cy) {
+          const oldScale = scale;
+          scale = Math.min(maxScale, Math.max(minScale, scale * factor));
+          if (scale === oldScale) return;
+
+          if (scale <= 1) {
+            panX = 0;
+            panY = 0;
+          } else if (cx !== undefined && cy !== undefined) {
+            const rect = container.getBoundingClientRect();
+            const mouseX = cx - (rect.left + rect.width / 2);
+            const mouseY = cy - (rect.top + rect.height / 2);
+            const ratio = scale / oldScale;
+            panX = mouseX - (mouseX - panX) * ratio;
+            panY = mouseY - (mouseY - panY) * ratio;
+          }
+          applyTransform(true);
+        }
+
+        function reset() {
+          scale = 1;
+          panX = 0;
+          panY = 0;
+          applyTransform(true);
+        }
+
+        // On-screen Zoom Toolbar
+        const zoomBar = make("div", "photo-ctrl-overlay");
+        const inBtn = make("button", "ctrl-btn", "➕");
+        inBtn.type = "button";
+        inBtn.setAttribute("aria-label", "Zoom in");
+        inBtn.title = "Zoom In";
+        inBtn.onclick = (e) => { e.stopPropagation(); zoom(1.3); };
+        const outBtn = make("button", "ctrl-btn", "➖");
+        outBtn.type = "button";
+        outBtn.setAttribute("aria-label", "Zoom out");
+        outBtn.title = "Zoom Out";
+        outBtn.onclick = (e) => { e.stopPropagation(); zoom(0.75); };
+        const resetBtn = make("button", "ctrl-btn", "↺");
+        resetBtn.type = "button";
+        resetBtn.setAttribute("aria-label", "Reset photo zoom");
+        resetBtn.title = "Reset Zoom";
+        resetBtn.onclick = (e) => { e.stopPropagation(); reset(); };
+
+        zoomBar.append(inBtn, outBtn, resetBtn);
+        container.append(zoomBar);
+
+        // Desktop Mouse Wheel Zoom
+        container.addEventListener("wheel", (e) => {
+          e.preventDefault();
+          const factor = e.deltaY < 0 ? 1.2 : 0.8;
+          zoom(factor, e.clientX, e.clientY);
+        }, { passive: false });
+
+        // Desktop Mouse Drag to Pan
+        img.addEventListener("mousedown", (e) => {
+          if (scale <= 1) return;
+          e.preventDefault();
+          isDragging = true;
+          startX = e.clientX - panX;
+          startY = e.clientY - panY;
+          applyTransform(false);
+        });
+
+        window.addEventListener("mousemove", (e) => {
+          if (!isDragging) return;
+          e.preventDefault();
+          panX = e.clientX - startX;
+          panY = e.clientY - startY;
+          applyTransform(false);
+        });
+
+        window.addEventListener("mouseup", () => {
+          if (isDragging) {
+            isDragging = false;
+            applyTransform(true);
+          }
+        });
+
+        // Mobile Touch Gestures (Pinch-to-Zoom & Drag-to-Pan)
+        container.addEventListener("touchstart", (e) => {
+          if (e.touches.length === 1 && scale > 1) {
+            isDragging = true;
+            startX = e.touches[0].clientX - panX;
+            startY = e.touches[0].clientY - panY;
+            applyTransform(false);
+          } else if (e.touches.length === 2) {
+            isDragging = false;
+            initialDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialScale = scale;
+          }
+        }, { passive: true });
+
+        container.addEventListener("touchmove", (e) => {
+          if (e.touches.length === 1 && isDragging && scale > 1) {
+            e.preventDefault();
+            panX = e.touches[0].clientX - startX;
+            panY = e.touches[0].clientY - startY;
+            applyTransform(false);
+          } else if (e.touches.length === 2 && initialDist > 0) {
+            e.preventDefault();
+            const currentDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            scale = Math.min(maxScale, Math.max(minScale, initialScale * (currentDist / initialDist)));
+            applyTransform(false);
+          }
+        }, { passive: false });
+
+        container.addEventListener("touchend", (e) => {
+          if (e.touches.length === 0) {
+            isDragging = false;
+            if (scale <= 1) reset();
+            else applyTransform(true);
+          }
+        });
+
+        // Double-tap or double-click to toggle 1x and 2.5x zoom
+        let lastTap = 0;
+        container.addEventListener("click", (e) => {
+          const now = Date.now();
+          if (now - lastTap < 300) {
+            e.preventDefault();
+            if (scale > 1) reset();
+            else zoom(2.5, e.clientX, e.clientY);
+          }
+          lastTap = now;
+        });
+      }
+
+      /* =======================================================================
+       * 🖼 MEDIA DISPLAY (PHOTOS & PANORAMAS)
+       * ======================================================================= */
+      function openMedia(item) {
+        stopSlideshow();
+        returnFocusElement = document.activeElement;
+        title.textContent = item.title || "Ireland Memory";
+        content.replaceChildren();
+
+        if (item.type === "photo") {
+          const image = make("img", "modal-photo");
+          const driveId = extractDriveId(item.src);
+          image.alt = item.title || "";
+          if (driveId) {
+            image.onerror = () => {
+              image.onerror = null;
+              image.src = `https://drive.google.com/thumbnail?id=${driveId}&sz=w2048`;
+            };
+          }
+          content.append(image);
+          image.src = resolveHighResMedia(item.src);
+          dialog.showModal();
+          setupPhotoPanZoom(image, content);
+        } else if (item.type === "panorama") {
+          const panoBox = make("div", "modal-panorama");
+          panoBox.id = "activePannellum";
+          content.append(panoBox);
+
+          const status = make("p", "panorama-status", "Loading the high-resolution 360° view…");
+          status.setAttribute("role", "status");
+          status.setAttribute("aria-live", "polite");
+          content.append(status);
+
+          const controls = make("div", "pano-ctrl-overlay");
+          const fullscreen = make("button", "ctrl-btn", "⛶ Fullscreen");
+          fullscreen.type = "button";
+          fullscreen.setAttribute("aria-label", "View panorama fullscreen");
+          fullscreen.addEventListener("click", toggleFullscreen);
+          const gyro = make("button", "ctrl-btn", "📱 Gyroscope");
+          gyro.type = "button";
+          gyro.setAttribute("aria-label", "Look around using the device gyroscope");
+          gyro.addEventListener("click", () => {
+            try {
+              if (pannellumViewer) pannellumViewer.startOrientation();
+            } catch (error) {
+              alert("Motion sensors not supported or require permissions.");
+            }
+          });
+          controls.append(fullscreen, gyro);
+          content.append(controls);
+          dialog.showModal();
+
+          try {
+            pannellumViewer = pannellum.viewer("activePannellum", {
+              type: "equirectangular",
+              panorama: resolvePanoramaMedia(item.panoramaSrc),
+              autoLoad: true,
+              autoRotate: -1.2,
+              crossOrigin: "anonymous",
+              showControls: true,
+              showFullscreenCtrl: false,
+              mouseZoom: true
+            });
+
+            pannellumViewer.on("load", () => {
+              status.hidden = true;
+            });
+            pannellumViewer.on("error", message => {
+              status.hidden = false;
+              status.textContent = `This 360° panorama could not be loaded. ${String(message || "Check your connection and Google Drive sharing permissions.")}`;
+            });
+            // A cached panorama can finish loading before its event listener attaches.
+            if (pannellumViewer.isLoaded()) status.hidden = true;
+          } catch (error) {
+            status.hidden = false;
+            status.textContent = `Could not open this 360° panorama. ${error?.message || "The panorama viewer could not start."}`;
+          }
+        }
+      }
+
+      function buildCard(item) {
+        const card = make("div", "card");
+        card.dataset.search = normalizeText(`${item.title || ""} ${item.caption || ""} ${item.theme || ""} ${item.youtubeUrl || ""}`);
+        card.dataset.place = photoPlace(item);
+        gridItems[item.type].push(card);
+
+        if (item.type === "video") {
+          const link = make("a", "card-trigger");
+          link.href = item.youtubeUrl;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          const thumbBox = make("div", "thumbnail-box");
+          const thumbUrl = resolveThumb(item);
+          if (thumbUrl) {
+            const image = make("img", "thumbnail");
+            image.src = thumbUrl;
+            image.loading = "lazy";
+            image.alt = `Video thumbnail: ${item.title || "Ireland travel film"}`;
+            image.addEventListener("error", () => image.remove(), { once: true });
+            thumbBox.append(image);
+          }
+          const badge = make("div", "play-badge");
+          badge.innerHTML = '<span class="play-icon" aria-hidden="true">▶</span>';
+          thumbBox.append(badge);
+          const day = item.title?.match(/Day\s+(\d+)/i)?.[1];
+          if (day) thumbBox.append(make("span", "badge", `Trip Day ${day}`));
+          const body = make("div", "card-body");
+          body.append(make("h3", "", item.title || "Untitled"));
+          if (item.caption) body.append(make("p", "", item.caption));
+          body.append(make("span", "card-action", "Play travel film on YouTube ↗"));
+          link.append(thumbBox, body);
+          link.setAttribute("aria-label", `${item.title || "Ireland travel film"}; opens YouTube in a new tab`);
+          card.append(link);
+          return card;
+        }
+
+        const button = make("button", "card-trigger");
+        button.type = "button";
+        button.setAttribute("aria-label", `${item.type === "panorama" ? "Explore 360 degree panorama" : "Open full-resolution photograph"}: ${item.title || "Ireland memory"}`);
+        const thumbnailBox = make("div", "thumbnail-box");
+        const thumbnailUrl = resolveThumb(item);
+        if (thumbnailUrl) {
+          const image = make("img", "thumbnail");
+          image.src = thumbnailUrl;
+          image.loading = "lazy";
+          image.alt = item.title || "";
+          image.addEventListener("error", () => {
+            image.replaceWith(make("span", "placeholder", item.type === "panorama" ? "◎" : "☘"));
+          }, { once: true });
+          thumbnailBox.append(image);
+        } else {
+          thumbnailBox.append(make("span", "placeholder", item.type === "panorama" ? "◎" : "☘"));
+        }
+        if (item.theme || item.type === "panorama") thumbnailBox.append(make("span", "badge", photoPlace(item)));
+        const body = make("div", "card-body");
+        body.append(make("h3", "", item.title || "Untitled"));
+        if (item.caption) body.append(make("p", "", item.caption));
+        body.append(make("span", "card-action", item.type === "panorama" ? "Explore 360° ↗" : "View Photo ↗"));
+        button.append(thumbnailBox, body);
+        button.addEventListener("click", () => openMedia(item));
+        card.append(button);
+        return card;
+      }
+
+      let photoItems = [];
+      for (const item of MEDIA) {
+        if (item.type === "photo") photoItems.push(item);
+        if (grids[item.type]) grids[item.type].append(buildCard(item));
+      }
+      const journalContainer = document.getElementById("journalDays");
+      const journalDateFormatter = new Intl.DateTimeFormat("en", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+      JOURNAL.forEach((day, index) => {
+        const section = make("section", "journal-day");
+        section.id = `journal-day-${day.date}`;
+        section.setAttribute("aria-labelledby", `journal-title-${day.date}`);
+
+        const label = make("div", "journal-day-label");
+        label.append(make("span", "", `Day ${String(index + 1).padStart(2, "0")} · ${day.place}`));
+        const time = make("time", "", journalDateFormatter.format(new Date(`${day.date}T12:00:00Z`)));
+        time.dateTime = day.date;
+        label.append(time);
+
+        const heading = make("h3", "", day.title);
+        heading.id = `journal-title-${day.date}`;
+        const lead = make("p", "journal-lead", day.lead);
+        const entries = make("div", "journal-entries");
+        day.entries.forEach(([entryTitle, text]) => {
+          const entry = make("article", "journal-entry");
+          entry.append(make("h4", "", entryTitle), make("p", "", text));
+          entries.append(entry);
+        });
+        section.append(label, heading, lead, entries);
+        journalContainer.append(section);
+      });
+
+      installSearch("search-photos", grids.photo, "photo", "location-photos");
+      installSearch("search-panoramas", grids.panorama, "panorama", "location-panoramas");
+      installSearch("search-videos", grids.video, "video");
+
+      document.getElementById("playSlideshow").addEventListener("click", () => {
+        const photos = gridItems.photo.flatMap((card, index) => card.hidden ? [] : [photoItems[index]]);
+        if (photos.length) startSlideshow(photos);
+      });
+      document.getElementById("previousSlide").addEventListener("click", () => showSlideshowPhoto(slideshowIndex - 1));
+      document.getElementById("nextSlide").addEventListener("click", () => showSlideshowPhoto(slideshowIndex + 1));
+      document.getElementById("pauseSlideshow").addEventListener("click", () => {
+        if (slideshowTimer !== null) {
+          window.clearInterval(slideshowTimer);
+          slideshowTimer = null;
+        } else if (slideshowPhotos.length) {
+          slideshowTimer = window.setInterval(() => showSlideshowPhoto(slideshowIndex + 1), 6000);
+        }
+        syncSlideshowControls();
+      });
+
+      let touchStart = null;
+      content.addEventListener("touchstart", event => {
+        if (slideshowPhotos.length && event.touches.length === 1) {
+          touchStart = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+        }
+      }, { passive: true });
+      content.addEventListener("touchend", event => {
+        if (!slideshowPhotos.length || touchStart === null) return;
+        const deltaX = event.changedTouches[0].clientX - touchStart.x;
+        const deltaY = event.changedTouches[0].clientY - touchStart.y;
+        touchStart = null;
+        if (Math.abs(deltaX) > 55 && Math.abs(deltaX) > Math.abs(deltaY) * 1.3) showSlideshowPhoto(slideshowIndex + (deltaX < 0 ? 1 : -1));
+      }, { passive: true });
+
+      const slideshowButton = document.getElementById("playSlideshow");
+      const updateSlideshowAvailability = () => { slideshowButton.disabled = gridItems.photo.every(card => card.hidden); };
+      updateSlideshowAvailability();
+      document.getElementById("search-photos").addEventListener("input", updateSlideshowAvailability);
+      document.getElementById("location-photos").addEventListener("change", updateSlideshowAvailability);
+
+      switchTab = (target, moveFocus = false) => {
+        for (const tab of document.querySelectorAll(".tab")) {
+          const selected = tab.dataset.tab === target;
+          tab.setAttribute("aria-selected", String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+          if (selected && moveFocus) tab.focus();
+        }
+        for (const panel of document.querySelectorAll(".tab-panel")) panel.hidden = panel.id !== `panel-${target}`;
+      };
+      for (const tab of document.querySelectorAll(".tab")) {
+        tab.addEventListener("click", () => switchTab(tab.dataset.tab));
+        tab.addEventListener("keydown", event => {
+          const tabs = [...document.querySelectorAll(".tab")];
+          const index = tabs.indexOf(tab);
+          const next = event.key === "ArrowRight" ? (index + 1) % tabs.length
+            : event.key === "ArrowLeft" ? (index - 1 + tabs.length) % tabs.length
+              : event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : -1;
+          if (next >= 0) {
+            event.preventDefault();
+            switchTab(tabs[next].dataset.tab, true);
+          }
+        });
+      }
+
+      document.querySelectorAll(".brand").forEach(link => link.addEventListener("click", event => {
+        const target = link.getAttribute("href")?.slice(1);
+        if (target === "top") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, behavior: motionSafeBehavior });
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+        }
+      }));
+      const progressBar = document.getElementById("readingProgress");
+      let scrollPending = false;
+      window.addEventListener("scroll", () => {
+        if (scrollPending) return;
+        scrollPending = true;
+        window.requestAnimationFrame(() => {
+          const root = document.documentElement;
+          const progress = Math.min(100, Math.round(root.scrollTop / Math.max(1, root.scrollHeight - root.clientHeight) * 100));
+          progressBar.style.width = `${progress}%`;
+          progressBar.setAttribute("aria-valuenow", String(progress));
+          scrollPending = false;
+        });
+      }, { passive: true });
+
+      // Dialog Close & Fullscreen Teardown
+      async function closeMediaDialog() {
+        stopSlideshow();
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+          try {
+            if (document.exitFullscreen) await document.exitFullscreen();
+            else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+          } catch (err) {}
+        }
+        dialog.classList.remove("is-fullscreen");
+        dialog.close();
+      }
+
+      document.getElementById("closeDialog").onclick = () => closeMediaDialog();
+      dialog.addEventListener("cancel", event => {
+        event.preventDefault();
+        closeMediaDialog();
+      });
+      dialog.addEventListener("click", e => {
+        if (e.target === dialog) closeMediaDialog();
+      });
+      dialog.addEventListener("close", () => {
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+          try {
+            document.exitFullscreen?.().catch(() => {});
+          } catch (err) {}
+        }
+        dialog.classList.remove("is-fullscreen");
+        if (pannellumViewer) {
+          try { pannellumViewer.destroy(); } catch (e) {}
+          pannellumViewer = null;
+        }
+        content.replaceChildren();
+        updateFullscreenUI();
+        const restoreFocusTo = returnFocusElement;
+        returnFocusElement = null;
+        if (restoreFocusTo?.isConnected) restoreFocusTo.focus({ preventScroll: true });
+      });
+    })();
+  </script>
+</body>
+</html>
