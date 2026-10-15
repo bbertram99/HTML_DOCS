@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stage 2: Detailed Symptom Follow-Up</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --yes-bg: #dcfce7;
+      --yes-border: #16a34a;
+      --yes-text: #14532d;
+      --no-bg: #fee2e2;
+      --no-border: #dc2626;
+      --no-text: #7f1d1d;
+      --unsure-bg: #fef9c3;
+      --unsure-border: #ca8a04;
+      --unsure-text: #713f12;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 16px 12px 60px;
+      line-height: 1.5;
+      font-size: 18px;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--card-bg);
+      padding: 22px 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      margin-bottom: 20px;
+      border-top: 6px solid var(--primary);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      color: #0f172a;
+    }
+
+    header p {
+      margin: 0 0 12px;
+      color: var(--text-muted);
+      font-size: 17px;
+    }
+
+    .voice-tip {
+      background: #eff6ff;
+      border-left: 4px solid var(--primary);
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 16px;
+      color: #1e3a8a;
+      margin-top: 10px;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      padding: 22px 20px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .question-block {
+      padding: 18px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .question-block:last-child {
+      border-bottom: none;
+      padding-bottom: 4px;
+    }
+
+    .question-text {
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .q-number {
+      font-weight: 700;
+      color: var(--primary);
+      margin-right: 6px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 17px;
+      user-select: none;
+      transition: all 0.15s ease;
+      background: #f8fafc;
+      flex: 1;
+      min-width: 95px;
+      justify-content: center;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .checkbox-label.yes-selected {
+      background-color: var(--yes-bg);
+      border-color: var(--yes-border);
+      color: var(--yes-text);
+    }
+
+    .checkbox-label.no-selected {
+      background-color: var(--no-bg);
+      border-color: var(--no-border);
+      color: var(--no-text);
+    }
+
+    .checkbox-label.unsure-selected {
+      background-color: var(--unsure-bg);
+      border-color: var(--unsure-border);
+      color: var(--unsure-text);
+    }
+
+    .sub-prompt {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin: 8px 0 6px;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 17px;
+      font-family: inherit;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--text-main);
+    }
+
+    textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #f8fafc;
+    }
+
+    .submit-area {
+      background: var(--card-bg);
+      padding: 24px 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      text-align: center;
+    }
+
+    .btn-submit {
+      background-color: var(--primary);
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 700;
+      padding: 16px 28px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 420px;
+      transition: background-color 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .fallback-box {
+      display: none;
+      margin-top: 24px;
+      padding: 18px;
+      background: #f0fdf4;
+      border: 2px solid #86efac;
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    .fallback-box h3 {
+      margin: 0 0 10px;
+      color: #166534;
+      font-size: 20px;
+    }
+
+    .action-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 14px 0;
+    }
+
+    .btn-secondary {
+      display: inline-block;
+      text-decoration: none;
+      background: #15803d;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .summary-preview {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 14px;
+      white-space: pre-wrap;
+      max-height: 260px;
+      overflow-y: auto;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Stage 2: Follow-Up Questions</h1>
+    <p>Thank you for the first set of answers—they were super helpful! These follow-up questions drill down into the "Yes" answers so we can put together a clear page for Dad's doctor.</p>
+    <div class="voice-tip">
+      <strong>Phone Tip:</strong> For the text boxes below, you can tap the <strong>microphone icon</strong> on your phone's keyboard and speak the answers instead of typing!
+    </div>
+  </header>
+
+  <form id="stage2Form">
+    <div id="questionsContainer"></div>
+
+    <div class="submit-area">
+      <button type="submit" class="btn-submit">Submit &amp; Send Stage 2 to Brent</button>
+
+      <div id="resultBox" class="fallback-box">
+        <h3>Stage 2 Answers Ready!</h3>
+        <p style="margin: 0 0 10px; font-size: 16px; color: #1e293b;">
+          Your email app should open automatically. If it doesn't, tap one of the buttons below or paste the copied text into an email to <strong>bbertram99@gmail.com</strong>:
+        </p>
+        <div class="action-links">
+          <a id="mailtoLink" href="#" class="btn-secondary">Open Default Email App</a>
+          <a id="gmailLink" href="#" target="_blank" rel="noopener" class="btn-secondary" style="background:#1d4ed8;">Open in Gmail</a>
+          <button type="button" id="copyBtn" class="btn-secondary" style="background:#334155;">Copy Answers to Clipboard</button>
+        </div>
+        <div id="summaryPreview" class="summary-preview"></div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  const sections = [
+    {
+      title: "Part 1: Where & How the Pain Hits",
+      questions: [
+        {
+          id: 1,
+          text: "Did Dad go through these questions with you, or are any of these answers ones we should double-check with him?",
+          hasCheckboxes: false,
+          textPrompt: "Let me know if Dad confirmed the answers from Part 1 (especially the red eyes and fevers):",
+          placeholder: "e.g., Asked Dad directly / Filled out together..."
+        },
+        {
+          id: 2,
+          text: "What are the top 3 or 4 exact spots on his body where the sharp pain hits most often?",
+          hasCheckboxes: false,
+          textPrompt: "Be as specific as you can (e.g., under right ribs, middle of chest, left side of belly, lower back, sinuses):",
+          placeholder: "Type the main body spots here..."
+        },
+        {
+          id: 3,
+          text: "Once the sharp pain hits a spot, how long does a typical attack last before it fades or moves?",
+          hasCheckboxes: false,
+          textPrompt: "Does it last seconds, 20–30 minutes, several hours, or days at a time?",
+          placeholder: "e.g., Usually lasts about an hour..."
+        },
+        {
+          id: 4,
+          text: "In Part 1, you checked YES that bending, twisting, coughing, or pressing on the spot makes it worse. Does taking a deep breath also make it hurt worse when it is in his chest, ribs, or upper belly?",
+          hasCheckboxes: true,
+          textPrompt: "Which body spots hurt when pressed or when he coughs/bends?",
+          placeholder: "e.g., Mostly when it's in his ribs or stomach..."
+        }
+      ]
+    },
+    {
+      title: "Part 2: The PET Scan & 6-Month Relief Mystery",
+      questions: [
+        {
+          id: 5,
+          text: "Think back to the drink he had at the PET scan clinic. Did that liquid flush out his bowels or give him diarrhea later that day?",
+          hasCheckboxes: true,
+          textPrompt: "Do you remember if the drink was clear (like water/licorice) or a thick chalky shake?",
+          placeholder: "Describe what you remember about the drink or scan prep..."
+        },
+        {
+          id: 6,
+          text: "Did they give him any IV relaxing medicine (like Valium/Ativan) or injection right before the PET scan?",
+          hasCheckboxes: true,
+          textPrompt: "Any other details about the day of the PET scan:",
+          placeholder: "Optional notes..."
+        },
+        {
+          id: 7,
+          text: "After those 6 good months were over, did the pain come back suddenly all at once, or did it creep back slowly?",
+          hasCheckboxes: false,
+          textPrompt: "Did anything specific happen right before the pain returned (like catching a cold, eating certain foods, or restarting a medication)?",
+          placeholder: "e.g., Crept back slowly over a few weeks..."
+        }
+      ]
+    },
+    {
+      title: "Part 3: Stomach, Meals & Diarrhea (30–90 Mins After Eating)",
+      questions: [
+        {
+          id: 8,
+          text: "Since the stomach pain and diarrhea happen 30–90 minutes after eating, does skipping a meal (or fasting) keep the pain away?",
+          hasCheckboxes: true,
+          textPrompt: "Are there specific foods that trigger it worst (like heavy/fatty meals, dairy, sugar/bread, or spicy food), or does ANY meal trigger it?",
+          placeholder: "e.g., Heavy or greasy meals trigger it worst..."
+        },
+        {
+          id: 9,
+          text: "When the pain hits his elsewhere (like his chest, back, or head), does it ALSO happen 30–90 minutes after eating, or only the stomach pain?",
+          hasCheckboxes: false,
+          textPrompt: "Explain if meals trigger the non-stomach pain too:",
+          placeholder: "e.g., Only the stomach pain happens after eating..."
+        },
+        {
+          id: 10,
+          text: "Has he ever noticed blood, black/tarry color, or mucus in his stool when the diarrhea hits?",
+          hasCheckboxes: true,
+          textPrompt: "Has he had a colonoscopy or stomach camera test in the last few years? If yes, what did they find?",
+          placeholder: "e.g., Had a colonoscopy 2 years ago, they said it was normal..."
+        }
+      ]
+    },
+    {
+      title: "Part 4: Eyes, Lungs & Fevers (Critical Clues for the Doctor)",
+      questions: [
+        {
+          id: 11,
+          text: "You checked YES that his eyes get red, dry, or painful when the body pain flares. Does the white part of his eye turn visibly bloodshot/red, or does bright light hurt his eyes?",
+          hasCheckboxes: true,
+          textPrompt: "Describe what happens to his eyes during a pain flare (one eye or both?):",
+          placeholder: "e.g., Both eyes get bloodshot and feel gritty/sore..."
+        },
+        {
+          id: 12,
+          text: "You checked YES that he feels feverish, chilly, or gets night sweats when the pain is bad. Has he ever checked his temperature with a thermometer during a flare?",
+          hasCheckboxes: true,
+          textPrompt: "Describe the chills, fever, or night sweats (do the sweats soak his pajamas/sheets?):",
+          placeholder: "e.g., Gets the chills and sweats at night when pain flares..."
+        },
+        {
+          id: 13,
+          text: "You checked YES to new wheezing, asthma, or shortness of breath over the last few years. Did a doctor prescribe an inhaler/puffer for this?",
+          hasCheckboxes: true,
+          textPrompt: "When does the wheezing or shortness of breath happen, and does a puffer help?",
+          placeholder: "e.g., Wheezes at night or when walking uphill..."
+        }
+      ]
+    },
+    {
+      title: "Part 5: Medications & History",
+      questions: [
+        {
+          id: 14,
+          text: "Was he ever prescribed the antibiotic Cipro (ciprofloxacin) or Levaquin during his prostate biopsies, urinary infections, or before this pain first started years ago?",
+          hasCheckboxes: true,
+          textPrompt: "If you aren't sure, has he taken heavy antibiotics for prostate tests in the past?",
+          placeholder: "e.g., He took antibiotics for his prostate biopsy..."
+        },
+        {
+          id: 15,
+          text: "What is the exact name of his cholesterol pill (e.g., Crestor/rosuvastatin, Lipitor/atorvastatin), and what other daily pills or supplements does he take?",
+          hasCheckboxes: false,
+          textPrompt: "Please list his daily medications here (you can just read them off the pill bottles):",
+          placeholder: "List daily medications here..."
+        },
+        {
+          id: 16,
+          text: "Did he start taking that cholesterol pill BEFORE this jumping pain first began years ago?",
+          hasCheckboxes: true,
+          textPrompt: "Has he ever stopped taking the cholesterol pill for a couple of weeks to see if the pain went away?",
+          placeholder: "e.g., He has been on it for 10 years, never stopped..."
+        }
+      ]
+    }
+  ];
+
+  const container = document.getElementById("questionsContainer");
+
+  sections.forEach(section => {
+    const card = document.createElement("div");
+    card.className = "section-card";
+
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.textContent = section.title;
+    card.appendChild(title);
+
+    section.questions.forEach(q => {
+      const block = document.createElement("div");
+      block.className = "question-block";
+
+      const textDiv = document.createElement("div");
+      textDiv.className = "question-text";
+      textDiv.innerHTML = `<span class="q-number">${q.id}.</span> ${q.text}`;
+      block.appendChild(textDiv);
+
+      if (q.hasCheckboxes) {
+        const group = document.createElement("div");
+        group.className = "checkbox-group";
+
+        const options = [
+          { label: "Yes", value: "YES", cls: "yes-selected" },
+          { label: "No", value: "NO", cls: "no-selected" },
+          { label: "Not Sure", value: "NOT SURE", cls: "unsure-selected" }
+        ];
+
+        const inputs = [];
+
+        options.forEach(opt => {
+          const lbl = document.createElement("label");
+          lbl.className = "checkbox-label";
+          const inp = document.createElement("input");
+          inp.type = "checkbox";
+          inp.name = `q_${q.id}_check`;
+          inp.value = opt.value;
+          lbl.appendChild(inp);
+          lbl.appendChild(document.createTextNode(opt.label));
+          group.appendChild(lbl);
+          inputs.push({ inp, lbl, cls: opt.cls });
+        });
+
+        inputs.forEach(current => {
+          current.inp.addEventListener("change", () => {
+            if (current.inp.checked) {
+              inputs.forEach(other => {
+                if (other !== current) {
+                  other.inp.checked = false;
+                  other.lbl.classList.remove(other.cls);
+                }
+              });
+              current.lbl.classList.add(current.cls);
+            } else {
+              current.lbl.classList.remove(current.cls);
+            }
+          });
+        });
+
+        block.appendChild(group);
+      }
+
+      if (q.textPrompt) {
+        const sub = document.createElement("div");
+        sub.className = "sub-prompt";
+        sub.textContent = q.textPrompt;
+        block.appendChild(sub);
+
+        const area = document.createElement("textarea");
+        area.id = `q_${q.id}_text`;
+        area.placeholder = q.placeholder || "Type details here...";
+        block.appendChild(area);
+      }
+
+      card.appendChild(block);
+    });
+
+    container.appendChild(card);
+  });
+
+  document.getElementById("stage2Form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let lines = [];
+    lines.push("STAGE 2: DETAILED SYMPTOM FOLLOW-UP");
+    lines.push("====================================");
+    lines.push("");
+
+    sections.forEach(section => {
+      lines.push(section.title.toUpperCase());
+      lines.push("------------------------------------");
+      section.questions.forEach(q => {
+        let checkVal = "";
+        if (q.hasCheckboxes) {
+          const checked = document.querySelector(`input[name="q_${q.id}_check"]:checked`);
+          checkVal = checked ? `[${checked.value}] ` : "[NO BOX CHECKED] ";
+        }
+        const textEl = document.getElementById(`q_${q.id}_text`);
+        const textVal = textEl && textEl.value.trim() ? textEl.value.trim() : "No details entered.";
+
+        lines.push(`Q${q.id}: ${q.text}`);
+        if (q.hasCheckboxes) {
+          lines.push(`   Choice: ${checkVal}`);
+        }
+        lines.push(`   Details: ${textVal}`);
+        lines.push("");
+      });
+    });
+
+    const finalBody = lines.join("\n");
+    const recipient = "bbertram99@gmail.com";
+    const subject = "Stage 2 Symptom Answers - Dad";
+
+    const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(finalBody)}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(finalBody)}`;
+
+    document.getElementById("mailtoLink").href = mailtoUrl;
+    document.getElementById("gmailLink").href = gmailUrl;
+    document.getElementById("summaryPreview").textContent = finalBody;
+    document.getElementById("resultBox").style.display = "block";
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(finalBody).catch(() => {});
+    }
+
+    window.location.href = mailtoUrl;
+    document.getElementById("resultBox").scrollIntoView({ behavior: "smooth" });
+  });
+
+  document.getElementById("copyBtn").addEventListener("click", function() {
+    const text = document.getElementById("summaryPreview").textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById("copyBtn");
+      btn.textContent = "Copied to Clipboard!";
+      setTimeout(() => {
+        btn.textContent = "Copy Answers to Clipboard";
+      }, 2500);
+    });
+  });
+</script>
+
+</body>
+</html>
