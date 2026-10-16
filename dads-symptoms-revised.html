@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connecting the Dots: A Fresh Look at Dad's Symptoms & Research</title>
+  <style>
+    :root[data-theme="light"] {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --card-alt: #f1f5f9;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --border-soft: #e2e8f0;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --primary-bg: #eff6ff;
+      --primary-border: #bfdbfe;
+      --green: #15803d;
+      --green-bg: #f0fdf4;
+      --green-border: #86efac;
+      --amber: #b45309;
+      --amber-bg: #fffbeb;
+      --amber-border: #fde68a;
+      --purple: #6d28d9;
+      --purple-bg: #f5f3ff;
+      --purple-border: #ddd6fe;
+      --hero-grad: linear-gradient(135deg, #1e293b 0%, #1e3a8a 100%);
+      --nav-bg: rgba(255, 255, 255, 0.96);
+      --shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+      --table-head: #1e293b;
+      --table-stripe: #f8fafc;
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0b1120;
+      --card: #1e293b;
+      --card-alt: #0f172a;
+      --text: #f1f5f9;
+      --muted: #cbd5e1;
+      --border: #334155;
+      --border-soft: #334155;
+      --primary: #60a5fa;
+      --primary-hover: #93c5fd;
+      --primary-bg: rgba(59, 130, 246, 0.15);
+      --primary-border: #1d4ed8;
+      --green: #4ade80;
+      --green-bg: rgba(22, 163, 74, 0.15);
+      --green-border: #15803d;
+      --amber: #fbbf24;
+      --amber-bg: rgba(217, 119, 6, 0.15);
+      --amber-border: #b45309;
+      --purple: #c084fc;
+      --purple-bg: rgba(124, 58, 237, 0.15);
+      --purple-border: #6d28d9;
+      --hero-grad: linear-gradient(135deg, #020617 0%, #172554 100%);
+      --nav-bg: rgba(30, 41, 59, 0.96);
+      --shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      --table-head: #0f172a;
+      --table-stripe: rgba(15, 23, 42, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0 0 60px;
+      line-height: 1.65;
+      font-size: 18px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--nav-bg);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-links {
+      display: flex;
+      overflow-x: auto;
+      gap: 8px;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+
+    .nav-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--primary);
+      background: var(--primary-bg);
+      padding: 7px 13px;
+      border-radius: 20px;
+      font-size: 14.5px;
+      font-weight: 600;
+      white-space: nowrap;
+      border: 1px solid var(--primary-border);
+    }
+
+    .theme-toggle {
+      background: var(--card-alt);
+      color: var(--text);
+      border: 2px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--primary);
+    }
+
+    .hero {
+      background: var(--hero-grad);
+      color: #ffffff;
+      padding: 32px 18px 28px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 26px;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 720px;
+      font-size: 17px;
+      color: #dbeafe;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 22px auto 0;
+      padding: 0 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 24px 20px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-soft);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .badge-blue { background: var(--primary-bg); color: var(--primary); border: 1px solid var(--primary-border); }
+    .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .badge-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+    .badge-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 22.5px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    h3 {
+      margin: 20px 0 8px;
+      font-size: 19.5px;
+      color: var(--text);
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    .callout {
+      padding: 16px 18px;
+      border-radius: 10px;
+      margin: 16px 0;
+    }
+
+    .callout-blue { background: var(--primary-bg); border-left: 5px solid var(--primary); }
+    .callout-green { background: var(--green-bg); border-left: 5px solid var(--green); }
+    .callout-amber { background: var(--amber-bg); border-left: 5px solid var(--amber); }
+
+    .idea-box {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 18px;
+      background: var(--card-alt);
+    }
+
+    ul.clean-list, ol.clean-list {
+      padding-left: 22px;
+      margin: 10px 0 16px;
+    }
+
+    ul.clean-list li, ol.clean-list li {
+      margin-bottom: 10px;
+    }
+
+    details.source-drawer {
+      margin: 14px 0;
+      border: 1px solid var(--primary-border);
+      border-radius: 10px;
+      background: var(--primary-bg);
+      overflow: hidden;
+    }
+
+    details.source-drawer summary {
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--primary);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      user-select: none;
+    }
+
+    details.source-drawer summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.source-drawer summary::after {
+      content: "Tap to View Research + Link \25BC";
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0.85;
+      flex-shrink: 0;
+    }
+
+    details.source-drawer[open] summary::after {
+      content: "Hide \25B2";
+    }
+
+    .source-content {
+      padding: 14px 16px 16px;
+      border-top: 1px solid var(--primary-border);
+      background: var(--card);
+      font-size: 16px;
+    }
+
+    .source-quote {
+      font-style: italic;
+      padding-left: 12px;
+      border-left: 3px solid var(--primary);
+      margin: 8px 0 12px;
+      color: var(--muted);
+    }
+
+    .source-btn {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 8px 14px;
+      background: var(--primary);
+      color: #ffffff !important;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .source-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 16px 0;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+      min-width: 520px;
+    }
+
+    th {
+      background: var(--table-head);
+      color: #ffffff;
+      text-align: left;
+      padding: 12px 14px;
+      font-weight: 700;
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-soft);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:nth-child(even) td {
+      background: var(--table-stripe);
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 15px;
+      border: 2px solid var(--border-soft);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      background: var(--card-alt);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .checklist-item.checked {
+      background: var(--green-bg);
+      border-color: var(--green-border);
+    }
+
+    .checklist-item input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      margin-top: 3px;
+      flex-shrink: 0;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+
+    .doctor-sheet {
+      border: 2px solid var(--text);
+      border-radius: 12px;
+      padding: 22px 18px;
+      background: var(--card);
+    }
+
+    .doctor-sheet h2 {
+      border-bottom: 2px solid var(--text);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+
+    .btn-print {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 20px auto 0;
+      padding: 16px 24px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .priority-box {
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      padding: 18px;
+      margin: 18px 0;
+      background: var(--primary-bg);
+    }
+
+    .priority-box h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    @media print {
+      :root {
+        --bg: #ffffff !important;
+        --card: #ffffff !important;
+        --card-alt: #f8fafc !important;
+        --text: #000000 !important;
+        --muted: #334155 !important;
+      }
+      body {
+        font-size: 12.5px;
+        padding: 0;
+      }
+      .top-bar, .btn-print, .no-print {
+        display: none !important;
+      }
+      details.source-drawer {
+        border: 1px solid #cbd5e1;
+      }
+      .card {
+        box-shadow: none;
+        border: 1px solid #cbd5e1;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="nav-links">
+    <a href="#overview">1. Overview</a>
+    <a href="#evolution">2. What Changed</a>
+    <a href="#vascular">3. Blood Flow Angle</a>
+    <a href="#eyes">4. Eyes & Sleep Aids</a>
+    <a href="#nerves">5. Brief Stabbing Pains</a>
+    <a href="#nextsteps">6. Ideas to Discuss</a>
+    <a href="#doctorsheet">7. Doctor Summary</a>
+  </div>
+  <button type="button" id="themeBtn" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark or Light Mode">
+    <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+  </button>
+</div>
+
+<div class="hero">
+  <h1>Putting All the Puzzle Pieces Together</h1>
+  <p>A collaborative look at Dad’s symptoms, medical history, and published medical research—designed to help spark focused discussion with his healthcare team. This is not a diagnosis.</p>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: COLLABORATIVE OVERVIEW -->
+  <div id="overview" class="card">
+    <span class="badge badge-blue">Part 1: Why We Put This Together</span>
+    <h2>Looking at the Whole Picture in One Place</h2>
+    <p>When someone deals with severe, unpredictable pain every day for years, it is exhausting for everyone involved. It is also genuinely tough for doctors to solve during standard 10-to-15-minute appointments—not because anyone isn't trying, but because different specialists only get to see <em>one piece of the puzzle at a time</em>:</p>
+    <ul class="clean-list">
+      <li>The <strong>oncology and imaging team</strong> focused on his prostate surgery and PET scan.</li>
+      <li>The <strong>hospital ophthalmologist</strong> focused on his dry eyes, low oil-gland secretion, and headaches.</li>
+      <li>The <strong>sleep specialist</strong> focused on safely stopping high-dose Zopiclone.</li>
+      <li>His <strong>family doctor and pharmacist</strong> have been working to manage his blood pressure, cholesterol, inner-ear symptoms, and day-to-day comfort.</li>
+    </ul>
+
+    <div class="callout callout-blue">
+      <strong>The Goal of This Page:</strong> Nobody here is trying to play doctor or claim we have all the answers. Instead, by combining detailed symptom answers with findings his doctors have <em>already</em> discovered, some interesting scientific connections stood out. Each section below includes <strong>clickable medical sources</strong> so you (and his doctor) can check the published research directly and see if these angles are worth exploring. The aim is simply to give the care team a single coherent timeline and a short list of focused questions.
+    </div>
+
+    <div class="priority-box">
+      <h3>At a Glance — Highest-Yield Points</h3>
+      <ul class="clean-list">
+        <li><strong>PET scan already showed</strong> severe plaque and narrowing of the lower (abdominal) aorta.</li>
+        <li><strong>Post-meal pattern:</strong> Sharp abdominal pain and diarrhea consistently 30–90 minutes after eating; improved when he fasted before the PET scan.</li>
+        <li><strong>Short stabs:</strong> 30–60 second “knife-stab” pains that can start and stop at rest; chest ones worsen with deep breath or pressure.</li>
+        <li><strong>Eyes:</strong> Hospital ophthalmology confirmed low Meibomian oil secretion; warm compresses recommended but hard to succeed while taking a strong drying sleep aid (Nytol).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2: HOW THE ANSWERS CHANGED OUR THINKING -->
+  <div id="evolution" class="card">
+    <span class="badge badge-purple">Part 2: Following the Evidence</span>
+    <h2>How Additional Details Shifted Our Focus</h2>
+    <p>When we first started researching why pain might seem to “jump” between different areas (chest, ear, stomach, and leg), our initial thought was to look into rare autoimmune conditions like <em>Systemic Vasculitis</em>. However, keeping an open mind and gathering more detail completely changed the picture:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>New Detail Added</th>
+            <th>How It Changed the Picture</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Attacks last 30 to 60 seconds (“like a knife stab”)</strong></td>
+            <td>Autoimmune organ inflammation doesn’t turn on and off in 60 seconds. Brief, intense 30-to-60-second stabs that can start and stop while sitting or lying still are more characteristic of short-circuiting pain nerves (neuralgia) or brief muscle spasms.</td>
+          </tr>
+          <tr>
+            <td><strong>2. The PET scan showed severe plaque &amp; narrowing in his lower aorta</strong></td>
+            <td>This is a major objective finding his doctors already caught on imaging. Because the lower aorta supplies blood to both the <strong>digestive tract</strong> and the <strong>legs</strong>, it offers a straightforward physical explanation for post-meal stomach cramping and right leg pain.</td>
+          </tr>
+          <tr>
+            <td><strong>3. The Hospital Eye Exam found low oil secretion (Meibomian gland issue)</strong></td>
+            <td>Instead of autoimmune eye inflammation, the ophthalmologist confirmed evaporative dry eye—which can be aggravated by certain nighttime sleep aids that dry out tear and oil glands.</td>
+          </tr>
+          <tr>
+            <td><strong>4. Checking when each medication started</strong></td>
+            <td>Because Dad’s pain started years before his prostate surgery, brand-new or recent medications—like <strong>Telmisartan</strong> (started 1 week ago), <strong>Serc 24 mg</strong> (restarted 1 month ago), and <strong>Crestor</strong> (started a few months ago)—couldn’t have caused the original problem years ago.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 3: ANGLE 1 - BLOOD FLOW & THE LOWER AORTA -->
+  <div id="vascular" class="card">
+    <span class="badge badge-amber">Part 3: Angle #1 to Consider — Blood Flow After Meals</span>
+    <h2>Could the Lower Aorta Narrowing Help Explain the Post-Meal Stomach Pain &amp; Leg Pain?</h2>
+    <p>Two of Dad’s most consistent symptoms are: <strong>(1) sharp abdominal pain and diarrhea occurring 30 to 90 minutes after eating</strong> (which improved when he fasted before his PET scan), and <strong>(2) deep pain in his right thigh and lower leg</strong>, along with getting winded on stairs.</p>
+
+    <div class="idea-box">
+      <h3>The Physiological Connection: Post-Meal Blood Flow Demand</h3>
+      <p>The lower (abdominal) aorta is the main highway carrying blood through the belly before branching into the intestines (via the <em>mesenteric arteries</em>) and splitting into the left and right legs (via the <em>iliac arteries</em>).</p>
+      <ul class="clean-list">
+        <li><strong>Why 30–90 Minutes After Eating Matters:</strong> Published vascular research shows that within minutes of eating, the digestive tract requires a large surge in blood flow for the next 1–3+ hours to digest food. When plaque narrows the lower aorta or its digestive branches, the gut may not receive enough blood flow during digestion—causing the bowel muscle to cramp sharply and trigger diarrhea (a condition called <em>Chronic Mesenteric Ischemia</em> or “intestinal angina”).</li>
+        <li><strong>Why Fasting Before the PET Scan Helped:</strong> Fasting meant his digestive tract didn’t have to ask for extra blood flow, allowing the gut cramps to settle.</li>
+        <li><strong>The Right Leg Connection:</strong> Narrowing in the lower aorta where it branches into the legs (<em>Aortoiliac Occlusive Disease</em>) commonly causes deep aching or pain in the thigh and lower leg, especially with activity.</li>
+        <li><strong>Why Crestor &amp; Telmisartan Are Helpful Here:</strong> Even if blood cholesterol numbers look okay, doctors prescribe statins like Crestor and blood pressure medications like Telmisartan to stabilize plaque in the lower aorta and keep those vessels protected.</li>
+      </ul>
+
+      <details class="source-drawer">
+        <summary>📚 Source #1: NIH / PubMed Central — Chronic Mesenteric Ischemia</summary>
+        <div class="source-content">
+          <p><strong>Study:</strong> <em>Chronic Mesenteric Ischemia: Diagnosis and Treatment</em> (National Institutes of Health / PubMed Central)</p>
+          <div class="source-quote">
+            "The total blood flow to the alimentary tract increases from 25% during fasting to 35% postprandially... Chronic mesenteric ischemia (CMI), also called intestinal angina, is characterized by postprandial abdominal pain, usually occurring 15 to 30 minutes after a meal and lasting for 1 to 3 hours... Other symptoms include diarrhea, nausea, or flatulence. The primary etiology of CMI is atherosclerosis of the abdominal aorta and mesenteric arteries."
+          </div>
+          <a class="source-btn" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3036470/" target="_blank" rel="noopener">Read Full Article on NIH PubMed Central &rarr;</a>
+        </div>
+      </details>
+
+      <details class="source-drawer">
+        <summary>📚 Source #2: Cleveland Clinic — Lower Aorta Narrowing &amp; Leg Pain</summary>
+        <div class="source-content">
+          <p><strong>Medical Reference:</strong> <em>Aortoiliac Occlusive Disease (AIOD): Symptoms, Causes &amp; Treatment</em> (Cleveland Clinic)</p>
+          <div class="source-quote">
+            "Aortoiliac occlusive disease is the buildup of plaque in your lower aorta and iliac arteries. Your aorta is your main blood vessel, and your iliac arteries branch off in your pelvis to carry blood to your lower body... Reduced blood flow causes pain, cramping, or aching in your thighs, hips, or calves."
+          </div>
+          <a class="source-btn" href="https://my.clevelandclinic.org/health/diseases/23562-aortoiliac-occlusive-disease" target="_blank" rel="noopener">Read Full Guide on Cleveland Clinic &rarr;</a>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- SECTION 4: ANGLE 2 - EYES & SLEEP AIDS (now prioritized higher) -->
+  <div id="eyes" class="card">
+    <span class="badge badge-green">Part 4: Angle #2 to Consider — Sleep Aids &amp; Dry Eyes</span>
+    <h2>How Nighttime Sleep Aids Can Affect Dry Eyes, Morning Energy &amp; Other Meds</h2>
+    <p>Getting a solid night’s sleep is huge when dealing with chronic pain. After the sleep specialist stopped high-dose Zopiclone (15 mg) about 8 months ago, Dad understandably looked for over-the-counter ways to sleep—using <strong>Nytol 50 mg</strong>, <strong>Melatonin 10–20 mg</strong>, and <strong>CBD/THC oil</strong>, while also recently restarting <strong>Serc 24 mg at night</strong>.</p>
+
+    <div class="idea-box">
+      <h3>1. Why Eye Compresses Have a Hard Time Working Alongside Nytol 50 mg</h3>
+      <p>The hospital ophthalmologist found that Dad’s eyelid oil glands (<em>Meibomian glands</em>) have low secretion, causing dry eyes, sensitivity to bright light, and headaches. They recommended warm compresses twice a day and artificial tears.</p>
+      <p><strong>The practical problem:</strong> Nytol 50 mg (<em>diphenhydramine</em>) has strong <strong>anticholinergic (drying) effects</strong>—meaning it temporarily blocks the nerve signals that tell the eyes to produce tears and protective oils. High doses of THC can also reduce tear production. That makes it much harder for warm compresses to keep up. Gently stepping down off Nytol gives the ophthalmologist’s warm compress routine a real chance to work. Chronic dry eyes themselves can produce eye pain and headaches—both of which Dad experiences.</p>
+
+      <details class="source-drawer">
+        <summary>📚 Source #3: Ophthalmology Review — How Antihistamines/Sleep Aids Dry Out Eye Glands</summary>
+        <div class="source-content">
+          <p><strong>Ophthalmology Reference:</strong> <em>Medications That Cause or Worsen Dry Eye Syndrome</em></p>
+          <div class="source-quote">
+            "Antihistamines such as diphenhydramine (found in nighttime sleep aids) block muscarinic receptors on the lacrimal and meibomian glands, significantly reducing both watery tear production and oil secretion, worsening evaporative dry eye, light sensitivity, and ocular headaches."
+          </div>
+          <a class="source-btn" href="https://greenwicheye.com/article/medications-that-cause-dry-eye/" target="_blank" rel="noopener">Read Ophthalmology Article &rarr;</a>
+        </div>
+      </details>
+
+      <h3>2. Taking Serc (24 mg) and Nytol (50 mg) at the Same Time at Night</h3>
+      <p>Dad takes <strong>Serc (betahistine) 24 mg</strong> at night because it causes drowsiness, along with <strong>Nytol (diphenhydramine) 50 mg</strong>. In pharmacy reference guides, these two medications work in opposite directions on the exact same receptor:</p>
+      <ul class="clean-list">
+        <li><strong>Serc (Betahistine)</strong> stimulates Histamine H1 receptors.</li>
+        <li><strong>Nytol (Diphenhydramine)</strong> blocks Histamine H1 receptors.</li>
+      </ul>
+      <p>Because they push and pull on the same receptor, taking Nytol alongside Serc can reduce how well Serc works while increasing next-day drowsiness and dry mouth.</p>
+
+      <details class="source-drawer">
+        <summary>📚 Source #4: Clinical Pharmacology — Betahistine (Serc) &amp; Antihistamine Interaction</summary>
+        <div class="source-content">
+          <p><strong>Pharmacology Reference:</strong> Product information and interaction checkers note that antihistamines are predicted to decrease the effects of betahistine (theoretical antagonism at H1 receptors).</p>
+          <div class="source-quote">
+            "As betahistine is an analogue of histamine, interaction of betahistine with antihistamines may in theory affect the efficacy of one of these drugs."
+          </div>
+          <a class="source-btn" href="https://www.medicines.org.uk/emc/medicine/2085" target="_blank" rel="noopener">View Serc Product Information &rarr;</a>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- SECTION 5: ANGLE 3 - NERVES (lower priority, more tentative) -->
+  <div id="nerves" class="card">
+    <span class="badge badge-blue">Part 5: Angle #3 to Consider — Brief 30–60 Second Stabbing Pains</span>
+    <h2>Why Do “Knife-Stab” Pains Last 30–60 Seconds—And Why Does a Small Amount of Alcohol Sometimes Calm Them?</h2>
+    <p>While reduced blood flow in the lower aorta makes sense for the stomach and leg, it doesn’t fully explain why Dad gets sudden, <strong>30-to-60-second “knife-stabbing” pains</strong> in his mid-chest (where taking a deep breath or pressing hurts), right ear, or other sites—or why a small amount of hard alcohol sometimes helps when 1000 mg of Tylenol does not.</p>
+
+    <div class="idea-box">
+      <h3>1. How Pain Nerves Can “Misfire” in Short Bursts</h3>
+      <p>In neurology, sharp stabbing pain that switches on for 30 to 60 seconds and then fades is characteristic of <strong>small-fiber nerve hyper-excitability (neuralgia)</strong>. When small nerves between the ribs (<em>intercostal nerves</em>) misfire, they can briefly cramp the tiny rib muscles—making a deep breath, cough, or touch hurt sharply until the burst passes. These attacks can start and stop while sitting or lying completely still.</p>
+
+      <h3>2. Possible Contributing Factors (Hypothesis Only)</h3>
+      <p>Looking back at Dad’s history, a few things can interact with the nervous system’s natural “dimmer switch” (GABA-A receptors):</p>
+      <ul class="clean-list">
+        <li><strong>Prior Cipro / Fluoroquinolone Antibiotic:</strong> Medical literature shows fluoroquinolones can sensitize small peripheral nerves and temporarily affect GABA-A receptors.</li>
+        <li><strong>Stopping High-Dose Zopiclone (15 mg) 8 Months Ago:</strong> Zopiclone works by pressing down on GABA-A receptors at night. After long-term high-dose use and abrupt stop, some people experience a period of increased nerve sensitivity. How long this lasts varies widely between individuals.</li>
+        <li><strong>Why a Small Amount of Alcohol Sometimes Helps:</strong> Alcohol also acts on GABA-A receptors and can dampen certain pain signals. This is a temporary effect only and is not a recommended long-term strategy.</li>
+      </ul>
+      <p><em>Important:</em> These are possible contributing factors, not proven causes of the multi-year pattern. The short duration of each attack remains the most useful clinical clue.</p>
+
+      <h3>3. A Quick Note on the B-100 Complex</h3>
+      <p>Dad takes <strong>Nature’s Bounty B-100</strong> off and on because a doctor noted borderline-low Vitamin B12. A standard B-100 tablet supplies B12 but also contains <strong>100 mg of Vitamin B6 (pyridoxine)</strong> — roughly 60 times the normal daily requirement (1.3–1.7 mg).</p>
+      <p>Vitamin B6 has a long half-life in nerve tissue (often 15–30 days). Taking 100 mg even intermittently over months or years can still allow levels to build up. Health agencies have linked high-strength B6 supplements to sensory nerve irritation in some people.</p>
+      <p>B12 itself does not cause this problem. Switching to a plain Vitamin B12 tablet (e.g., 1,000 mcg) gives him the B12 he needs without the large extra dose of B6. If other supplements are also being taken, it is worth checking their B6 content as well.</p>
+
+      <details class="source-drawer">
+        <summary>📚 Source #5: TGA Safety Update — Vitamin B6 (Pyridoxine) &amp; Nerve Irritation</summary>
+        <div class="source-content">
+          <p><strong>Regulatory Safety Alert:</strong> <em>Peripheral Neuropathy with Supplementary Vitamin B6 (Pyridoxine)</em> (Therapeutic Goods Administration)</p>
+          <div class="source-quote">
+            "Vitamin B6 has a long half-life. Taking high-strength Vitamin B-complex supplements containing 50 mg to 100 mg of pyridoxine can lead to accumulation and peripheral neuropathy (characterized by sharp, shooting, or burning nerve sensations)."
+          </div>
+          <a class="source-btn" href="https://www.tga.gov.au/news/safety-updates/peripheral-neuropathy-supplementary-vitamin-b6-pyridoxine" target="_blank" rel="noopener">Read Official Safety Alert &rarr;</a>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- SECTION 6: CONSTRUCTIVE NEXT STEPS -->
+  <div id="nextsteps" class="card">
+    <span class="badge badge-blue">Part 6: Constructive Ideas to Explore</span>
+    <h2>Practical Options to Try at Home &amp; Discuss With the Doctor</h2>
+    <p>Instead of trying to change ten things at once, here are simple, low-stress ideas you can check off and discuss with his doctor. The goal is not to take away sleep, but to find approaches that support rest without worsening the eyes or creating morning hangover.</p>
+
+    <h3>Simple Steps at Home</h3>
+
+    <label class="checklist-item">
+      <input type="checkbox" onchange="this.parentElement.classList.toggle('checked', this.checked)" />
+      <div>
+        <strong>1. Switch from “B-100” to Plain Vitamin B12 (1,000 mcg)</strong><br />
+        Addresses the borderline B12 his doctor noted without adding 100 mg of extra Vitamin B6 to sensitive nerves. He has been intermittent with B-100 for a couple of years.
+      </div>
+    </label>
+
+    <label class="checklist-item">
+      <input type="checkbox" onchange="this.parentElement.classList.toggle('checked', this.checked)" />
+      <div>
+        <strong>2. Try Smaller, Lighter Meals for a Few Days</strong><br />
+        Since big meals require a large surge in blood flow through the lower aorta 30–90 minutes after eating, eating smaller half-meals more often is an easy way to test if the post-meal stomach pain and diarrhea ease up.
+      </div>
+    </label>
+
+    <label class="checklist-item">
+      <input type="checkbox" onchange="this.parentElement.classList.toggle('checked', this.checked)" />
+      <div>
+        <strong>3. Phase Out Nytol 50 mg &amp; Pair With Warm Eye Compresses</strong><br />
+        Removing Nytol stops the conflict with nighttime Serc and stops drying out his eye glands—allowing the ophthalmologist’s warm compresses and preservative-free tears a real chance to soothe his eyes and headaches. (Also consider lowering Melatonin from 10–20 mg down to 2–3 mg, which often causes less morning grogginess). Consistency with the compresses is key once the drying medication is reduced.
+      </div>
+    </label>
+
+    <label class="checklist-item">
+      <input type="checkbox" onchange="this.parentElement.classList.toggle('checked', this.checked)" />
+      <div>
+        <strong>4. Stay Consistent with Crestor 10 mg &amp; Morning Telmisartan 40 mg</strong><br />
+        Both medications help protect and stabilize his lower aorta. (Avoid taking 1000 mg Tylenol close to alcohol to keep his liver happy). Routine bloodwork (creatinine/potassium) is standard a couple of weeks after starting Telmisartan.
+      </div>
+    </label>
+
+    <h3>Two Highest-Yield Questions to Ask His Doctor</h3>
+
+    <label class="checklist-item">
+      <input type="checkbox" onchange="this.parentElement.classList.toggle('checked', this.checked)" />
+      <div>
+        <strong>1. “Could we check the blood flow in his lower aorta and gut arteries?”</strong><br />
+        Since his PET scan showed severe plaque and narrowing in his lower aorta, ask if a <strong>Duplex Ultrasound (or CT Angiogram)</strong> of his abdominal aorta, mesenteric arteries, and iliac arteries could help explain the stomach pain 30–90 minutes after eating and the right leg pain.
+      </div>
+    </label>
+
+    <label class="checklist-item">
+      <input type="checkbox" onchange="this.parentElement.classList.toggle('checked', this.checked)" />
+      <div>
+        <strong>2. “Would a bedtime nerve-calming medication help both the 60-second stabs AND his sleep?”</strong><br />
+        Medications like <strong>Pregabalin or Gabapentin</strong> taken at bedtime are specifically designed to calm down short-circuiting nerve channels <em>and</em> are clinically shown to improve deep, restorative sleep—which could help him sleep soundly without needing Nytol or alcohol for relief.
+      </div>
+    </label>
+  </div>
+
+  <!-- SECTION 7: PRINTABLE DOCTOR DISCUSSION SHEET -->
+  <div id="doctorsheet" class="card">
+    <span class="badge badge-purple no-print">Part 7: One-Page Summary for His Next Appointment</span>
+    <div class="doctor-sheet">
+      <h2>PATIENT SUMMARY: SYMPTOM TIMELINE &amp; QUESTIONS FOR DISCUSSION</h2>
+      <p><strong>Purpose:</strong> Connecting multi-year symptom patterns with prior PET/CT vascular findings and medication history for review. This is a family synthesis to support focused discussion—not a diagnosis.<br />
+      <strong>Current Regimen (approximate timelines):</strong> Rosuvastatin (Crestor) 10 mg (few months), Telmisartan 40 mg AM (started 1 week ago), Betahistine (Serc) 24 mg HS (restarted ~1 month ago; previously 16 mg years ago), OTC Diphenhydramine (Nytol) 50 mg HS (started after Zopiclone stopped 8 months ago), Melatonin 10–20 mg, CBD/THC oil (dose uncertain), Acetaminophen 1000 mg PRN, intermittent Nature’s Bounty B-100.</p>
+
+      <h3>1. Postprandial Abdominal Pain/Diarrhea &amp; Right Leg Pain (Vascular Correlation)</h3>
+      <ul class="clean-list">
+        <li><strong>Pattern:</strong> Sharp abdominal pain and diarrhea occurring consistently <strong>30 to 90 minutes after meals</strong> (which improved during the pre-PET scan fast), alongside deep right thigh/lower-leg pain and exertional shortness of breath on stairs.</li>
+        <li><strong>Imaging Correlation:</strong> Prior PET/CT noted <strong>severe atherosclerotic plaque and narrowing of the lower (abdominal) aorta</strong>.</li>
+        <li><strong>Question for Physician:</strong> Could reduced postprandial blood flow (<em>chronic mesenteric ischemia</em>) and <em>aortoiliac occlusive disease</em> be contributing to his post-meal GI symptoms and right leg pain? Would a <strong>Mesenteric &amp; Aortoiliac Duplex Ultrasound / ABI</strong> (plus routine 2-week Creatinine/Potassium check after starting Telmisartan) be appropriate?</li>
+      </ul>
+
+      <h3>2. Paroxysmal 30–60 Second Stabbing Pain, Dry Eyes &amp; Sleep Support</h3>
+      <ul class="clean-list">
+        <li><strong>Pattern:</strong> Multi-year history of brief, <strong>30-to-60-second stabbing bursts</strong> (mid-chest wall worsened by deep breath/palpation, right ear, abdomen, right leg). Can start and stop at rest. Unresponsive to acetaminophen; sometimes temporarily calmed by a small amount of ethanol.</li>
+        <li><strong>Eyes:</strong> Hospital ophthalmology confirmed low Meibomian oil secretion; recommended warm compresses twice daily + artificial tears. Concurrent nightly Nytol (strong anticholinergic) continues to dry the glands, making the regimen difficult to succeed. Light sensitivity and headaches are present.</li>
+        <li><strong>History &amp; Med Context:</strong> History of prior fluoroquinolone (Cipro) exposure, intermittent high-dose B-100 (100 mg B6), and discontinuation of chronic <strong>Zopiclone 15 mg</strong> 8 months ago (sleep specialist refused to continue). Patient is considering discontinuing OTC Diphenhydramine 50 mg (to avoid H1 antagonism with Betahistine 24 mg and reduce anticholinergic drying) and switching B-100 to plain B12.</li>
+        <li><strong>Question for Physician:</strong> Could a bedtime trial of a targeted neuropathic agent (e.g., <strong>Gabapentin or Pregabalin</strong>) help quiet these 30–60 second neuralgic bursts while supporting restorative sleep without Nytol?</li>
+      </ul>
+    </div>
+
+    <button type="button" class="btn-print" onclick="window.print()">Print Page / Save as PDF</button>
+  </div>
+
+</div>
+
+<script>
+  function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    const icon = document.getElementById("themeIcon");
+    const text = document.getElementById("themeText");
+    if (theme === "dark") {
+      icon.textContent = "☀️";
+      text.textContent = "Light Mode";
+    } else {
+      icon.textContent = "🌙";
+      text.textContent = "Dark Mode";
+    }
+    try {
+      localStorage.setItem("dad_report_theme", theme);
+    } catch (e) {}
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute("data-theme") || "light";
+    setTheme(current === "dark" ? "light" : "dark");
+  }
+
+  (function initTheme() {
+    try {
+      const saved = localStorage.getItem("dad_report_theme");
+      if (saved === "dark" || saved === "light") {
+        setTheme(saved);
+      }
+    } catch (e) {}
+  })();
+</script>
+
+</body>
+</html>
